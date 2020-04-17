@@ -1,6 +1,4 @@
-#Title
-
-## Fixes issue #[ISSUE NUMBER]
+### Fixes issue #[ISSUE NUMBER]
 
 ### Description
 Include a summary of the change and relevant motivation/context. List any dependencies that are required for this change.
