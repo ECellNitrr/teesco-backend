@@ -56,20 +56,38 @@ class PermissionSet:
         return permission_string
 
 
+    def __str__(self):
+        self.stringify()
+
+
 class PermissionSetField(models.CharField):
     """
     Custom model field to store permissions. Automatically converts db string to permission object
     and permission object into string to be stored in the database.
     """
+    
+    description = "To store and retrieve the permissions"
 
-    max_length = 8192
+    def __init__(self, *args, **kwargs):
+        """This inherits most defaults of CharField except for the below"""
+        kwargs['max_length'] = 8196
+        kwargs['default'] = PermissionSet()
+        kwargs['serialize'] = False
+        
+        super(PermissionSetField, self).__init__(*args, **kwargs)
+
+
+    def from_db_value(self, value, expression, connection, context):
+        return PermissionSet(value)
 
     def to_python(self, value):
-        """Converts string from db into PermissionSet object"""
-
         return PermissionSet(value)
 
     def get_prep_value(self, value):
-        """Converts PermissionSet object into string to store in db"""
+        if value:
+            return value.stringify()
+        return ''
 
-        return value.stringify()
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.get_prep_value(value)
