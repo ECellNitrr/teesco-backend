@@ -2,6 +2,9 @@ asgiref==3.2.7
 blinker==1.4
 Click==7.0
 Django==3.0.5
+django-cors-headers==3.2.1
+djangorestframework==3.11.0
+Pillow==7.1.1
 fanstatic==1.1
 Flask==1.1.1
 Flask-Mail==0.9.1
