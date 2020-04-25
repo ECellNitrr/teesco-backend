@@ -60,23 +60,14 @@ class PermissionSet:
         self.stringify()
 
 
-class PermissionSetField(models.CharField):
+class PermissionSetField(models.Model):
     """
     Custom model field to store permissions. Automatically converts db string to permission object
     and permission object into string to be stored in the database.
     """
     
     description = "To store and retrieve the permissions"
-
-    def __init__(self, *args, **kwargs):
-        """This inherits most defaults of CharField except for the below"""
-        kwargs['max_length'] = 8196
-        kwargs['default'] = PermissionSet()
-        kwargs['serialize'] = False
-        
-        super(PermissionSetField, self).__init__(*args, **kwargs)
-
-
+    perm = models.CharField(max_length=8196,default=PermissionSet)   
     def from_db_value(self, value, expression, connection, context):
         return PermissionSet(value)
 
