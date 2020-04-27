@@ -39,6 +39,8 @@ class PermissionSet:
     
     def ret_permission_list(permission_int):
 
+        """Returns a list of permissions"""
+
         permissions = list()
 
         if permission_int&1:
@@ -121,7 +123,7 @@ class PermissionField(models.IntegerField):
     description = "Saves permissions as integers but returns a Permission Set"
 
     def __init__(self, *args, **kwargs):
-        """This inherits most defaults of CharField except for the below"""
+        """This inherits most defaults of IntegerField except for the below"""
 
         kwargs['default'] = PermissionSet()
         kwargs['serialize'] = False
