@@ -16,7 +16,7 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
-
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
 
         # all permissions should be false when the value is 0
         self.assertFalse(permission_set.permissions[PermissionSet.CAN_REVIEW_PROOFS])
@@ -39,7 +39,7 @@ class PermissionSetTestCase(TestCase):
 
        
         self.assertListEqual(expected_result, actual_result)
-
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # IS_STAFF at position 1 
         self.assertTrue(permission_set.permissions[PermissionSet.IS_STAFF])
@@ -65,6 +65,7 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
 
                 
         # IS_STAFF at position 1 and CAN_REVIEW_PROOFS at position 4
@@ -94,6 +95,9 @@ class PermissionSetTestCase(TestCase):
         self.assertListEqual(expected_result, actual_result)
 
                 
+    
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
+
         # IS_STAFF at position 1 and CAN_REVIEW_PROOFS at position 4 and CAN_CREATE_TASKS at position 2
         self.assertTrue(permission_set.permissions[PermissionSet.IS_STAFF])
         self.assertTrue(permission_set.permissions[PermissionSet.CAN_REVIEW_PROOFS])
@@ -121,6 +125,7 @@ class PermissionSetTestCase(TestCase):
      
         self.assertListEqual(expected_result, actual_result)
 
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # IS_STAFF at position 1 and CAN_REVIEW_PROOFS at position 4 and CAN_CREATE_TASKS at position 2 and CAN_REPLY_TO_QUERIES at position 3
         self.assertTrue(permission_set.permissions[PermissionSet.IS_STAFF])
@@ -149,7 +154,7 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
-
+        self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # All permissions have been added
         self.assertTrue(permission_set.permissions[PermissionSet.IS_STAFF])
