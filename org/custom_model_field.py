@@ -1,4 +1,5 @@
-
+from collections import defaultdict
+from django.db import models
 
 
 class PermissionSet:
@@ -6,6 +7,7 @@ class PermissionSet:
     """Helps in interconversion of permissions into objects(for ease of use) and integers(for storage in db)."""
 
     # These mappings are to reduce the chance to misspell the permission name
+
     IS_ADMIN = 'IS_ADMIN'  # 0 position
     IS_STAFF = 'IS_STAFF'   # 1 position
     CAN_CREATE_TASKS = 'CAN_CREATE_TASKS'   # 2 Position    
@@ -20,21 +22,44 @@ class PermissionSet:
         self.permissions = defaultdict(bool)
 
         if permission_int&1:
-            self.permissions[IS_ADMIN] = True   #2^0 = 1
+            self.permissions['IS_ADMIN'] = True   #2^0 = 1
 
         if permission_int&2:
-            self.permissions[IS_STAFF] = True   #2^1 = 2
+            self.permissions['IS_STAFF'] = True   #2^1 = 2
         
         if permission_int&4:
-            self.permissions[CAN_CREATE_TASKS] = True   #2^2 = 4
+            self.permissions['CAN_CREATE_TASKS'] = True   #2^2 = 4
 
         if permission_int&8:
-            self.permissions[CAN_REPLY_TO_QUERIES] = True   #2^3 = 8
+            self.permissions['CAN_REPLY_TO_QUERIES'] = True   #2^3 = 8
 
         if permission_int&16:
-            self.permissions[CAN_REVIEW_PROOFS] = True   #2^4 = 16
+            self.permissions['CAN_REVIEW_PROOFS'] = True   #2^4 = 16
 
     
+    def ret_permission_list(permission_int):
+
+        permissions = list()
+
+        if permission_int&1:
+            permissions.append('IS_ADMIN')   #2^0 = 1
+
+        if permission_int&2:
+            permissions.append('IS_STAFF')  #2^1 = 2
+        
+        if permission_int&4:
+            permissions.append('CAN_CREATE_TASKS')   #2^2 = 4
+
+        if permission_int&8:
+            permissions.append('CAN_REPLY_TO_QUERIES')   #2^3 = 8
+
+        if permission_int&16:
+            permissions.append('CAN_REVIEW_PROOFS')  #2^4 = 16
+
+        return permissions
+
+
+
     def set_permissions(self, permissions_array):
         """Revokes all the permissions and sets the permissions supplied in the array."""
 
