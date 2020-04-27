@@ -16,6 +16,8 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
+
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
 
         # all permissions should be false when the value is 0
@@ -39,6 +41,8 @@ class PermissionSetTestCase(TestCase):
 
        
         self.assertListEqual(expected_result, actual_result)
+        
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # IS_STAFF at position 1 
@@ -65,6 +69,8 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
+        
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
 
                 
@@ -95,7 +101,7 @@ class PermissionSetTestCase(TestCase):
         self.assertListEqual(expected_result, actual_result)
 
                 
-    
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
 
         # IS_STAFF at position 1 and CAN_REVIEW_PROOFS at position 4 and CAN_CREATE_TASKS at position 2
@@ -125,6 +131,7 @@ class PermissionSetTestCase(TestCase):
      
         self.assertListEqual(expected_result, actual_result)
 
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # IS_STAFF at position 1 and CAN_REVIEW_PROOFS at position 4 and CAN_CREATE_TASKS at position 2 and CAN_REPLY_TO_QUERIES at position 3
@@ -154,6 +161,8 @@ class PermissionSetTestCase(TestCase):
 
         
         self.assertListEqual(expected_result, actual_result)
+
+        #Integer created by permission test and entered must be equal
         self.assertEqual(permission_int,PermissionSet.integer_conver(permission_set))
                 
         # All permissions have been added
