@@ -119,16 +119,11 @@ class PermissionSet:
 
 
 
-class PermissionField(models.IntegerField):
+class PermissionField(models.Model):
     description = "Saves permissions as integers but returns a Permission Set"
 
-    def __init__(self, *args, **kwargs):
-        """This inherits most defaults of IntegerField except for the below"""
-
-        kwargs['default'] = PermissionSet()
-        kwargs['serialize'] = False
-        
-        super(PermissionSetField, self).__init__(*args, **kwargs)
+    description = "To store and retrieve the permissions"
+    perm = models.IntegerField(default=PermissionSet)
 
 
     def from_db_value(self, value, expression, connection, context):
