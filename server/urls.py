@@ -15,13 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include 
-from query import views
-from org import views
-from tasks import views
-from users import views
-from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title='teesco API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +23,5 @@ urlpatterns = [
     path('api/users/',include('users.urls')),
     path('api/org/',include('org.urls')),
     path('api/tasks/',include('tasks.urls')),
-    path('',schema_view)
+
 ]
