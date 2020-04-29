@@ -64,11 +64,7 @@ class PermissionSet:
     def __str__(self):
         """Returns a string of elements"""
 
-        permissions_array = []
-
-        for permission in self.permissions:
-            permissions_array.append(permission)
-
+        permissions_array = [str(x) for x in self.permissions]
         permission_string = ','.join(permissions_array)
         return permission_string
 
