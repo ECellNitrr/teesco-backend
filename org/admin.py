@@ -1,5 +1,4 @@
 from django.contrib import admin
-from org.models import Test
-# Register your models here.
+from org.models import PermissionSetTestModel
 
-admin.site.register(Test)
+admin.site.register(PermissionSetTestModel)

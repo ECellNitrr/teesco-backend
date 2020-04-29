@@ -3,64 +3,30 @@ from django.db import models
 
 
 class PermissionSet:
-
     """Helps in interconversion of permissions into objects(for ease of use) and integers(for storage in db)."""
 
-    # These mappings are to reduce the chance to misspell the permission name
 
-    IS_ADMIN = 'IS_ADMIN'  # 0 position
-    IS_STAFF = 'IS_STAFF'   # 1 position
-    CAN_CREATE_TASKS = 'CAN_CREATE_TASKS'   # 2 Position    
-    CAN_REPLY_TO_QUERIES = 'CAN_REPLY_TO_QUERIES'   # 3 Position
-    CAN_REVIEW_PROOFS = 'CAN_REVIEW_PROOFS' #4 Position
+    # These mappings are to reduce the chance to misspell the permission name
+    # enum is not used here because addicidentally changing the order corrupt the exisiting DB records 
+
+    IS_ADMIN = 0
+    IS_STAFF = 1
+    CAN_CREATE_TASKS = 2    
+    CAN_REPLY_TO_QUERIES = 3
+    CAN_REVIEW_PROOFS = 4
 
 
     def __init__(self,permission_int=0):
-
         """Creates a permission set object from the permission integer."""
 
         self.permissions = defaultdict(bool)
 
-        if permission_int&1:
-            self.permissions['IS_ADMIN'] = True   #2^0 = 1
-
-        if permission_int&2:
-            self.permissions['IS_STAFF'] = True   #2^1 = 2
-        
-        if permission_int&4:
-            self.permissions['CAN_CREATE_TASKS'] = True   #2^2 = 4
-
-        if permission_int&8:
-            self.permissions['CAN_REPLY_TO_QUERIES'] = True   #2^3 = 8
-
-        if permission_int&16:
-            self.permissions['CAN_REVIEW_PROOFS'] = True   #2^4 = 16
-
+        self.permissions[self.IS_ADMIN] = bool(permission_int & (1 << self.IS_ADMIN))   
+        self.permissions[self.IS_STAFF] = bool(permission_int & (1 << self.IS_STAFF))   
+        self.permissions[self.CAN_CREATE_TASKS] = bool(permission_int & (1 << self.CAN_CREATE_TASKS))   
+        self.permissions[self.CAN_REPLY_TO_QUERIES] = bool(permission_int & (1 << self.CAN_REPLY_TO_QUERIES))   
+        self.permissions[self.CAN_REVIEW_PROOFS] = bool(permission_int & (1 << self.CAN_REVIEW_PROOFS))   
     
-    def ret_permission_list(permission_int):
-
-        """Returns a list of permissions"""
-
-        permissions = list()
-
-        if permission_int&1:
-            permissions.append('IS_ADMIN')   #2^0 = 1
-
-        if permission_int&2:
-            permissions.append('IS_STAFF')  #2^1 = 2
-        
-        if permission_int&4:
-            permissions.append('CAN_CREATE_TASKS')   #2^2 = 4
-
-        if permission_int&8:
-            permissions.append('CAN_REPLY_TO_QUERIES')   #2^3 = 8
-
-        if permission_int&16:
-            permissions.append('CAN_REVIEW_PROOFS')  #2^4 = 16
-
-        return permissions
-
-
 
     def set_permissions(self, permissions_array):
         """Revokes all the permissions and sets the permissions supplied in the array."""
@@ -70,48 +36,38 @@ class PermissionSet:
             self.permissions[permission]=True
 
 
-    def integer_conver(self):
+    def permissions_to_integer(self):
         """Converts the permissions that are set(True) into an integer to be stored in the database."""
 
         permission_integer = 0
-
-        if self.permissions[self.IS_ADMIN]:
-            permission_integer+=1
-
-        if self.permissions[self.IS_STAFF]:
-            permission_integer+=2
-
-        if self.permissions[self.CAN_CREATE_TASKS]:
-            permission_integer+=4
-
-        if self.permissions[self.CAN_REPLY_TO_QUERIES]:
-            permission_integer+=8
-
-        if self.permissions[self.CAN_REVIEW_PROOFS]:
-            permission_integer+=16
-
+        for permission in self.permissions:
+            if self.permissions[permission]:
+                permission_integer |= 1 << permission
+        
         return permission_integer
 
-    def __str__(self):
 
+    def get_permission_list(self, permission_int):
+        """Returns a list of permissions available"""
+
+        permissions_list = [
+            self.IS_ADMIN,
+            self.IS_STAFF,
+            self.CAN_CREATE_TASKS,
+            self.CAN_REPLY_TO_QUERIES,
+            self.CAN_REVIEW_PROOFS
+        ]
+
+        return permissions_list
+
+
+    def __str__(self):
         """Returns a string of elements"""
 
         permissions_array = []
 
-        if self.permissions[self.IS_ADMIN]:
-            permissions_array.append(self.IS_ADMIN)
-
-        if self.permissions[self.IS_STAFF]:
-            permissions_array.append(self.IS_STAFF)
-
-        if self.permissions[self.CAN_CREATE_TASKS]:
-            permissions_array.append(self.CAN_CREATE_TASKS)
-
-        if self.permissions[self.CAN_REPLY_TO_QUERIES]:
-            permissions_array.append(self.CAN_REPLY_TO_QUERIES)
-
-        if self.permissions[self.CAN_REVIEW_PROOFS]:
-            permissions_array.append(self.CAN_REVIEW_PROOFS)
+        for permission in self.permissions:
+            permissions_array.append(permission)
 
         permission_string = ','.join(permissions_array)
         return permission_string
@@ -119,24 +75,36 @@ class PermissionSet:
 
 
 
-class PermissionField(models.Model):
-    description = "Saves permissions as integers but returns a Permission Set"
+class PermissionField(models.IntegerField):
+    "Saves permissions as an integer in the DB and returns PermissionSet obj when queried"
 
-    description = "To store and retrieve the permissions"
-    perm = models.IntegerField(default=PermissionSet)
+    def __init__(self, *args, **kwargs):
+        kwargs['default'] = PermissionSet()
+        super().__init__(*args, **kwargs)
 
 
-    def from_db_value(self, value, expression, connection, context):
-        return PermissionSet(value)
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        del kwargs["default"]
+        return name, path, args, kwargs
+
+
+    def from_db_value(self, value, expression, connection):
+        return self.to_python(value)
+
 
     def to_python(self, value):
+        if isinstance(value, PermissionSet):
+            return value
+        
+        if isinstance(value, str):
+            return PermissionSet(int(value)) 
+
+        if value is None:
+            return PermissionSet()
+        
         return PermissionSet(value)
+    
 
-    def get_prep_value(self, value):
-        if value:
-            return value.integer_conver()
-        return 0
-
-    def value_to_string(self, obj):
-        value = self.value_from_object(obj)
-        return self.get_prep_value(value)
+    def get_prep_value(self, value, *args, **kwargs):
+        return value.permissions_to_integer()
