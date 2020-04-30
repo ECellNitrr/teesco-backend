@@ -41,5 +41,5 @@ urlpatterns = [
     path('api/org/',include('org.urls')),
     path('api/tasks/',include('tasks.urls')),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
-
 ]
+
