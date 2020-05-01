@@ -8,6 +8,7 @@
 1. Make a copy of `.env.sample` to `.env` and change the values of variables with original values.
 1. Migrate the migrations: `python manage.py migrate`
 1. Run the app: `python manage.py runserver`
+1. Open two terminals and run `celery -A server worker -l info` and `redis-server`  on second and third terminal respectively.
 1. Navigate to http://localhost:8000 in your browser
 1. When you are done using the app, deactivate the virtual environment: `deactivate`
 

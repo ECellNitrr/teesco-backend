@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'query',
     'users',
     'org',
-    'tasks'
+    'tasks',
+    'core'
 ]
 
 MIDDLEWARE = [
