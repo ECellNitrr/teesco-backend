@@ -7,7 +7,7 @@ from users.models import User
 
 class Org (models.Model):
     route_slug = models.SlugField(max_length = 40)
-    can_join_without_invite = models.BooleanField()
+    can_join_without_invite = models.BooleanField(default = True)
     name = models.CharField(max_length=30)
     tagline = models.CharField(max_length = 50)
     about = models.CharField(max_length = 500)
