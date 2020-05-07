@@ -3,7 +3,7 @@
 ## Setup and run
 
 1. Create a virtual environment with Python3.7: `virtualenv env -p python3.7`
-1. Activate the virutal environment: `source /env/bin/activate`
+1. Activate the virutal environment: `source env/bin/activate`
 1. Install all the dependencies in `requirements.txt` file: `pip install -r requirements.txt`
 1. Make a copy of `.env.sample` to `.env` and change the values of variables with original values.
 1. Migrate the migrations: `python manage.py migrate`
