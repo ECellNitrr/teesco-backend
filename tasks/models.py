@@ -7,9 +7,9 @@ class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     social_media_platform = models.CharField(max_length=30)
     description = models.CharField(max_length=300)
-    share_link = models.CharField( max_length=30)
-    share_text = models.CharField(max_length=65536)
-    share_img = models.ImageField( upload_to='uploads/tasks/share_img', null=False)
+    share_link = models.CharField( max_length=30, null=True)
+    share_text = models.CharField(max_length=65536, null=True)
+    share_img = models.ImageField( upload_to='uploads/tasks/share_img', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
