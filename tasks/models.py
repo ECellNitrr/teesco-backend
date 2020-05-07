@@ -20,13 +20,23 @@ class Proof(models.Model):
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
     screenshot = models.ImageField( upload_to='uploads/tasks/screenshots', null=False)
     points = models.IntegerField()
+<<<<<<< HEAD
     proof_field_choices = (
+=======
+    proof_status_choices = (
+>>>>>>> 89e72fb9fd0f3489791fac23b61fb96c3247c5df
         ('accepted','Accepted'),
         ('pending','Review Pending'),
         ('rejected','Rejected')
     )
+<<<<<<< HEAD
     review_by_ai = models.CharField(max_length=50,choices = proof_field_choices)
     review_by_human = models.CharField(max_length=50,choices = proof_field_choices)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.org} - {self.task.id} -- {self.id}"
+=======
+    review_by_ai = models.CharField(max_length=50,choices = proof_field)
+    review_by_human = models.CharField(max_length=50,choices = proof_field)
+    created_at = models.DateTimeField(auto_now_add=True)
+>>>>>>> 89e72fb9fd0f3489791fac23b61fb96c3247c5df
