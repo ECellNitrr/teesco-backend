@@ -17,7 +17,7 @@ class Proof(models.Model):
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
     screenshot = models.ImageField( upload_to='uploads/tasks/screenshots', null=False)
     points = models.IntegerField()
-    proof_field = (
+    proof_status_choices = (
         ('accepted','Accepted'),
         ('pending','Review Pending'),
         ('rejected','Rejected')
