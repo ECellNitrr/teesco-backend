@@ -10,7 +10,7 @@ class PermissionSetTestModel(models.Model):
 class Org (models.Model):
     route_slug = models.SlugField(max_length = 40, unique=True)
     can_join_without_invite = models.BooleanField(default = True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=False, blank=False)
     tagline = models.CharField(max_length = 50)
     about = models.CharField(max_length = 500, null=True)
     profile_pic = models.ImageField(upload_to = 'uploads/org/profile_pic', null=True)
@@ -21,17 +21,17 @@ class Org (models.Model):
         return self.name
 
 class PermissionSet(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=False, blank=False)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
     permissions = PermissionField()
 
     def __str__(self):
-        return f'{self.id}-{self.perm.permissions_to_integer()}'
+        return f'{self.id}-{self.permissions.permissions_to_integer()}'
 
 
 
 class Group (models.Model):
-    name = models.CharField(max_length = 30)
+    name = models.CharField(max_length = 30, null=False, blank=False)
     role = models.CharField(max_length = 200)
     invite_slug = models.SlugField(max_length = 40, unique=True)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
@@ -48,7 +48,7 @@ class Member (models.Model):
     permissions  = models.ForeignKey(PermissionSet, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.id}-{self.org.name}-{self.group.name}-{self.user.name}'
+        return f'{self.id}-{self.org.name}-{self.group.name}-{self.user.username}'
 
 
 class Leaderboard (models.Model):
@@ -57,4 +57,4 @@ class Leaderboard (models.Model):
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.id}-{self.org.name}-{self.user.name}-{self.points}'
+        return f'{self.id}-{self.org.name}-{self.user.username}-{self.points}'
