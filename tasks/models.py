@@ -12,16 +12,21 @@ class Task(models.Model):
     share_img = models.ImageField( upload_to='uploads/tasks/share_img', null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.org} - {self.social_media_platform} - {self.id}"
+
 class Proof(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
     screenshot = models.ImageField( upload_to='uploads/tasks/screenshots', null=False)
     points = models.IntegerField()
-    proof_field = (
+    proof_field_choices = (
         ('accepted','Accepted'),
         ('pending','Review Pending'),
         ('rejected','Rejected')
     )
-    review_by_ai = models.CharField(max_length=50,choices = proof_field)
-    review_by_human = models.CharField(max_length=50,choices = proof_field)
+    review_by_ai = models.CharField(max_length=50,choices = proof_field_choices)
+    review_by_human = models.CharField(max_length=50,choices = proof_field_choices)
     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.org} - {self.task.id} -- {self.id}"
