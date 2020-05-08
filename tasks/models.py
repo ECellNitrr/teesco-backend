@@ -25,8 +25,9 @@ class Proof(models.Model):
         ('pending','Review Pending'),
         ('rejected','Rejected')
     )
-    review_by_ai = models.CharField(max_length=50,choices = proof_field_choices)
-    review_by_human = models.CharField(max_length=50,choices = proof_field_choices)
+    review_by_ai = models.CharField(max_length=50,choices = proof_status_choices)
+    review_by_human = models.CharField(max_length=50,choices = proof_status_choices)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f"{self.org} - {self.task.id} -- {self.id}"
