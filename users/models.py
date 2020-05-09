@@ -14,7 +14,7 @@ class User (AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.username
 
 class Notification (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -22,4 +22,4 @@ class Notification (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.name + self.id
+        return self.user.username + self.id
