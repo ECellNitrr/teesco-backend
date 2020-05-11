@@ -7,7 +7,7 @@ from users.serializers import RegistrationSerializer
 # Create your views here.
 
 @api_view(['POST'])
-def registrationview(request):
+def Registrationview(request):
 
     serializer = RegistrationSerializer(data = request.data)
     data = {}
