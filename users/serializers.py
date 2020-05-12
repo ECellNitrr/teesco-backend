@@ -5,13 +5,13 @@ from rest_framework.validators import UniqueValidator
 class RegistrationSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(
-        write_only=True,
-        required=False,
-        min_length=8,
-        error_messages={
-            "blank": "Password cannot be empty.",
-            "min_length": "Password must be atleast 8 characters.",
-        },
+            write_only=True,
+            required=False,
+            min_length=8,
+            error_messages={
+                "blank": "Password cannot be empty.",
+                "min_length": "Password must be atleast 8 characters.",
+            },
     )
 
     email = serializers.EmailField(validators=[
@@ -27,9 +27,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email','name','password','institution','country_code','phone']
-        extra_kwargs = {
-            "name": {"error_messages": {"required": "Name field is required."}}
-        }
+                extra_kwargs = {
+                        "name": {"error_messages": {"required": "Name field is required."}}
+                    }
          
         def save(self):
 
