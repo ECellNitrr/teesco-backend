@@ -15,15 +15,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
     )
 
     email = serializers.EmailField(validators=[
-    UniqueValidator(
-        queryset=User.objects.all(),
-        message="This email has already been taken",
-    )],
-    error_messages = {
-        "required": "Email field is required.", 
-        "invalid" : "Kindly enter a Valid Email Address",
-    }
-    )
+                UniqueValidator(
+                    queryset=User.objects.all(),
+                    message="This email is already registered with us.",
+                )],
+                error_messages = {
+                    "required": "Email field is required.", 
+                    "invalid" : "Kindly enter a Valid Email Address",
+                })
 
     class Meta:
         model = User
