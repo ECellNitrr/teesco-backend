@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'query',
     'users',
     'org',
@@ -140,5 +141,23 @@ STATIC_URL = '/static/'
 
 # drf-yasg 
 SWAGGER_SETTINGS  = {
-    'DEFAULT_MODEL_RENDERING' : 'example'
+    'DEFAULT_MODEL_RENDERING' : 'example',
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+   }
+}
+
+# django rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
