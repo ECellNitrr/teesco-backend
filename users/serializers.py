@@ -44,3 +44,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "name": {"error_messages": {"required": "Name field is required."}}
         }
          
+
+class LoginSerializer(serializers.Serializer):
+    email= serializers.EmailField(allow_blank=False)
+    password= serializers.CharField(allow_blank=False)
