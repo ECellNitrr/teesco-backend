@@ -24,6 +24,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "invalid" : "Kindly enter a Valid Email Address",
         })
 
+    def save(self):
+        user = User.objects.create_user(
+            email = self.validated_data['email'],
+            username = self.validated_data['email'],
+            name = self.validated_data['name'],
+            password = self.validated_data['password'],
+            institution = self.validated_data['institution'],
+            country_code = self.validated_data['country_code'],
+            phone = self.validated_data['phone']
+        )
+
+        user.save()
+        return user
+
     class Meta:
         model = User
         fields = ['email','name','password','institution','country_code','phone']
@@ -31,16 +45,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "name": {"error_messages": {"required": "Name field is required."}}
         }
          
-        def save(self):
-
-            user = User(
-                email = self.validated_data['email'],
-                username = self.validated_data['email'],
-                name = self.validated_data['name'],
-                password = self.validated_data['password'],
-                institution = self.validated_data['institution'],
-                country_code = self.validated_data['country_code'],
-            )
-
-            user.save()
-            return user
