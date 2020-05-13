@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from utils.swagger import set_example
 
+
 # Create your views here.
 @swagger_auto_schema(
     operation_id="test_authentication",

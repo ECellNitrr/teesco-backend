@@ -143,9 +143,6 @@ STATIC_URL = '/static/'
 SWAGGER_SETTINGS  = {
     'DEFAULT_MODEL_RENDERING' : 'example',
     'SECURITY_DEFINITIONS': {
-        'Basic': {
-            'type': 'basic'
-        },
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
@@ -157,7 +154,6 @@ SWAGGER_SETTINGS  = {
 # django rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
