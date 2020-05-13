@@ -6,7 +6,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(
         write_only=True,
-        required=False,
         min_length=8,
         error_messages={
             "blank": "Password cannot be empty.",
