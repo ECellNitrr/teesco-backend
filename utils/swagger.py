@@ -2,14 +2,11 @@ from drf_yasg.openapi import Response
 from rest_framework import serializers 
 
 
-class AuthHeaderSerializer(serializers.Serializer):
-    Authorization={}
-
-
 # It will suffice in some cases (like error message to show the possible errors)
 # This serialiser will be used for error messages
 class PlaceholderSerialiser(serializers.Serializer):
     pass
+
 
 # Used to create a example response object
 def set_example(example, description='', schema=PlaceholderSerialiser):
