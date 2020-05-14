@@ -6,6 +6,7 @@
 1. Activate the virutal environment: `source env/bin/activate`
 1. Install all the dependencies in `requirements.txt` file: `pip install -r requirements.txt`
 1. Make a copy of `.env.sample` to `.env` and change the values of variables with original values.
+1. Replace `email@gmail.com` with your email and `password` with your password in the `.env` file.
 1. Migrate the migrations: `python manage.py migrate`
 1. Run the app: `python manage.py runserver`
 1. Open two terminals and run `celery -A server worker -l info` and `redis-server`  on second and third terminal respectively.
