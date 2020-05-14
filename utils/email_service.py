@@ -4,4 +4,4 @@ from decouple import config
 
 @shared_task
 def send_email(recipient,subject,body):
-    send_mail(subject, body, config('EMAIL_HOST_USER') , [recipient,])
+    send_mail(subject, body, config('EMAIL_HOST_USER') , recipient)
