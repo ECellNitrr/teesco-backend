@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'tasks',
     'core',
     'drf_yasg',
-    'utils'
 ]
 
 MIDDLEWARE = [
