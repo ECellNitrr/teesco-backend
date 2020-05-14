@@ -5,8 +5,10 @@ install:
 - pip install -r requirements.txt
 - python manage.py migrate
 env:
-  SECRET_KEY: 'sameple_secret_key'
-  ALLOWED_HOSTS: '*'
+  SECRET_KEY: sameple_secret_key
+  ALLOWED_HOSTS: "*"
   DEBUG: 'True'
+  EMAIL_HOST_USER: naveennvrgup@gmail.com
+  EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
 script:
 - python manage.py test
