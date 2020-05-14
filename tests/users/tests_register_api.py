@@ -78,3 +78,15 @@ class RegistrationTestCase(APITestCase):
 
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
         self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
+
+    def test_registration_with_invalid_email(self):
+        data = {
+            "email" : "testtest.test",
+            "name" : "test",
+            "password": "testingg",
+        }
+
+        response = self.client.post("/api/users/register/", data)
+
+        self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
+        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
