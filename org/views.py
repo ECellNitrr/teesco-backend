@@ -26,18 +26,22 @@ class OrgView(APIView):
         },
     )
     def post(self,request):
-    """
-    when a org is created Admin and Volunteer
-    groups are created automatically
-    Generating permissions for that
-    Voluntter group has no permissions
-    """
-
+        """
+        1. when a Organisation is created Admin and Volunteer 
+            groups are also automatically created for that org.
+        2. Admin group has all the permissions available.
+        3. Volunteer group has no permissions but when a user  
+            joins that org without invite link he/she will be 
+            put into volunteer group.
+        4. The creator of the org will be automatically put into Admin group.
+        """
         serializer = CreateOrgSerializer(data = request.data)
 
         if serializer.is_valid():
+            # create org and default groups
             org,admin_group,admin_permission_set = serializer.save()
 
+            # add creator to admin group
             member = Member.objects.create(
                 user=request.user,
                 org=org,

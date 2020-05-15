@@ -5,18 +5,20 @@ from .custom_model_field import PermissionSet as Permissions
 from slugify import slugify
 import uuid
 
+
 class CreateOrgSerializer(serializers.Serializer):
     name= serializers.CharField(allow_blank=False)
     tagline= serializers.CharField(allow_blank=False)
     profile_pic = serializers.ImageField(required=False)
 
+
     def save(self):
         # get validated data from serializer
         valid_data = self.validated_data
 
-
         # generate a unique route slug
         # by prefixing it with its org.id the unquiness is ensured
+        # this method makes it to be semi-readable
         last_org_id = 0
         if Org.objects.count()>0:
             last_org_id = Org.objects.last().id + 1      
@@ -33,10 +35,10 @@ class CreateOrgSerializer(serializers.Serializer):
             profile_pic=valid_data.get('profile_pic',None)
         )
 
-
-        # Admin group has all permissions available 
+        # create default group permissions  
         volunteer_permissions = Permissions()
         admin_permissions = Permissions()
+        
         admin_permissions.set_permissions([
             Permissions.IS_ADMIN,
             Permissions.IS_STAFF,
@@ -44,6 +46,9 @@ class CreateOrgSerializer(serializers.Serializer):
             Permissions.CAN_REPLY_TO_QUERIES,
             Permissions.CAN_REVIEW_PROOFS,
         ]) 
+        
+        
+        # create deafult group permission_sets
         admin_permission_set = PermissionSet.objects.create(
             name = 'Admin',
             org = org,
@@ -55,12 +60,15 @@ class CreateOrgSerializer(serializers.Serializer):
             permissions = volunteer_permissions 
         )
 
+
         # creating invite slugs
+        # this method is used because we dont need a 
+        # readable link this time
         admin_group_invite_slug = str(org.id)+'-'+str(uuid.uuid4())
         volunteer_group_invite_slug = str(org.id)+'-'+str(uuid.uuid4())
 
 
-        # Creating Admin and Volunteer groups
+        # Creating default groups
         admin_group = Group.objects.create(
             name='Admin',
             role='''This group is for owners/top level members of the org. 
@@ -69,7 +77,6 @@ class CreateOrgSerializer(serializers.Serializer):
             org=org,
             default_permission_set=admin_permission_set
         )
-
         volunteer_group = Group.objects.create(
             name='Volunteer',
             role='''When a person clicks join org button of his own without a 
@@ -78,5 +85,6 @@ class CreateOrgSerializer(serializers.Serializer):
             org=org,
             default_permission_set=volunteer_permission_set
         )
+
 
         return [org,admin_group,admin_permission_set]
