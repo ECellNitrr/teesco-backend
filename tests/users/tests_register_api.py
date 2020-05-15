@@ -17,7 +17,6 @@ class RegistrationTestCase(APITestCase):
 
         response = self.client.post("/api/users/register/", data)
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
-        self.assertNotEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
 
     def test_registration_with_used_email(self):
         data = {
@@ -33,7 +32,6 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/users/register/", data)
 
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
 
 
     def test_registration_without_optional_fields(self):
@@ -45,7 +43,6 @@ class RegistrationTestCase(APITestCase):
 
         response = self.client.post("/api/users/register/", data)
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
-        self.assertNotEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
 
 
     def test_registration_without_email(self):
@@ -56,7 +53,6 @@ class RegistrationTestCase(APITestCase):
 
         response = self.client.post("/api/users/register/", data)
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
 
     def test_registration_without_name(self):
         data = {
@@ -66,7 +62,6 @@ class RegistrationTestCase(APITestCase):
 
         response = self.client.post("/api/users/register/", data)
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
 
     def test_registration_without_password(self):
         data = {
@@ -77,7 +72,6 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/users/register/", data)
 
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
 
     def test_registration_with_invalid_email(self):
         data = {
@@ -89,7 +83,6 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/users/register/", data)
 
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
 
     def test_registration_with_small_password(self):
         data = {
@@ -101,4 +94,3 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/users/register/", data)
 
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
-        self.assertNotEqual(response.status_code , status.HTTP_201_CREATED)
