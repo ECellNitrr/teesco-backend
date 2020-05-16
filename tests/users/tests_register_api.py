@@ -18,6 +18,15 @@ class RegistrationTestCase(APITestCase):
         response = self.client.post("/api/users/register/", data)
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
 
+        data_login = {
+
+            "email" : "test@test.test",
+            "password": "testingg"
+        }
+
+        response = self.client.post("/api/users/login/", data_login)
+        self.assertEqual(response.status_code , status.HTTP_202_ACCEPTED)
+
     def test_registration_with_used_email(self):
         data = {
             "email" : "test@test.test",
