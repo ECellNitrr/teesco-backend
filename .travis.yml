@@ -10,5 +10,6 @@ env:
   DEBUG: 'True'
   EMAIL_HOST_USER: naveennvrgup@gmail.com
   EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
+  MOCK_EMAIL: 'True'
 script:
 - python manage.py test
