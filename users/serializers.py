@@ -34,14 +34,27 @@ class RegistrationSerializer(serializers.ModelSerializer):
         error_messages = {
             "required": "Name field is required.", 
         },)
-    institution = serializers.CharField(allow_blank=True, required=False)
-    country_code = serializers.CharField(allow_blank=True, required=False)
-    phone = serializers.CharField(allow_blank=True, required=False)
+    institution = serializers.CharField(allow_blank=True, required=False, default = None)
+    country_code = serializers.CharField(allow_blank=True, required=False, default = None)
+    phone = serializers.CharField(allow_blank=True, required=False, default = None)
 
     class Meta:
         model = User
         fields = ['email','name','password','institution','country_code','phone']
-         
+
+    def save(self):
+        user = User.objects.create_user(
+            email = self.validated_data['email'],
+            username = self.validated_data['email'],
+            name = self.validated_data['name'],
+            password = self.validated_data['password'],
+            institution = self.validated_data['institution'],
+            country_code = self.validated_data['country_code'],
+            phone = self.validated_data['phone']
+        )
+
+        user.save()
+        return user         
 
 class LoginSerializer(serializers.Serializer):
     email= serializers.EmailField(allow_blank=False)
