@@ -9,9 +9,9 @@ class User (AbstractUser):
     name = models.CharField(max_length=30, null=False, blank=False)
     password = models.CharField(max_length = 30)
     username = models.CharField(max_length=30, null=False, blank=False, unique = True)
-    institution = models.CharField(max_length=30)
-    country_code = models.CharField(max_length=6)
-    phone = models.CharField(max_length=10)
+    institution = models.CharField(max_length=30,blank=True, null=True)
+    country_code = models.CharField(max_length=6,blank=True, null=True)
+    phone = models.CharField(max_length=10,blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
