@@ -31,8 +31,11 @@ ALLOWED_HOSTS='*'
 DEBUG='True'
 EMAIL_HOST_USER='naveen@gmail.com'
 EMAIL_HOST_PASSWORD='wnejszjzrvacvkpn'
+MOCK_EMAIL ='True'
 ```
 
+note:
+1. MOCK_EMAIL defaults to True
 
 ## Email Setup
 
