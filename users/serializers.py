@@ -10,7 +10,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         error_messages={
             "blank": "Password cannot be empty.",
             "min_length": "Password must be atleast 8 characters.",
-        },
+        }, 
+        allow_blank=False,
+        required=True
     )
 
     email = serializers.EmailField(validators=[
@@ -21,7 +23,24 @@ class RegistrationSerializer(serializers.ModelSerializer):
         error_messages = {
             "required": "Email field is required.", 
             "invalid" : "Kindly enter a Valid Email Address",
-        })
+        }, 
+        allow_blank=False,
+        required=True
+    )
+
+    name = serializers.CharField(
+        allow_blank=False,
+        required=True,
+        error_messages = {
+            "required": "Name field is required.", 
+        },)
+    institution = serializers.CharField(allow_blank=True, required=False, default = None)
+    country_code = serializers.CharField(allow_blank=True, required=False, default = None)
+    phone = serializers.CharField(allow_blank=True, required=False, default = None)
+
+    class Meta:
+        model = User
+        fields = ['email','name','password','institution','country_code','phone']
 
     def save(self):
         user = User.objects.create_user(
@@ -35,15 +54,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
 
         user.save()
-        return user
-
-    class Meta:
-        model = User
-        fields = ['email','name','password','institution','country_code','phone']
-        extra_kwargs = {
-            "name": {"error_messages": {"required": "Name field is required."}}
-        }
-         
+        return user         
 
 class LoginSerializer(serializers.Serializer):
     email= serializers.EmailField(allow_blank=False)
