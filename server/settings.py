@@ -140,6 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL= '/media/' # user uploaded files will be served from this url prefix
 
 
 # disable cors
