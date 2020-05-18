@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
 from . import responses
+from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
@@ -52,3 +53,40 @@ class OrgView(APIView):
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    operation_id="add_volunteer",
+    operation_description="When an authenticated user hits this API it gets added to the volunteer group"
+    method='get',
+    responses={
+        '200': set_example({"message": "You're added as a volunteer!"}),
+        '401': set_example({"detail": "Authentication credentials were not provided."})
+    }
+)
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def AddVolunteer(request,org_id):
+    org_count = Org.objects.filter(pk=org_id).count()
+    if org_count>0:
+        org = Org.objects.get(pk=org_id)
+        volunteer_permissions = Permissions()
+        volunteer_permission_set = PermissionSet.objects.get(
+            name='Volunteer',
+            org=org,
+            permissions = volunteer_permissions,
+        )
+        volunteer_group = Group.objects.get(
+            name='Volunteer',
+            org=org,
+            default_permission_set=volunteer_permission_set,
+        )
+        member = Member.objects.create(
+            user = request.user,
+            org = org,
+            group = volunteer_group,
+            permissions = volunteer_permission_set 
+        )
+        return Response({'You are added as a volunteer'},status.HTTP_201_CREATED)
+    else:
+        return Response({'Organization not present'},status.HTTP_400_BAD_REQUEST)
