@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework import status 
+from rest_framework import status
 from rest_framework.views import APIView
 from users.serializers import *
 from django.contrib.auth import authenticate
 from . import responses
 from drf_yasg.utils import swagger_auto_schema
 from utils.swagger import set_example
-from rest_framework.authtoken.models import Token 
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 
 class RegistrationView(APIView):
@@ -21,6 +23,7 @@ class RegistrationView(APIView):
             '400': set_example(responses.user_registration_400)
         },
     )
+
     def post(self,request):
         """
             Registers a user with certain details into the database, after this users can log in.
@@ -54,18 +57,42 @@ class LoginView(APIView):
 
         if serializer.is_valid():
             user = authenticate(
-                username= serializer.data['email'], 
-                password= serializer.data['password']
+                username=serializer.data['email'],
+                password=serializer.data['password']
             )
-            
+
             if user:
-                token,_ = Token.objects.get_or_create(user=user)
+                token, _ = Token.objects.get_or_create(user=user)
 
                 return Response({
                     'token': f"Token {token.key}"
                 }, status.HTTP_202_ACCEPTED)
             else:
-                return Response({'message':'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
+                return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    operation_id="view_user",
+    method='get',
+    responses={
+        '200': set_example(responses.profile_200),
+        '401': set_example({"detail": "Authentication credentials were not provided."})
+    }
+)
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def profile_view(request):
+    user = request.user
+    user_object = {
+        'email': user.email,
+        'username': user.username,
+        'name': user.name,
+        'institution': user.institution,
+        'country_code': user.country_code,
+        'phone': user.phone,
+        'created_at': user.created_at
+    }
+    return Response(user_object, status.HTTP_200_OK)
