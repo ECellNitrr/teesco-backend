@@ -11,6 +11,7 @@ from utils.swagger import set_example
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from org.models import *
 
 
 class RegistrationView(APIView):
@@ -89,3 +90,25 @@ def profile_view(request):
         'created_at': user.created_at
     }
     return Response(user_object, status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    operation_id="list_orgs",
+    method='get',
+    responses={
+        '200': set_example(responses.list_orgs_200),
+        '401': set_example({"detail": "Authentication credentials were not provided."})
+    }
+)
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def list_orgs_view(request):
+    members = Member.objects.filter(user=request.user)
+    response_object = []
+    for member in members:
+        org = {
+            'org_name': member.org.name,
+            'user_role': member.group.name
+        }
+        response_object.append(org)
+    return Response(response_object, status.HTTP_200_OK)

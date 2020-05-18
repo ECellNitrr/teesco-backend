@@ -50,3 +50,14 @@ profile_200 = {
             'phone': "phone number",
             'created_at': "time"
 }
+
+list_orgs_200 = [
+    {
+        "org_name": "E Cell",
+        "user_role": "Admin"
+    },
+    {
+        "org_name": "NITRR",
+        "user_role": "Admin"
+    }
+]
