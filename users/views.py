@@ -22,6 +22,9 @@ class RegistrationView(APIView):
         },
     )
     def post(self,request):
+        """
+            Registers a user with certain details into the database, after this users can log in.
+        """
         serializer = RegistrationSerializer(data = request.data)
 
         if serializer.is_valid():
@@ -44,6 +47,9 @@ class LoginView(APIView):
         },
     )
     def post(self,request):
+        """
+            Logs in particular user with email and password, generates a token when logged in.
+        """
         serializer = LoginSerializer(data = request.data)
 
         if serializer.is_valid():

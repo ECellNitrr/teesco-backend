@@ -27,7 +27,7 @@ class OrgView(APIView):
     )
     def post(self,request):
         """
-        1. when a Organisation is created Admin and Volunteer 
+        1. When an Organisation is created Admin and Volunteer 
             groups are also automatically created for that org.
         2. Admin group has all the permissions available.
         3. Volunteer group has no permissions but when a user  

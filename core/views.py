@@ -10,6 +10,10 @@ from utils.swagger import set_example
 # Create your views here.
 @swagger_auto_schema(
     operation_id="test_authentication",
+    operation_description=
+    """
+        Checks if the user is authenticated or not.
+    """,
     method='get',
     responses={
         '200': set_example({"message": "You are authenticated user!"}),
