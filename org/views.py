@@ -57,7 +57,7 @@ class OrgView(APIView):
 
 @swagger_auto_schema(
     operation_id="add_volunteer",
-    operation_description="When an authenticated user hits this API it gets added to the volunteer group"
+    operation_description="When an authenticated user hits this API it gets added to the volunteer group",
     method='get',
     responses={
         '200': set_example({"message": "You're added as a volunteer!"}),
