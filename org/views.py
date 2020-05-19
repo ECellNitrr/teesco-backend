@@ -70,11 +70,9 @@ def AddVolunteer(request,org_id):
     org_count = Org.objects.filter(pk=org_id).count()
     if org_count>0:
         org = Org.objects.get(pk=org_id)
-        volunteer_permissions = Permissions()
         volunteer_permission_set = PermissionSet.objects.get(
             name='Volunteer',
-            org=org,
-            permissions = volunteer_permissions,
+            org=org
         )
         volunteer_group = Group.objects.get(
             name='Volunteer',
