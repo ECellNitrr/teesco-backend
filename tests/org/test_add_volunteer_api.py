@@ -74,6 +74,26 @@ class AddVolunteerAPITestCase(AuthAPITestCase):
         auth_client.credentials(HTTP_AUTHORIZATION=auth_token)
         return auth_client
 
+    #Creates auth client in the org as volunteer
+    def create_auth_client_in_org(self):
+        """
+        This function returns an authorized client.
+        """
+        login_api = "/api/users/login/"
+        login_payload = {
+            'email': self.user_email,
+            'password': self.user_password
+        }
+        add_volunteer_api = "/api/org/1/volunteer/"
+        auth_client = APIClient()
+        login_response = auth_client.post(login_api, login_payload)
+        auth_token = login_response.data['token']
+        
+        # Authorizing the requests by adding the token in header.
+        auth_client.credentials(HTTP_AUTHORIZATION=auth_token)
+        auth_client.get(add_volunteer_api)
+        return auth_client
+    
     def test_fail_without_auth_header(self):
         add_volunteer_api = "/api/org/1/volunteer/"
         un_auth_client = APIClient()
@@ -85,6 +105,19 @@ class AddVolunteerAPITestCase(AuthAPITestCase):
         auth_client = self.create_auth_client()
         response = auth_client.get(add_volunteer_api)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+    def test_already_member(self):
+        add_volunteer_api = "/api/org/1/volunteer/"
+        auth_client = self.create_auth_client_in_org()
+        response = auth_client.get(add_volunteer_api)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_fail_bad_org_id(self):
+        add_volunteer_api = "/api/org/2/volunteer/"
+        auth_client = self.create_auth_client()
+        response = auth_client.get(add_volunteer_api)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+ 
     def tearDown(self):
         self.user.delete()

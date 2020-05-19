@@ -60,33 +60,40 @@ class OrgView(APIView):
     operation_description="When an authenticated user hits this API it gets added to the volunteer group",
     method='get',
     responses={
-        '200': set_example({"message": "You're added as a volunteer!"}),
-        '401': set_example({"detail": "Authentication credentials were not provided."})
+        '201': set_example(responses.add_volunteer_201),
+        '400': set_example(responses.org_not_present_400),
+        '401': set_example(responses.user_unauthorized_401),
+        '200': set_example(responses.user_already_present_200)
     }
 )
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
 def AddVolunteer(request,org_id):
     org_count = Org.objects.filter(pk=org_id).count()
+    
     if org_count>0:
         org = Org.objects.get(pk=org_id)
-        volunteer_permissions = Permissions()
-        volunteer_permission_set = PermissionSet.objects.get(
-            name='Volunteer',
-            org=org,
-            permissions = volunteer_permissions,
-        )
-        volunteer_group = Group.objects.get(
-            name='Volunteer',
-            org=org,
-            default_permission_set=volunteer_permission_set,
-        )
-        member = Member.objects.create(
+        member_present = Member.objects.filter(
             user = request.user,
-            org = org,
-            group = volunteer_group,
-            permissions = volunteer_permission_set 
-        )
-        return Response({'You are added as a volunteer'},status.HTTP_201_CREATED)
+            org = org 
+        ).count()
+        if member_present>0:
+            return Response({"message":"Already a member of the organization"},status.HTTP_200_OK)
+        else:
+            volunteer_permission_set = PermissionSet.objects.get(
+                name='Volunteer',
+                org=org,
+            )
+            volunteer_group = Group.objects.get(
+                name='Volunteer',
+                org=org,
+            )
+            member = Member.objects.create(
+                user = request.user,
+                org = org,
+                group = volunteer_group,
+                permissions = volunteer_permission_set 
+            )
+            return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
-        return Response({'Organization not present'},status.HTTP_400_BAD_REQUEST)
+        return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
