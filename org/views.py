@@ -63,7 +63,7 @@ class OrgView(APIView):
         '201': set_example(responses.add_volunteer_201),
         '400': set_example(responses.org_not_present_400),
         '401': set_example(responses.user_unauthorized_401),
-        '409': set_example(responses.user_already_present_409)
+        '200': set_example(responses.user_already_present_200)
     }
 )
 @api_view(['get'])
@@ -78,7 +78,7 @@ def AddVolunteer(request,org_id):
             org = org 
         ).count()
         if member_present>0:
-            return Response({"message":"Already a member of the organization"},status.HTTP_409_CONFLICT)
+            return Response({"message":"Already a member of the organization"},status.HTTP_200_OK)
         else:
             volunteer_permission_set = PermissionSet.objects.get(
                 name='Volunteer',
