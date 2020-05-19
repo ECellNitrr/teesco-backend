@@ -23,8 +23,4 @@ class Notification (models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-<<<<<<< HEAD
-        return self.user.name + self.id
-=======
-        return self.user.username + self.id
->>>>>>> upstream/dev
+        return (self.user.username + self.id)
