@@ -103,12 +103,22 @@ def profile_view(request):
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
 def list_orgs_view(request):
+    """
+    1. The API lists all the orgs the authorized user is a part of. 
+    2. The API gives information about the orgs listed and 
+    the group (user_role) the user is in. 
+    3. It returns a null for profile pic if no picture url is found in that field.
+    """
     members = Member.objects.filter(user=request.user)
     response_object = []
     for member in members:
         org = {
+            'id': member.org.id,
             'org_name': member.org.name,
-            'user_role': member.group.name
+            'user_role': member.group.name,
+            'profile_pic': member.org.profile_pic if member.org.profile_pic else "null",
+            'route_slug': member.org.route_slug,
+            'tagline': member.org.tagline
         }
         response_object.append(org)
     return Response(response_object, status.HTTP_200_OK)
