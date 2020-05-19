@@ -50,13 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'drf_yasg',
-    'query',
-    'users',
-    'org',
-    'tasks'
-=======
     'rest_framework',
     'rest_framework.authtoken',
     'query',
@@ -65,7 +58,6 @@ INSTALLED_APPS = [
     'tasks',
     'core',
     'drf_yasg',
->>>>>>> upstream/dev
 ]
 
 MIDDLEWARE = [

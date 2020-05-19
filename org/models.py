@@ -1,8 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-
-# Create your models here.
-=======
 from .custom_model_field import *
 from users.models import User
 
@@ -62,4 +58,3 @@ class Leaderboard (models.Model):
 
     def __str__(self):
         return f'{self.id}-{self.org.name}-{self.user.username}-{self.points}'
->>>>>>> upstream/dev
