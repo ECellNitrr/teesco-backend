@@ -16,3 +16,5 @@ debug.log
 .vscode
 .idea
 
+#uploads
+/uploads

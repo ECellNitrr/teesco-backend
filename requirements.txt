@@ -1,12 +1,65 @@
+amqp==2.5.2
+appdirs==1.4.3
 asgiref==3.2.7
+billiard==3.6.3.0
+CacheControl==0.12.6
+celery==4.4.2
+certifi==2020.4.5.1
+chardet==3.0.4
+colorama==0.4.3
+contextlib2==0.6.0
+coreapi==2.3.3
+coreschema==0.0.4
+distlib==0.3.0
+distro==1.4.0
 Django==3.0.5
 django-cors-headers==3.2.1
+django-rest-swagger==2.2.0
 djangorestframework==3.11.0
+drf-yasg==1.17.1
+html5lib==1.0.1
+idna==2.9
+importlib-metadata==1.6.0
+inflection==0.4.0
+ipaddr==2.2.0
+itypes==1.2.0
+Jinja2==2.11.2
+kombu==4.6.8
+lockfile==0.12.2
+MarkupSafe==1.1.1
+msgpack==0.6.2
+openapi-codec==1.3.2
+packaging==20.3
+pep517==0.8.2
 Pillow==7.1.1
+<<<<<<< HEAD
 python-decouple==3.3
+=======
+progress==1.5
+pyparsing==2.4.7
+python-decouple==3.3
+python-slugify==4.0.0
+pytoml==0.1.21
+>>>>>>> upstream/dev
 pytz==2019.3
+redis==3.5.0
+requests==2.23.0
+retrying==1.3.3
+ruamel.yaml==0.16.10
+ruamel.yaml.clib==0.2.0
+simplejson==3.17.0
+six==1.14.0
 sqlparse==0.3.1
+<<<<<<< HEAD
 
 
 drf-yasg
 
+=======
+text-unidecode==1.3
+uritemplate==3.0.1
+urllib3==1.25.9
+vine==1.3.0
+webencodings==0.5.1
+zipp==3.1.0
+>>>>>>> upstream/dev
