@@ -56,7 +56,7 @@ class PermissionSet:
             'Permission for task creation' : self.CAN_CREATE_TASKS,
             'Permission to resolve queries' : self.CAN_REPLY_TO_QUERIES,
             'Permission to review proofs' : self.CAN_REVIEW_PROOFS
-        ]
+        }
 
         return permissions_dict
 
