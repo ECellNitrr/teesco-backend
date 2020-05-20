@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import *
 from .models import *
 from . import responses
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
+from rest_framework.decorators import api_view, permission_classes
 
 
 class OrgView(APIView):
@@ -52,3 +53,20 @@ class OrgView(APIView):
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    operation_id="list_permissions",
+    method='GET',
+    responses={
+        '200': set_example({}),
+        '400':set_example({"detail": "Unauthorised"}),
+        '401': set_example({"detail": "Authentication credentials were not provided."})
+    }
+)
+@permission_classes([IsAdminUser])
+@api_view(['GET'])
+def list_permissions_view(request):
+    member = Member.objects.filter(user=request.user).last()
+    response_unit = member.permissions.permissions.get_permission_dict()
+    return Response(response_unit, status.HTTP_200_OK)
