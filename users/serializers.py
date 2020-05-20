@@ -57,5 +57,5 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return user         
 
 class LoginSerializer(serializers.Serializer):
-    email= serializers.EmailField(allow_blank=False)
-    password= serializers.CharField(allow_blank=False)
+    email = serializers.EmailField(allow_blank=False)
+    password = serializers.CharField(allow_blank=False)

@@ -37,6 +37,10 @@ login_400 = {
     ]
 }
 
+login_404 = {
+    "message": "User not found"
+}
+
 login_202 = {
     "token": "Token 9935a8b04f2de7f5dec8f9e92a1893822b034dc7"
 }
