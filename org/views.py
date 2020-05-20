@@ -12,6 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
 from rest_framework.decorators import api_view, permission_classes
+from org.custom_model_field import PermissionSet
 
 
 class OrgView(APIView):
@@ -60,13 +61,16 @@ class OrgView(APIView):
     method='GET',
     responses={
         '200': set_example({}),
-        '400':set_example({"detail": "Unauthorised"}),
+        '400':set_example({"detail": "You are not authorised to view this."}),
         '401': set_example({"detail": "Authentication credentials were not provided."})
     }
 )
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_permissions_view(request):
-    member = Member.objects.filter(user=request.user).last()
-    response_unit = member.permissions.permissions.get_permission_dict()
-    return Response(response_unit, status.HTTP_200_OK)
+    members = Member.objects.filter(user=request.user)
+    for member in members:
+        if member.permissions.permissions.IS_ADMIN:
+            response_unit = member.permissions.permissions.get_permission_dict()
+            return Response(response_unit, status.HTTP_200_OK)
+    return Response({"detail": "You are not authorised to view this."}, status.HTTP_400_BAD_REQUEST)

@@ -48,7 +48,7 @@ class PermissionSet:
 
 
     def get_permission_dict(self):
-        """Returns a list of permissions available"""
+        """Returns a dictionary of permissions available"""
 
         permissions_dict = {
             'Admin Permission' : self.IS_ADMIN,
@@ -56,7 +56,7 @@ class PermissionSet:
             'Permission for task creation' : self.CAN_CREATE_TASKS,
             'Permission to resolve queries' : self.CAN_REPLY_TO_QUERIES,
             'Permission to review proofs' : self.CAN_REVIEW_PROOFS
-        }
+        ]
 
         return permissions_dict
 
