@@ -68,9 +68,22 @@ class OrgView(APIView):
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def list_permissions_view(request):
-    members = Member.objects.filter(user=request.user)
+    '''This function shall allow an ADMIN member to see the list of permissions'''
+    
+    members = Member.objects.filter(user=request.user)  # Receiving member status for the respective organisations
     for member in members:
-        if member.permissions.permissions.IS_ADMIN:
-            response_unit = member.permissions.permissions.get_permission_dict()
+        '''
+        User might be a member of various organisations such
+        that it isn't an ADMIN of all, so finding an organisation
+        such that it is an ADMIN member, and printing permission
+        dictionary if it happens to be one.
+        '''                               
+        if member.permissions.permissions.IS_ADMIN:     
+            response_unit = member.permissions.permissions.get_permission_dict() 
             return Response(response_unit, status.HTTP_200_OK)
+    
+    '''
+    If the user doesn't turn out to be an ADMIN at any organisation, or isn't a part of any
+    it shall not be authorised to view permissions.
+    '''
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_400_BAD_REQUEST)
