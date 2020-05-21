@@ -12,7 +12,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from users.models import User
-from django.http import Http404
+
 
 
 
@@ -55,10 +55,9 @@ class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
-        found_email = request.data['email']
-  
-        
         if serializer.is_valid():
+            found_email =  serializer.data['email']
+            
             user = authenticate(
                 username=serializer.data['email'],
                 password=serializer.data['password']
@@ -72,7 +71,7 @@ class LoginView(APIView):
                         return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
                     
                 except User.DoesNotExist:
-                    raise Http404     
+                    return Response({"message": "User not found"}, status.HTTP_404_NOT_FOUND)     
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
