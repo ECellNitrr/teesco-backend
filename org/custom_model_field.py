@@ -47,15 +47,15 @@ class PermissionSet:
         return permission_integer
 
 
-    def get_permission_dict(self):
+    def get_permission_list(self):
         """Returns a dictionary of permissions available"""
 
         permissions_dict = {
-            'Admin Permission' : self.IS_ADMIN,
-            'Staff Permission' : self.IS_STAFF,
-            'Permission for task creation' : self.CAN_CREATE_TASKS,
-            'Permission to resolve queries' : self.CAN_REPLY_TO_QUERIES,
-            'Permission to review proofs' : self.CAN_REVIEW_PROOFS
+            'Is Admin' : self.IS_ADMIN,
+            'Is Staff' : self.IS_STAFF,
+            'Can Create Tasks' : self.CAN_CREATE_TASKS,
+            'Can Reply To Queries' : self.CAN_REPLY_TO_QUERIES,
+            'Can Review Proofs' : self.CAN_REVIEW_PROOFS
         }
 
         return permissions_dict
