@@ -11,13 +11,9 @@ from utils.swagger import set_example
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-<<<<<<< HEAD
 from users.models import User
 from org.models import *
 
-=======
-from org.models import *
->>>>>>> 2c5531881a2f99754b11ec13fcac395228803dc7
 
 
 class RegistrationView(APIView):

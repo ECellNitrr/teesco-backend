@@ -53,8 +53,6 @@ class OrgView(APIView):
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
-=======
 
 
 @swagger_auto_schema(
@@ -99,4 +97,3 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
->>>>>>> 2c5531881a2f99754b11ec13fcac395228803dc7
