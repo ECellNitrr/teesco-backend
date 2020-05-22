@@ -37,6 +37,10 @@ login_400 = {
     ]
 }
 
+login_404 = {
+    "message": "User not found"
+}
+
 login_202 = {
     "token": "Token 9935a8b04f2de7f5dec8f9e92a1893822b034dc7"
 }
@@ -53,11 +57,19 @@ profile_200 = {
 
 list_orgs_200 = [
     {
+        "id": 1,
         "org_name": "E Cell",
-        "user_role": "Admin"
+        "user_role": "Admin",
+        "profile_pic": "null",
+        "route_slug": "0-e-cell",
+        "tagline": "Leader Beyond Borders"
     },
     {
+        "id": 2,
         "org_name": "NITRR",
-        "user_role": "Admin"
+        "user_role": "Admin",
+        "profile_pic": "null",
+        "route_slug": "2-nitrr",
+        "tagline": "Work is worship"
     }
 ]

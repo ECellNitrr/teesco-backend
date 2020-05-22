@@ -64,4 +64,12 @@ class LoginTestCase(APITestCase):
         # check successful login
         self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
 
-    
+    def test_error_unregistered_email(self):
+        data = {
+            "email" : 'unregistereduser@email.com',
+            "password" : 'any password'
+        }
+        response = self.client.post("/api/users/login/", data)
+
+        # check successful login
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
