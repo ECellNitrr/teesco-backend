@@ -48,7 +48,7 @@ class CreateOrgSerializer(serializers.Serializer):
         ]) 
         
         
-        # create deafult group permission_sets
+        # create default group permission_sets
         admin_permission_set = PermissionSet.objects.create(
             name = 'Admin',
             org = org,
@@ -88,3 +88,4 @@ class CreateOrgSerializer(serializers.Serializer):
 
 
         return [org,admin_group,admin_permission_set]
+

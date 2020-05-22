@@ -29,7 +29,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-CELERY_IMPORTS = ( 'core', 'utils.email_service' )
+CELERY_IMPORTS = ('core', 'utils.email_service')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
@@ -37,7 +37,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [
+                       s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -140,22 +141,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL= '/media/' # user uploaded files will be served from this url prefix
+MEDIA_URL = '/media/'  # user uploaded files will be served from this url prefix
 
 
 # disable cors
 CORS_ORIGIN_ALLOW_ALL = True
 
-# drf-yasg 
-SWAGGER_SETTINGS  = {
-    'DEFAULT_MODEL_RENDERING' : 'example',
+# drf-yasg
+SWAGGER_SETTINGS = {
+    'DEFAULT_MODEL_RENDERING': 'example',
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header'
         }
-   }
+    },
+    'USE_SESSION_AUTH': False,
+    'PERSIST_AUTH': True
 }
 
 # django rest framework settings
@@ -165,7 +168,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-#Email Settings
+# Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
