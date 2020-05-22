@@ -24,7 +24,7 @@ class PermissionSet(models.Model):
     name = models.CharField(max_length=30, null=False, blank=False)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
     permissions = PermissionField()
-
+    
     def __str__(self):
         return f'{self.id}-{self.permissions.permissions_to_integer()}'
 

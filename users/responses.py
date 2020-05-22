@@ -54,3 +54,22 @@ profile_200 = {
             'phone': "phone number",
             'created_at': "time"
 }
+
+list_orgs_200 = [
+    {
+        "id": 1,
+        "org_name": "E Cell",
+        "user_role": "Admin",
+        "profile_pic": "null",
+        "route_slug": "0-e-cell",
+        "tagline": "Leader Beyond Borders"
+    },
+    {
+        "id": 2,
+        "org_name": "NITRR",
+        "user_role": "Admin",
+        "profile_pic": "null",
+        "route_slug": "2-nitrr",
+        "tagline": "Work is worship"
+    }
+]
