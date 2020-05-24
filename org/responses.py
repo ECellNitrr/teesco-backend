@@ -33,3 +33,11 @@ list_permission_set_200 = [
     "name": "Head_Coordinator",
     }
 ]
+
+user_unauthorized_401 = {
+  "detail": "Authentication credentials were not provided."
+}
+
+user_already_present_409 = {
+  "message": "Already a member of organization"
+}
