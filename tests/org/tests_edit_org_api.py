@@ -57,6 +57,4 @@ class EditOrgTestCase(AuthAPITestCase):
         response = auth_client.put(add_volunteer_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def tearDown(self):
-        self.auth_user.delete()
 

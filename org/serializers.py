@@ -88,3 +88,9 @@ class CreateOrgSerializer(serializers.Serializer):
 
 
         return [org,admin_group,admin_permission_set]
+
+
+class EditOrgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Org
+        fields = ['name','tagline','about']
