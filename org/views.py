@@ -97,3 +97,50 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    operation_id="view_list_of_permissions",
+    method='GET',
+    responses={
+        '200': set_example(responses.list_permission_set_200),
+        '401': set_example(responses.user_unauthorized_401),
+        '404': set_example({"detail": "This organisation doesn't exist."}),
+        '400': set_example({"detail" : "You are not a member of this organisation"}),
+        '403': set_example({"detail": "You are not authorised to view this."}),
+    }
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def Permission_Set_List(request,org_id):
+    try:
+        org = Org.objects.get(pk=org_id)
+    except Org.DoesNotExist:
+        return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+    try:
+        member = Member.objects.get(
+        user = request.user,
+        org = org
+        )
+    except Member.DoesNotExist:
+        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
+
+
+    if member.permissions.permissions.permissions[1]: 
+        '''
+        Field of 'member' containing Permission Set is called permissions[1]
+        which contains PermissionField() in the name permissions[2] which
+        has the permissions default dict called as permissions[3], this explains
+        the three permissions written in a row above. IS_STAFF = 1, as per
+        Permission field so checked truth for permissions[1].
+        '''
+        permission_sets = PermissionSet.objects.filter(org = org)
+        response_object = []
+        for permission_set in permission_sets:
+            value = {
+                'id' : permission_set.id,
+                'name' : permission_set.name
+            }
+            response_object.append(value)
+        return Response(response_object, status.HTTP_200_OK)
+    return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)

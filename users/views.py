@@ -11,7 +11,9 @@ from utils.swagger import set_example
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from users.models import User
 from org.models import *
+
 
 
 class RegistrationView(APIView):
@@ -44,28 +46,38 @@ class LoginView(APIView):
             '202': set_example(responses.login_202),
             '400': set_example(responses.login_400),
             '401': set_example(responses.login_401),
+            '404': set_example(responses.login_404)
         },
     )
+
+
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid():
+            found_email =  serializer.data['email']
+            
             user = authenticate(
                 username=serializer.data['email'],
                 password=serializer.data['password']
-            )
-
+                )     
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
-
-                return Response({
-                    'token': f"Token {token.key}"
-                }, status.HTTP_202_ACCEPTED)
+                return Response({'token': f"Token {token.key}"}, status.HTTP_202_ACCEPTED)
             else:
-                return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
+                try:
+                    if User.objects.get(email=found_email):
+                        return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
+                    
+                except User.DoesNotExist:
+                    return Response({"message": "User not found"}, status.HTTP_404_NOT_FOUND)     
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
+                    
+               
+        
 
 
 @swagger_auto_schema(
