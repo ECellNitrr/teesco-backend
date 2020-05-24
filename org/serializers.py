@@ -93,4 +93,4 @@ class CreateOrgSerializer(serializers.Serializer):
 class EditOrgSerializer(serializers.ModelSerializer):
     class Meta:
         model = Org
-        fields = ['name','tagline','about']
+        fields = ('name','tagline','about')

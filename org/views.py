@@ -146,10 +146,11 @@ def Permission_Set_List(request,org_id):
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
 
 
+
 @swagger_auto_schema(
     operation_id="edit_org",
     operation_description="When an authenticated user hits this API it gets added to the volunteer group",
-    method='put',
+    method='PUT',
     request_body = EditOrgSerializer,
     responses={
         '200': set_example(responses.update_org_200),
@@ -157,7 +158,7 @@ def Permission_Set_List(request,org_id):
         '401': set_example(responses.admin_access_401),
     }
 )
-@api_view(['put'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def EditOrg(request,org_id):
     org_count = Org.objects.filter(pk=org_id).count()
