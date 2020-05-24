@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
-from org.custom_model_field import PermissionSet
+
 
 class OrgView(APIView):
     parser_classes = [MultiPartParser]
@@ -126,7 +126,7 @@ def Permission_Set_List(request,org_id):
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
 
-    if member.permissions.permissions.permissions[PermissionSet.IS_STAFF]: 
+    if member.permissions.permissions.permissions[1]: 
         '''
         Field of 'member' containing Permission Set is called permissions[1]
         which contains PermissionField() in the name permissions[2] which
