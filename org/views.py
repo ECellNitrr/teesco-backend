@@ -128,13 +128,6 @@ def Permission_Set_List(request,org_id):
 
 
     if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]: 
-        '''
-        Field of 'member' containing Permission Set is called permissions[1]
-        which contains PermissionField() in the name permissions[2] which
-        has the permissions default dict called as permissions[3], this explains
-        the three permissions written in a row above. IS_STAFF = 1, as per
-        Permission field so checked truth for permissions[1].
-        '''
         permission_sets = PermissionSet.objects.filter(org = org)
         response_object = []
         for permission_set in permission_sets:
