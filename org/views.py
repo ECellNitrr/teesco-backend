@@ -144,3 +144,36 @@ def Permission_Set_List(request,org_id):
             response_object.append(value)
         return Response(response_object, status.HTTP_200_OK)
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+
+
+@swagger_auto_schema(
+    operation_id="edit_org",
+    operation_description="When an authenticated user hits this API it gets added to the volunteer group",
+    method='put',
+    request_body = EditOrgSerializer,
+    responses={
+        '200': set_example(responses.update_org_200),
+        '400': set_example(responses.org_not_present_400),
+        '401': set_example(responses.admin_access_401),
+    }
+)
+@api_view(['put'])
+@permission_classes([IsAuthenticated])
+def EditOrg(request,org_id):
+    org_count = Org.objects.filter(pk=org_id).count()
+    if org_count>0:
+        org = Org.objects.get(pk=org_id)
+        user = request.user
+        group = Group.objects.get(name="Admin",org=org)
+        isadmin = True if Member.objects.filter(user=user,group=group).count()>0 else False
+        if isadmin:
+            if request.method == "PUT":
+                serializer = EditOrgSerializer(org,data=request.data)
+                data = {}
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(responses.update_org_200,status.HTTP_200_OK)
+        else:
+            return Response(responses.admin_access_401,status.HTTP_401_UNAUTHORIZED)
+    else:
+        return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
