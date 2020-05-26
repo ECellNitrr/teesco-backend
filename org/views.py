@@ -155,7 +155,9 @@ def Permission_Set_List(request,org_id):
     responses={
         '200': set_example(responses.update_org_200),
         '400': set_example(responses.org_not_present_400),
-        '401': set_example(responses.admin_access_401),
+        '401': set_example(responses.user_unauthorized_401),
+        '403': set_example(responses.admin_access_403),
+        '500': set_example(responses.empty_fields_500)
     }
 )
 @api_view(['PUT'])
@@ -170,11 +172,12 @@ def EditOrg(request,org_id):
         if isadmin:
             if request.method == "PUT":
                 serializer = EditOrgSerializer(org,data=request.data)
-                data = {}
                 if serializer.is_valid():
                     serializer.save()
                     return Response(responses.update_org_200,status.HTTP_200_OK)
+                else:
+                    return Response(responses.empty_fields_500,status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(responses.admin_access_401,status.HTTP_401_UNAUTHORIZED)
+            return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
     else:
         return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)

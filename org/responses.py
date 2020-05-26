@@ -46,6 +46,10 @@ update_org_200 ={
   "message":"Organization details updated successfully"
 }
 
-admin_access_401 = {
+admin_access_403 = {
   "message":"You are not an admin of this organization"
+}
+
+empty_fields_500 = {
+  "message": "Can't update! one or more fields are empty!"
 }
