@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase,APIClient
 from rest_framework import status
 from users.models import User
 from org.serializers import CreateOrgSerializer
-from org.custom_model_field import PermissionSet as Permissions
+from org.custom_model_field import Permissions
 import uuid
 
 class GetPermissionsAPITestCase(AuthAPITestCase):
@@ -58,7 +58,7 @@ class GetPermissionsAPITestCase(AuthAPITestCase):
                 user = self.auth_user,
                 org = self.org,
                 group = volunteer_group,
-                permissions = volunteer_permission_set 
+                permission_set = volunteer_permission_set 
             )
         response = auth_client.get(get_permission_set_list_api)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -78,7 +78,7 @@ class GetPermissionsAPITestCase(AuthAPITestCase):
                 user = self.auth_user,
                 org = self.org,
                 group = admin_group,
-                permissions = admin_permission_set 
+                permission_set = admin_permission_set 
             )
         response = auth_client.get(get_permission_set_list_api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

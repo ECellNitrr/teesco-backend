@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase,APIClient
 from rest_framework import status
 from users.models import User
 from org.serializers import CreateOrgSerializer
-from org.custom_model_field import PermissionSet as Permissions
+from org.custom_model_field import Permissions
 import uuid
 class AddVolunteerAPITestCase(AuthAPITestCase):
     """

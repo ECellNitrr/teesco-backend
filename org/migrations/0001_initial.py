@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='PermissionField',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('perm', models.IntegerField(default=org.custom_model_field.PermissionSet)),
+                ('perm', models.IntegerField(default=org.custom_model_field.Permissions)),
             ],
         ),
         migrations.CreateModel(
