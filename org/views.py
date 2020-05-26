@@ -157,7 +157,6 @@ def Permission_Set_List(request,org_id):
         '400': set_example(responses.org_not_present_400),
         '401': set_example(responses.user_unauthorized_401),
         '403': set_example(responses.admin_access_403),
-        '500': set_example(responses.empty_fields_500)
     }
 )
 @api_view(['PUT'])
