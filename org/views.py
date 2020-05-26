@@ -176,7 +176,7 @@ def EditOrg(request,org_id):
                     serializer.save()
                     return Response(responses.update_org_200,status.HTTP_200_OK)
                 else:
-                    return Response(responses.empty_fields_500,status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
         else:
             return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
     else:
