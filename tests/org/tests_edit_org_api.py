@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase,APIClient
 from rest_framework import status
 from users.models import User
 from org.serializers import CreateOrgSerializer
-from org.custom_model_field import PermissionSet as Permissions
+from org.custom_model_field import PermissionField as Permissions
 import uuid
 
 class EditOrgTestCase(AuthAPITestCase):
@@ -50,7 +50,7 @@ class EditOrgTestCase(AuthAPITestCase):
             user=self.auth_user,
             org=self.org,
             group=self.admin_group,
-            permissions=self.admin_permission_set
+            permission_set=self.admin_permission_set
         )
         response = auth_client.put(add_volunteer_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -68,7 +68,7 @@ class EditOrgTestCase(AuthAPITestCase):
             user=self.auth_user,
             org=self.org,
             group=self.admin_group,
-            permissions=self.admin_permission_set
+            permission_set=self.admin_permission_set
         )
         response = auth_client.put(add_volunteer_api,data=self.data_org_put_empty)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
