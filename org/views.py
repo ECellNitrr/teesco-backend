@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
+from org.custom_model_field import Permissions
 
 
 class OrgView(APIView):
@@ -47,7 +48,7 @@ class OrgView(APIView):
                 user=request.user,
                 org=org,
                 group=admin_group,
-                permissions=admin_permission_set
+                permission_set=admin_permission_set
             )
             return Response({}, status.HTTP_201_CREATED)
         else:
@@ -92,7 +93,7 @@ def AddVolunteer(request,org_id):
                 user = request.user,
                 org = org,
                 group = volunteer_group,
-                permissions = volunteer_permission_set 
+                permission_set = volunteer_permission_set 
             )
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
@@ -126,14 +127,7 @@ def Permission_Set_List(request,org_id):
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
 
-    if member.permissions.permissions.permissions[1]: 
-        '''
-        Field of 'member' containing Permission Set is called permissions[1]
-        which contains PermissionField() in the name permissions[2] which
-        has the permissions default dict called as permissions[3], this explains
-        the three permissions written in a row above. IS_STAFF = 1, as per
-        Permission field so checked truth for permissions[1].
-        '''
+    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]: 
         permission_sets = PermissionSet.objects.filter(org = org)
         response_object = []
         for permission_set in permission_sets:

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import *
-from .custom_model_field import PermissionSet as Permissions
+from org.custom_model_field import Permissions
 from slugify import slugify
 from rest_framework.response import Response
 import uuid
@@ -54,12 +54,12 @@ class CreateOrgSerializer(serializers.Serializer):
         admin_permission_set = PermissionSet.objects.create(
             name = 'Admin',
             org = org,
-            permissions = admin_permissions 
+            perm_obj = admin_permissions 
         )
         volunteer_permission_set = PermissionSet.objects.create(
             name = 'Volunteer',
             org = org,
-            permissions = volunteer_permissions 
+            perm_obj = volunteer_permissions 
         )
 
 
