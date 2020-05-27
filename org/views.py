@@ -131,7 +131,7 @@ def Permission_Set_List(request,org_id):
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
 
-    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]: 
+    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:
         permission_sets = PermissionSet.objects.filter(org = org)
         response_object = []
         for permission_set in permission_sets:
@@ -143,7 +143,17 @@ def Permission_Set_List(request,org_id):
         return Response(response_object, status.HTTP_200_OK)
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN) 
 
-    
+@swagger_auto_schema(
+    operation_id="get_group",
+    method='GET',
+    responses={
+        '200': set_example(responses.get_group),
+        '401': set_example(responses.user_unauthorized_401),
+        '404': set_example({"detail": "This organisation doesn't exist."}),
+        '400': set_example({"detail" : "You are not a member of this organisation"}),
+        '403': set_example({"detail": "You are not authorised to view this."}),
+    }
+)    
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
 def GetGroup(request,org_id):
@@ -160,21 +170,18 @@ def GetGroup(request,org_id):
         )
     except Member.DoesNotExist:
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
-
-    print(member.permission_set.perm_obj.permissions[Permissions.IS_STAFF])          
+       
     # if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:
-    #     group = Group.objects.all() 
-    #     groupId = []
-    #     groupName = []
-    #     groupMember = []
-    #     for x in group:
-    #         groupId.append(x.id)
-    #         groupName.append(x.name)
-    #         memberLen = len(Member.objects.filter(group=x.id))
-    #         groupMember.append({x.name : memberLen })
-    #     return Response({"groupId":groupId,"groupName":groupName,"groupNumber":groupMember})
-    # else :
-    #     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+    if True:    
+        group = Group.objects.all() 
+        response_object = []
+        for x in group:
+            memberLen = len(Member.objects.filter(group=x.id))
+            response_object.append({"groupId":x.id, "groupName": x.name, "groupMember":memberLen})
+            
+        return Response(response_object,status.HTTP_200_OK)
+    else :
+        return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
 
-    return Response({"message":"API is working"})
+
     

@@ -33,3 +33,21 @@ list_permission_set_200 = [
     "name": "Head_Coordinator",
     }
 ]
+
+get_group = [
+  {
+    "groupId": 1,
+    "groupName": "group1",
+    "groupMember": 1
+  },
+  {
+    "groupId": 2,
+    "groupName": "group2",
+    "groupMember": 3
+  },
+  {
+    "groupId": 3,
+    "groupName": "group3",
+    "groupMember": 1
+  }
+]
