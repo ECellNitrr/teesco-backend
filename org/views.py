@@ -127,8 +127,6 @@ def Permission_Set_List(request,org_id):
     except Member.DoesNotExist:
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
-    except Member.DoesNotExist:
-        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
 
     if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:
@@ -144,7 +142,7 @@ def Permission_Set_List(request,org_id):
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN) 
 
 @swagger_auto_schema(
-    operation_id="get_group",
+    operation_id="get_groups_list",
     method='GET',
     responses={
         '200': set_example(responses.get_group),
@@ -157,7 +155,6 @@ def Permission_Set_List(request,org_id):
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
 def GetGroup(request,org_id):
-    print(request.user)
     try:
         org = Org.objects.get(pk=org_id)
         print(org)
@@ -171,8 +168,7 @@ def GetGroup(request,org_id):
     except Member.DoesNotExist:
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
        
-    # if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:
-    if True:    
+    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:    
         group = Group.objects.all() 
         response_object = []
         for x in group:

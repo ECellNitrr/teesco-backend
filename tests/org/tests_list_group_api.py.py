@@ -27,25 +27,25 @@ class GetGroupAPITestCase(APITestCase):
         if serializer.is_valid():
             self.org = serializer.save()[0]
 
-        def test_fail_without_auth_header(self):
+    def test_fail_without_auth_header(self):
             get_group_api = "/api/org/1/group/"
             un_auth_client = APIClient()
             response = un_auth_client.get(get_group_api)
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)    
 
-        def test_fail_invalid_org(self):
+    def test_fail_invalid_org(self):
             get_group_api = "/api/org/2/group/"
             auth_client = self.create_auth_client()
             response = auth_client.get(get_group_api)
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        def test_fail_not_a_member(self):
+    def test_fail_not_a_member(self):
             get_group_api = "/api/org/1/group/"
             auth_client = self.create_auth_client()
             response = auth_client.get(get_group_api)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        def test_fail_unauthorised_member(self):
+    def test_fail_unauthorised_member(self):
             get_group_api = "/api/org/1/group/"
             auth_client = self.create_auth_client()
             volunteer_permission_set = PermissionSet.objects.get(
@@ -65,7 +65,7 @@ class GetGroupAPITestCase(APITestCase):
             response = auth_client.get(get_group_api)
             self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        def test_success_authorized_user(self):
+    def test_success_authorized_user(self):
             get_group_api = "/api/org/1/group/"
             auth_client = self.create_auth_client()
             admin_permission_set = PermissionSet.objects.get(
@@ -86,4 +86,5 @@ class GetGroupAPITestCase(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
+        super(GetGroupAPITestCase,self).setUp()
         self.auth_user.delete()
