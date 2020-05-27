@@ -2,7 +2,7 @@ from collections import defaultdict
 from django.db import models
 
 
-class PermissionSet:
+class Permissions:
     """Helps in interconversion of permissions into objects(for ease of use) and integers(for storage in db)."""
 
 
@@ -72,10 +72,10 @@ class PermissionSet:
 
 
 class PermissionField(models.IntegerField):
-    "Saves permissions as an integer in the DB and returns PermissionSet obj when queried"
+    "Saves permissions as an integer in the DB and returns Permissions obj when queried"
 
     def __init__(self, *args, **kwargs):
-        kwargs['default'] = PermissionSet()
+        kwargs['default'] = Permissions()
         super().__init__(*args, **kwargs)
 
 
@@ -90,16 +90,16 @@ class PermissionField(models.IntegerField):
 
 
     def to_python(self, value):
-        if isinstance(value, PermissionSet):
+        if isinstance(value, Permissions):
             return value
         
         if isinstance(value, str):
-            return PermissionSet(int(value)) 
+            return Permissions(int(value)) 
 
         if value is None:
-            return PermissionSet()
+            return Permissions()
         
-        return PermissionSet(value)
+        return Permissions(value)
     
 
     def get_prep_value(self, value, *args, **kwargs):

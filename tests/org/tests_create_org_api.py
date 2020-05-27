@@ -44,7 +44,7 @@ class CreateOrgAPITestCase(AuthAPITestCase):
         member_obj = Member.objects.get(
             org=org,
             group=admin_group,
-            permissions=admin_permission_set,
+            permission_set=admin_permission_set,
             user=self.auth_user
         )
 
