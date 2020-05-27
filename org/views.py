@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
+# from custom_model_field.py import PermissionSet
 
 
 class OrgView(APIView):
@@ -97,3 +98,38 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def GetGroup(request,org_id):
+    print(request.user)
+    try:
+        org = Org.objects.get(pk=org_id)
+        print(org)
+    except Org.DoesNotExist:
+        print("hello")
+        return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+    try:
+        member = Member.objects.get(
+        user = request.user,
+        org = org
+        )
+        print(member.permissions.permissions.permissions[9])
+    except Member.DoesNotExist:
+        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
+    if member.permissions.permissions.permissions[1]:
+        group = Group.objects.all() 
+        groupId = []
+        groupName = []
+        groupMember = []
+        for x in group:
+            groupId.append(x.id)
+            groupName.append(x.name)
+            memberLen = len(Member.objects.filter(group=x.id))
+            groupMember.append({x.name : memberLen })
+        return Response({"groupId":groupId,"groupName":groupName,"groupNumber":groupMember})
+    else :
+        return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+
+    return Response({"message":"API is working"})
