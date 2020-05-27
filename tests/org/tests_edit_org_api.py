@@ -31,20 +31,20 @@ class EditOrgTestCase(AuthAPITestCase):
             self.org,self.admin_group,self.admin_permission_set = serializer.save()
 
     def test_fail_without_auth(self):
-        add_volunteer_api = "/api/org/1/"
+        edit_org_api = "/api/org/1/"
         un_auth_client = APIClient()
-        response = un_auth_client.put(add_volunteer_api,data=self.data_org_put)
+        response = un_auth_client.put(edit_org_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_fail_with_not_admin(self):
-        add_volunteer_api = "/api/org/1/"
+        edit_org_api = "/api/org/1/"
         auth_client = self.create_auth_client()
-        response = auth_client.put(add_volunteer_api,data=self.data_org_put)
+        response = auth_client.put(edit_org_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
     def test_pass_with_admin(self):
-        add_volunteer_api = "/api/org/1/"
+        edit_org_api = "/api/org/1/"
         auth_client = self.create_auth_client()
         Member.objects.create(
             user=self.auth_user,
@@ -52,17 +52,17 @@ class EditOrgTestCase(AuthAPITestCase):
             group=self.admin_group,
             permission_set=self.admin_permission_set
         )
-        response = auth_client.put(add_volunteer_api,data=self.data_org_put)
+        response = auth_client.put(edit_org_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_fail_with_unknown_org(self):
-        add_volunteer_api = "/api/org/2/"
+        edit_org_api = "/api/org/2/"
         auth_client = self.create_auth_client()
-        response = auth_client.put(add_volunteer_api,data=self.data_org_put)
+        response = auth_client.put(edit_org_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_fail_with_empty_fields(self):
-        add_volunteer_api = "/api/org/1/"
+        edit_org_api = "/api/org/1/"
         auth_client = self.create_auth_client()
         Member.objects.create(
             user=self.auth_user,
@@ -70,7 +70,7 @@ class EditOrgTestCase(AuthAPITestCase):
             group=self.admin_group,
             permission_set=self.admin_permission_set
         )
-        response = auth_client.put(add_volunteer_api,data=self.data_org_put_empty)
+        response = auth_client.put(edit_org_api,data=self.data_org_put_empty)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def tearDown(self):
