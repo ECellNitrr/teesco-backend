@@ -160,9 +160,9 @@ def EditOrg(request,org_id):
     if org_count>0:
         org = Org.objects.get(pk=org_id)
         user = request.user
-        group = Group.objects.get(name="Admin",org=org)
-        isadmin = True if Member.objects.filter(user=user,group=group).count()>0 else False
-        if isadmin:
+        isadmin = Member.objects.get(user=user).permission_set.perm_obj.permissions_to_integer()
+        #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
+        if isadmin%2 == 1:
             if request.method == "PUT":
                 serializer = EditOrgSerializer(org,data=request.data)
                 if serializer.is_valid():
