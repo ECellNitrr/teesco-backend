@@ -160,8 +160,8 @@ def EditOrg(request,org_id):
     if org_count>0:
         org = Org.objects.get(pk=org_id)
         user = request.user
-        if Member.objects.filter(user=user).count()>0:
-            isadmin = Member.objects.get(user=user).permission_set.perm_obj.permissions_to_integer()
+        if Member.objects.filter(user=user,org=org).count()>0:
+            isadmin = Member.objects.get(user=user,org=org).permission_set.perm_obj.permissions_to_integer()
             #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
             if isadmin%2 == 1:
                 if request.method == "PUT":
