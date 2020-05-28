@@ -93,4 +93,3 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
-
