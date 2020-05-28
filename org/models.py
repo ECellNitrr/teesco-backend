@@ -20,16 +20,6 @@ class Org (models.Model):
     def __str__(self):
         return self.name
 
-'''
-class PermissionSet(models.Model):
-    name = models.CharField(max_length=30, null=False, blank=False)
-    org = models.ForeignKey(Org,on_delete=models.CASCADE)
-    perm_obj = PermissionField()
-    
-    def __str__(self):
-        return f'{self.id}-{self.perm_obj.permissions_to_integer()}'
-'''
-
 
 class Group (models.Model):
     name = models.CharField(max_length = 30, null=False, blank=False)
@@ -37,7 +27,6 @@ class Group (models.Model):
     invite_slug = models.SlugField(max_length = 40, unique=True)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
     default_permissions = PermissionField()
-    #default_permission_set  = models.ForeignKey(PermissionSet, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -47,7 +36,6 @@ class Member (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
     group  = models.ForeignKey(Group,on_delete=models.CASCADE)
-#    permission_set  = models.ForeignKey(PermissionSet, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.id}-{self.org.name}-{self.group.name}-{self.user.username}'
