@@ -41,14 +41,14 @@ class OrgView(APIView):
 
         if serializer.is_valid():
             # create org and default groups
-            org,admin_group,admin_permission_set = serializer.save()
+            org,admin_group = serializer.save()
 
             # add creator to admin group
             member = Member.objects.create(
                 user=request.user,
                 org=org,
                 group=admin_group,
-                permission_set=admin_permission_set
+ #               permission_set=admin_permission_set
             )
             return Response({}, status.HTTP_201_CREATED)
         else:
@@ -81,10 +81,12 @@ def AddVolunteer(request,org_id):
         if member_present>0:
             return Response({"message":"Already a member of the organization"},status.HTTP_409_CONFLICT)
         else:
+            '''
             volunteer_permission_set = PermissionSet.objects.get(
                 name='Volunteer',
                 org=org,
             )
+            '''
             volunteer_group = Group.objects.get(
                 name='Volunteer',
                 org=org,
@@ -93,13 +95,13 @@ def AddVolunteer(request,org_id):
                 user = request.user,
                 org = org,
                 group = volunteer_group,
-                permission_set = volunteer_permission_set 
+                #permission_set = volunteer_permission_set 
             )
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
 
-
+'''
 @swagger_auto_schema(
     operation_id="view_list_of_permissions",
     method='GET',
@@ -111,6 +113,7 @@ def AddVolunteer(request,org_id):
         '403': set_example({"detail": "You are not authorised to view this."}),
     }
 )
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Permission_Set_List(request,org_id):
@@ -127,7 +130,7 @@ def Permission_Set_List(request,org_id):
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
 
 
-    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]: 
+    if member..perm_obj.permissions[Permissions.IS_STAFF]: 
         permission_sets = PermissionSet.objects.filter(org = org)
         response_object = []
         for permission_set in permission_sets:
@@ -138,3 +141,4 @@ def Permission_Set_List(request,org_id):
             response_object.append(value)
         return Response(response_object, status.HTTP_200_OK)
     return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+'''

@@ -1,3 +1,4 @@
+'''
 from django.test import TestCase
 from org.custom_model_field import Permissions as PermissionSet
 from collections import defaultdict
@@ -104,3 +105,5 @@ class PermissionSetTestCase(TestCase):
 
 
 # todo: add tests for remaining permissions
+
+'''

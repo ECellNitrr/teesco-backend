@@ -39,19 +39,19 @@ class CreateOrgAPITestCase(AuthAPITestCase):
         org = Org.objects.get(name=self.valid_payload['name'])
         admin_group=Group.objects.get(org=org, name='Admin')
         volunteer_group=Group.objects.get(org=org, name='Volunteer')
-        admin_permission_set=PermissionSet.objects.get(org=org,name='Admin')
-        volunteer_permission_set=PermissionSet.objects.get(org=org,name='Volunteer')
+      #  admin_permission_set=PermissionSet.objects.get(org=org,name='Admin')
+      #  volunteer_permission_set=PermissionSet.objects.get(org=org,name='Volunteer')
         member_obj = Member.objects.get(
             org=org,
             group=admin_group,
-            permission_set=admin_permission_set,
+            #permission_set=admin_permission_set,
             user=self.auth_user
         )
 
         self.assertIsNotNone(org)
         self.assertIsNotNone(admin_group)
         self.assertIsNotNone(volunteer_group)
-        self.assertIsNotNone(admin_permission_set)
-        self.assertIsNotNone(volunteer_permission_set)
+       # self.assertIsNotNone(admin_permission_set)
+       # self.assertIsNotNone(volunteer_permission_set)
         self.assertIsNotNone(member_obj)
         
