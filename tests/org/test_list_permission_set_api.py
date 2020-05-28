@@ -1,11 +1,10 @@
-from org.models import *
-from tests.AuthAPITestCase import AuthAPITestCase
-from rest_framework.test import APITestCase,APIClient
+from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
+from tests.AuthAPITestCase import AuthAPITestCase
+from org.models import *
 from users.models import User
 from org.serializers import CreateOrgSerializer
 from org.custom_model_field import Permissions
-import uuid
 
 class GetPermissionsAPITestCase(AuthAPITestCase):
     
@@ -14,16 +13,16 @@ class GetPermissionsAPITestCase(AuthAPITestCase):
             Create an organization in the test database
         """
         #Inheriting the base class functionality
-        super(GetPermissionsAPITestCase,self).setUp()
+        super(GetPermissionsAPITestCase, self).setUp()
         # Create the org using serializer
         data_org = {
-                "name":'test',
-                "tagline":'test'
+            "name":'test',
+            "tagline":'test'
         }
-        serializer = CreateOrgSerializer(data = data_org)
+        serializer = CreateOrgSerializer(data=data_org)
         if serializer.is_valid():
             self.org = serializer.save()[0]
-    
+
     
     def test_fail_without_auth_header(self):
         get_permission_set_list_api = "/api/org/1/permission_set/"
@@ -47,18 +46,18 @@ class GetPermissionsAPITestCase(AuthAPITestCase):
         get_permission_set_list_api = "/api/org/1/permission_set/"
         auth_client = self.create_auth_client()
         volunteer_permission_set = PermissionSet.objects.get(
-                name='Volunteer',
-                org=self.org,
+            name='Volunteer',
+            org=self.org,
             )
         volunteer_group = Group.objects.get(
-                name='Volunteer',
-                org=self.org,
+            name='Volunteer',
+            org=self.org,
             )
         member = Member.objects.create(
-                user = self.auth_user,
-                org = self.org,
-                group = volunteer_group,
-                permission_set = volunteer_permission_set 
+            user=self.auth_user,
+            org=self.org,
+            group=volunteer_group,
+            permission_set=volunteer_permission_set 
             )
         response = auth_client.get(get_permission_set_list_api)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -67,18 +66,18 @@ class GetPermissionsAPITestCase(AuthAPITestCase):
         get_permission_set_list_api = "/api/org/1/permission_set/"
         auth_client = self.create_auth_client()
         admin_permission_set = PermissionSet.objects.get(
-                name='Admin',
-                org=self.org,
+            name='Admin',
+            org=self.org,
             )
         admin_group = Group.objects.get(
-                name='Admin',
-                org=self.org,
+            name='Admin',
+            org=self.org,
             )
         member = Member.objects.create(
-                user = self.auth_user,
-                org = self.org,
-                group = admin_group,
-                permission_set = admin_permission_set 
+            user=self.auth_user,
+            org=self.org,
+            group=admin_group,
+            permission_set=admin_permission_set 
             )
         response = auth_client.get(get_permission_set_list_api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
