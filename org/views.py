@@ -160,17 +160,21 @@ def EditOrg(request,org_id):
     if org_count>0:
         org = Org.objects.get(pk=org_id)
         user = request.user
-        isadmin = Member.objects.get(user=user).permission_set.perm_obj.permissions_to_integer()
-        #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
-        if isadmin%2 == 1:
-            if request.method == "PUT":
-                serializer = EditOrgSerializer(org,data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(responses.update_org_200,status.HTTP_200_OK)
-                else:
-                    return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
+        if Member.objects.filter(user=user).count()>0:
+            isadmin = Member.objects.get(user=user).permission_set.perm_obj.permissions_to_integer()
+            #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
+            if isadmin%2 == 1:
+                if request.method == "PUT":
+                    serializer = EditOrgSerializer(org,data=request.data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(responses.update_org_200,status.HTTP_200_OK)
+                    else:
+                        return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
         else:
             return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
     else:
-        return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
+            return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
+
