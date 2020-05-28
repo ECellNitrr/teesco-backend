@@ -47,19 +47,6 @@ class CreateOrgSerializer(serializers.Serializer):
             Permissions.CAN_REVIEW_PROOFS,
         ]) 
         
-        '''
-        # create default group permission_sets
-        admin_permission_set = PermissionSet.objects.create(
-            name = 'Admin',
-            org = org,
-            perm_obj = admin_permissions 
-        )
-        volunteer_permission_set = PermissionSet.objects.create(
-            name = 'Volunteer',
-            org = org,
-            perm_obj = volunteer_permissions 
-        )
-        '''
 
         # creating invite slugs
         # this method is used because we dont need a 
