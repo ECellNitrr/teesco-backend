@@ -62,7 +62,7 @@ class CreateOrgSerializer(serializers.Serializer):
                 Members of this group has access to every place within the org.''',
             invite_slug=admin_group_invite_slug,
             org=org,
-            default_permissions=admin_permissions
+            perm_obj=admin_permissions
         )
         volunteer_group = Group.objects.create(
             name='Volunteer',
@@ -70,7 +70,7 @@ class CreateOrgSerializer(serializers.Serializer):
                 invite link then he will be put into this group.''',
             invite_slug=volunteer_group_invite_slug,
             org=org,
-            default_permissions=volunteer_permissions
+            perm_obj=volunteer_permissions
         )
 
 

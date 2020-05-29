@@ -26,7 +26,7 @@ class Group (models.Model):
     role = models.CharField(max_length = 200)
     invite_slug = models.SlugField(max_length = 40, unique=True)
     org = models.ForeignKey(Org,on_delete=models.CASCADE)
-    default_permissions = PermissionField()
+    perm_obj = PermissionField()
 
     def __str__(self):
         return self.name
