@@ -89,3 +89,20 @@ class CreateOrgSerializer(serializers.Serializer):
 
         return [org,admin_group,admin_permission_set]
 
+class CreateGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['name','role','default_permission_set']
+    def save(self, org_id):
+        valid_data = self.validated_data
+
+        invite_slug = str(org_id)+'-'+str(uuid.uuid4())
+        org = Org.objects.get(id=org_id)
+
+        group = Group.objects.create(
+            name = valid_data['name'],
+            role = valid_data['role'],
+            invite_slug = invite_slug,
+            org = org,
+            default_permission_set = valid_data['default_permission_set']
+        )
