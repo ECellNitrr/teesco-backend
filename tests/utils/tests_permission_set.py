@@ -1,5 +1,5 @@
 from django.test import TestCase
-from org.custom_model_field import PermissionSet
+from org.custom_model_field import Permissions as PermissionSet
 from collections import defaultdict
 
 
