@@ -18,3 +18,7 @@ debug.log
 
 #uploads
 /uploads
+
+
+#mac specific
+**/.DS_Store
