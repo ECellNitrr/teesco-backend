@@ -23,17 +23,6 @@ user_already_present_409 = {
   "message": "Already a member of organization"
 }
 
-list_permission_set_200 = [
-  {
-    "id": 1,
-    "name": "Volunteer",
-    },
-  {
-    "id": 2,
-    "name": "Head_Coordinator",
-    }
-]
-
 create_group_400={
   "name": [
     "Ensure this field has no more than 30 characters."

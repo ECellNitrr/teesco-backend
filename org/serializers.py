@@ -47,19 +47,6 @@ class CreateOrgSerializer(serializers.Serializer):
             Permissions.CAN_REVIEW_PROOFS,
         ]) 
         
-        
-        # create default group permission_sets
-        admin_permission_set = PermissionSet.objects.create(
-            name = 'Admin',
-            org = org,
-            perm_obj = admin_permissions 
-        )
-        volunteer_permission_set = PermissionSet.objects.create(
-            name = 'Volunteer',
-            org = org,
-            perm_obj = volunteer_permissions 
-        )
-
 
         # creating invite slugs
         # this method is used because we dont need a 
@@ -75,7 +62,7 @@ class CreateOrgSerializer(serializers.Serializer):
                 Members of this group has access to every place within the org.''',
             invite_slug=admin_group_invite_slug,
             org=org,
-            default_permission_set=admin_permission_set
+            perm_obj=admin_permissions
         )
         volunteer_group = Group.objects.create(
             name='Volunteer',
@@ -83,11 +70,11 @@ class CreateOrgSerializer(serializers.Serializer):
                 invite link then he will be put into this group.''',
             invite_slug=volunteer_group_invite_slug,
             org=org,
-            default_permission_set=volunteer_permission_set
+            perm_obj=volunteer_permissions
         )
 
 
-        return [org,admin_group,admin_permission_set]
+        return [org,admin_group]
 
 class CreateGroupSerializer(serializers.ModelSerializer):
     class Meta:
