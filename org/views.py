@@ -109,25 +109,27 @@ def AddVolunteer(request,org_id):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def EditOrg(request,org_id):
-    org_count = Org.objects.filter(pk=org_id).count()
-    if org_count>0:
+    user = request.user
+    try:
         org = Org.objects.get(pk=org_id)
-        user = request.user
-        if Member.objects.filter(user=user,org=org).count()>0:
-            isadmin = Member.objects.get(user=user,org=org).group.perm_obj.permissions_to_integer()
-            #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
-            if isadmin%2 == 1:
-                if request.method == "PUT":
-                    serializer = EditOrgSerializer(org,data=request.data)
-                    if serializer.is_valid():
-                        serializer.save()
-                        return Response(responses.update_org_200,status.HTTP_200_OK)
-                    else:
-                        return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
-        else:
-            return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
-    else:
-            return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
+    except Org.DoesNotExist:
+        return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
 
+    try: 
+        member = Member.objects.get(user=user,org=org)
+    except Member.DoesNotExist:
+        return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
+
+    isadmin = member.group.perm_obj.permissions_to_integer()
+    #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
+    if isadmin%2 == 1:
+        if request.method == "PUT":
+            serializer = EditOrgSerializer(org,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(responses.update_org_200,status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
+    
