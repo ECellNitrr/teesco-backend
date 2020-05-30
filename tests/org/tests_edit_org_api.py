@@ -28,7 +28,7 @@ class EditOrgTestCase(AuthAPITestCase):
         }
         serializer = CreateOrgSerializer(data = data_org)
         if serializer.is_valid():
-            self.org,self.admin_group,self.admin_permission_set = serializer.save()
+            self.org,self.admin_group = serializer.save()
 
     def test_fail_without_auth(self):
         edit_org_api = "/api/org/1/"
@@ -50,7 +50,6 @@ class EditOrgTestCase(AuthAPITestCase):
             user=self.auth_user,
             org=self.org,
             group=self.admin_group,
-            permission_set=self.admin_permission_set
         )
         response = auth_client.put(edit_org_api,data=self.data_org_put)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -68,7 +67,6 @@ class EditOrgTestCase(AuthAPITestCase):
             user=self.auth_user,
             org=self.org,
             group=self.admin_group,
-            permission_set=self.admin_permission_set
         )
         response = auth_client.put(edit_org_api,data=self.data_org_put_empty)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

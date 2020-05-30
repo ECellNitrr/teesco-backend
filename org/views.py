@@ -41,14 +41,13 @@ class OrgView(APIView):
 
         if serializer.is_valid():
             # create org and default groups
-            org,admin_group,admin_permission_set = serializer.save()
+            org,admin_group = serializer.save()
 
             # add creator to admin group
             member = Member.objects.create(
                 user=request.user,
                 org=org,
                 group=admin_group,
-                permission_set=admin_permission_set
             )
             return Response({}, status.HTTP_201_CREATED)
         else:
@@ -81,10 +80,7 @@ def AddVolunteer(request,org_id):
         if member_present>0:
             return Response({"message":"Already a member of the organization"},status.HTTP_409_CONFLICT)
         else:
-            volunteer_permission_set = PermissionSet.objects.get(
-                name='Volunteer',
-                org=org,
-            )
+            
             volunteer_group = Group.objects.get(
                 name='Volunteer',
                 org=org,
@@ -93,7 +89,6 @@ def AddVolunteer(request,org_id):
                 user = request.user,
                 org = org,
                 group = volunteer_group,
-                permission_set = volunteer_permission_set 
             )
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
@@ -161,7 +156,7 @@ def EditOrg(request,org_id):
         org = Org.objects.get(pk=org_id)
         user = request.user
         if Member.objects.filter(user=user,org=org).count()>0:
-            isadmin = Member.objects.get(user=user,org=org).permission_set.perm_obj.permissions_to_integer()
+            isadmin = Member.objects.get(user=user,org=org).group.perm_obj.permissions_to_integer()
             #Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
             if isadmin%2 == 1:
                 if request.method == "PUT":
