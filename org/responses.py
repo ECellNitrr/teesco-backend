@@ -36,18 +36,18 @@ list_permission_set_200 = [
 
 get_group = [
   {
-    "groupId": 1,
-    "groupName": "group1",
-    "groupMember": 1
+    "id": 1,
+    "name": "group1",
+    "memberCount": 1
   },
   {
-    "groupId": 2,
-    "groupName": "group2",
-    "groupMember": 3
+    "id": 2,
+    "name": "group2",
+    "memberCount": 3
   },
   {
-    "groupId": 3,
-    "groupName": "group3",
-    "groupMember": 1
+    "id": 3,
+    "name": "group3",
+    "memberCount": 1
   }
 ]

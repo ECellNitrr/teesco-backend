@@ -173,7 +173,7 @@ def GetGroup(request,org_id):
         response_object = []
         for x in group:
             memberLen = len(Member.objects.filter(group=x.id))
-            response_object.append({"groupId":x.id, "groupName": x.name, "groupMember":memberLen})
+            response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
             
         return Response(response_object,status.HTTP_200_OK)
     else :
