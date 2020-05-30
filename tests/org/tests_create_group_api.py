@@ -16,7 +16,9 @@ class CreateGroupAPITestCase(AuthAPITestCase):
     valid_payload = {
         'name':'Test_Group',
         'role':'Role hi role',
-        'default_permission_set':'1'
+        "permissions_array": [
+            1,3
+        ]
     }
     
     
@@ -57,8 +59,7 @@ class CreateGroupAPITestCase(AuthAPITestCase):
         member= Member.objects.create(
             user = self.auth_user,
             group = group,
-            org= self.org,
-            permission_set= group.default_permission_set
+            org= self.org
         )
         response = auth_client.post(self.create_group_api,{})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -71,8 +72,7 @@ class CreateGroupAPITestCase(AuthAPITestCase):
         member= Member.objects.create(
             user = self.auth_user,
             group = group,
-            org= self.org,
-            permission_set= group.default_permission_set
+            org= self.org
         )
         response = auth_client.post(self.create_group_api,self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -85,8 +85,7 @@ class CreateGroupAPITestCase(AuthAPITestCase):
         member= Member.objects.create(
             user = self.auth_user,
             group = group,
-            org= self.org,
-            permission_set= group.default_permission_set
+            org= self.org
         )
         response = auth_client.post(self.create_group_api, self.valid_payload)
 

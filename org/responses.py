@@ -30,8 +30,10 @@ create_group_400={
   "role": [
     "Ensure this field has no more than 200 characters."
   ],
-  "default_permission_set": [
-    "Invalid pk \"9\" - object does not exist."
+  "permissions_array": [
+    "This list may not be empty.",
+    "Ensure this value is less than or equal to 4.",
+    "Ensure this value is greater than or equal to 0."
   ]
 }
 

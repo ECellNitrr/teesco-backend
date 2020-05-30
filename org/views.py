@@ -83,21 +83,21 @@ class GroupView(APIView):
         except:
             return Response({"message":"The organisation was not found"}, status.HTTP_404_NOT_FOUND)
         else:
-            try:
-                member = Member.objects.get(user = request.user, org= org)
-            except:
-                return Response({"detail":"You are not a member of this organisation"}, status.HTTP_401_UNAUTHORIZED)
+            members = Member.objects.filter(user = request.user, org= org)
+            if members.count()>0:
+                for member in members:
+                    if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
+                        serializer = CreateGroupSerializer(data=request.data)
+                        if serializer.is_valid():
+                            serializer.save(org_id)
+                            return Response({}, status.HTTP_201_CREATED)
+                        else:
+                            data = serializer.errors
+                            return Response(data, status.HTTP_400_BAD_REQUEST)
+                return Response({"message":"You do not have the required permissions."}, status.HTTP_403_FORBIDDEN)
             else:
-                if member.permission_set.perm_obj.permissions[Permissions.IS_ADMIN]:
-                    serializer = CreateGroupSerializer(data=request.data)
-                    if serializer.is_valid():
-                        serializer.save(org_id)
-                        return Response({}, status.HTTP_201_CREATED)
-                    else:
-                        data = serializer.errors
-                        return Response(data, status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({"message":"You do not have the required permissions."}, status.HTTP_403_FORBIDDEN)
+                return Response({"detail":"You are not a member of this organisation"}, status.HTTP_401_UNAUTHORIZED)
+                
 
 @swagger_auto_schema(
     operation_id="add_volunteer",

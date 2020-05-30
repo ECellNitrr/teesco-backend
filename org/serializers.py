@@ -77,19 +77,25 @@ class CreateOrgSerializer(serializers.Serializer):
         return [org,admin_group]
 
 class CreateGroupSerializer(serializers.ModelSerializer):
+    permissions_array = serializers.ListField(
+            child=serializers.IntegerField(min_value=0, max_value=4), allow_empty= False
+    )
     class Meta:
         model = Group
-        fields = ['name','role','default_permission_set']
+        fields = ['name','role','permissions_array']
+
     def save(self, org_id):
         valid_data = self.validated_data
-
+        
         invite_slug = str(org_id)+'-'+str(uuid.uuid4())
         org = Org.objects.get(id=org_id)
-
+        perm = Permissions()
+        perm.set_permissions(permissions_array=valid_data['permissions_array'])
+        
         group = Group.objects.create(
             name = valid_data['name'],
             role = valid_data['role'],
             invite_slug = invite_slug,
             org = org,
-            default_permission_set = valid_data['default_permission_set']
+            perm_obj = perm
         )
