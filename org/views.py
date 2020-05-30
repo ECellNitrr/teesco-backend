@@ -93,6 +93,10 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
+=======
+
+>>>>>>> f39e4d5d599d754003183396880fb813aeb0dbc0
 
 
 @swagger_auto_schema(
@@ -171,5 +175,9 @@ def EditOrg(request,org_id):
         else:
             return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
     else:
+<<<<<<< HEAD
             return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
 
+=======
+            return Response(responses.org_not_present_400,status.HTTP_400_BAD_REQUEST)
+>>>>>>> f39e4d5d599d754003183396880fb813aeb0dbc0
