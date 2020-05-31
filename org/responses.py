@@ -51,3 +51,21 @@ create_group_403={
 create_group_404={
   "message":"The organisation was not found"
 }
+
+get_group = [
+  {
+    "id": 1,
+    "name": "group1",
+    "memberCount": 1
+  },
+  {
+    "id": 2,
+    "name": "group2",
+    "memberCount": 3
+  },
+  {
+    "id": 3,
+    "name": "group3",
+    "memberCount": 1
+  }
+]
