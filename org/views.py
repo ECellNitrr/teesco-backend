@@ -115,6 +115,7 @@ def GetGroup(request,org_id):
         print(org)
     except Org.DoesNotExist:
         return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+    
     try:
         member = Member.objects.get(
         user = request.user,
@@ -123,7 +124,7 @@ def GetGroup(request,org_id):
     except Member.DoesNotExist:
         return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
        
-    if member.permission_set.perm_obj.permissions[Permissions.IS_STAFF]:    
+    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
         group = Group.objects.all() 
         response_object = []
         for x in group:

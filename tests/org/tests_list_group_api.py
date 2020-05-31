@@ -49,10 +49,6 @@ class GetGroupAPITestCase(AuthAPITestCase):
     def test_fail_unauthorised_member(self): 
         get_group_api = "/api/org/1/group/"
         auth_client = self.create_auth_client()
-        volunteer_permission_set = PermissionSet.objects.get(
-                name='Volunteer',
-                org=self.org,
-        )
         volunteer_group = Group.objects.get(
                 name='Volunteer',
                 org=self.org,
@@ -60,8 +56,7 @@ class GetGroupAPITestCase(AuthAPITestCase):
         member = Member.objects.create(
                 user = self.auth_user,
                 org = self.org,
-                group = volunteer_group,
-                permission_set = volunteer_permission_set 
+                group = volunteer_group
         )
         response = auth_client.get(get_group_api)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -69,10 +64,6 @@ class GetGroupAPITestCase(AuthAPITestCase):
     def test_success_authorized_user(self): 
         get_group_api = "/api/org/1/group/"
         auth_client = self.create_auth_client()
-        admin_permission_set = PermissionSet.objects.get(
-                name='Admin',
-                org=self.org,
-        )
         admin_group = Group.objects.get(
                 name='Admin',
                 org=self.org,
@@ -81,11 +72,10 @@ class GetGroupAPITestCase(AuthAPITestCase):
                 user = self.auth_user,
                 org = self.org,
                 group = admin_group,
-                permission_set = admin_permission_set 
         )
         response = auth_client.get(get_group_api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
-        super(GetGroupAPITestCase,self).setUp()
-        self.auth_user.delete()
+        super(GetGroupAPITestCase,self).tearDown() 
+        # this is rundant to be removed
