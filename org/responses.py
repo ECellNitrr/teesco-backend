@@ -22,3 +22,21 @@ user_unauthorized_401 = {
 user_already_present_409 = {
   "message": "Already a member of organization"
 }
+
+get_group = [
+  {
+    "id": 1,
+    "name": "group1",
+    "memberCount": 1
+  },
+  {
+    "id": 2,
+    "name": "group2",
+    "memberCount": 3
+  },
+  {
+    "id": 3,
+    "name": "group3",
+    "memberCount": 1
+  }
+]
