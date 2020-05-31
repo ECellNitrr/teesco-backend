@@ -70,33 +70,85 @@ class GroupView(APIView):
     )
     def post(self,request, org_id):
         """
-        When a user posts the required details to this API, a number of checks follow:
-        1. A check at the URL, that the org_id in the url exists or not(404).
-        2. Whether the authorized user is a member of the organisation(401).
-        3. Whether the authorzed member is an admin of the organisation(403).
-        4. Whether the data posted is valid or not(400).
-        5. If everything goes right, we create a unique route slug in the overidden save()
-            which takes org_id as a parameter(201).
+        When a user posts the required details to this API, a number of checks follow.
+        If each of them pass, the group is created under the Organisation using the org_id.
         """
+       
         try:
             org = Org.objects.get(id=org_id)
-        except:
-            return Response({"message":"The organisation was not found"}, status.HTTP_404_NOT_FOUND)
+        except Org.DoesNotExist:
+            # A check at the URL, that the org_id in the url exists or not(404).
+            return Response(
+                {"message":"The organisation was not found"}, 
+                status.HTTP_404_NOT_FOUND
+            )
         else:
+            # Whether the authorized user is a member of the organisation(401).
             members = Member.objects.filter(user = request.user, org= org)
-            if members.count()>0:
+            if members.count()==0:
+                return Response(
+                    {"detail":"You are not a member of this organisation"}, 
+                    status.HTTP_401_UNAUTHORIZED
+                )
+            else:
+                # Whether the member is an Admin of the organisation.
                 for member in members:
                     if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
                         serializer = CreateGroupSerializer(data=request.data)
                         if serializer.is_valid():
+                            """
+                            If everything goes right, we create a unique route slug
+                            in the overidden save() which takes org_id as a parameter(201).
+                            """
                             serializer.save(org_id)
                             return Response({}, status.HTTP_201_CREATED)
                         else:
+                            # Whether the data posted is valid or not(400).
                             data = serializer.errors
                             return Response(data, status.HTTP_400_BAD_REQUEST)
-                return Response({"message":"You do not have the required permissions."}, status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({"detail":"You are not a member of this organisation"}, status.HTTP_401_UNAUTHORIZED)
+                # If no member instance has Admin permission.
+                return Response(
+                    {"message":"You do not have the required permissions."}, 
+                    status.HTTP_403_FORBIDDEN
+                )
+
+
+    @swagger_auto_schema(
+    operation_id="get_groups_list",
+    responses={
+        '200': set_example(responses.get_group),
+        '401': set_example(responses.user_unauthorized_401),
+        '404': set_example({"detail": "This organisation doesn't exist."}),
+        '400': set_example({"detail" : "You are not a member of this organisation"}),
+        '403': set_example({"detail": "You are not authorised to view this."}),
+        }
+    )    
+    def get(self, request, org_id):
+        try:
+            org = Org.objects.get(pk=org_id)
+        except Org.DoesNotExist:
+            return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+        
+        try:
+            member = Member.objects.get(
+            user = request.user,
+            org = org
+            )
+        except Member.DoesNotExist:
+            return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
+        
+        if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
+            group = Group.objects.all() 
+            response_object = []
+            for x in group:
+                memberLen = len(Member.objects.filter(group=x.id))
+                response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
+                
+            return Response(response_object,status.HTTP_200_OK)
+        else :
+            return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+        
+                
                 
 
 @swagger_auto_schema(
@@ -137,47 +189,4 @@ def AddVolunteer(request,org_id):
             return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
-
-
-
-@swagger_auto_schema(
-    operation_id="get_groups_list",
-    method='GET',
-    responses={
-        '200': set_example(responses.get_group),
-        '401': set_example(responses.user_unauthorized_401),
-        '404': set_example({"detail": "This organisation doesn't exist."}),
-        '400': set_example({"detail" : "You are not a member of this organisation"}),
-        '403': set_example({"detail": "You are not authorised to view this."}),
-    }
-)    
-@api_view(['get'])
-@permission_classes([IsAuthenticated])
-def GetGroup(request,org_id):
-    try:
-        org = Org.objects.get(pk=org_id)
-        print(org)
-    except Org.DoesNotExist:
-        return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
-    
-    try:
-        member = Member.objects.get(
-        user = request.user,
-        org = org
-        )
-    except Member.DoesNotExist:
-        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
        
-    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
-        group = Group.objects.all() 
-        response_object = []
-        for x in group:
-            memberLen = len(Member.objects.filter(group=x.id))
-            response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
-            
-        return Response(response_object,status.HTTP_200_OK)
-    else :
-        return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
-
-
-    
