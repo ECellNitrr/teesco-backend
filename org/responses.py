@@ -42,3 +42,20 @@ admin_access_403 = {
 empty_fields_500 = {
   "message": "Can't update! one or more fields are empty!"
 }
+get_group = [
+  {
+    "id": 1,
+    "name": "group1",
+    "memberCount": 1
+  },
+  {
+    "id": 2,
+    "name": "group2",
+    "memberCount": 3
+  },
+  {
+    "id": 3,
+    "name": "group3",
+    "memberCount": 1
+  }
+]

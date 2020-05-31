@@ -131,4 +131,46 @@ def EditOrg(request,org_id):
             return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
     else:
         return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
+
+
+@swagger_auto_schema(
+    operation_id="get_groups_list",
+    method='GET',
+    responses={
+        '200': set_example(responses.get_group),
+        '401': set_example(responses.user_unauthorized_401),
+        '404': set_example({"detail": "This organisation doesn't exist."}),
+        '400': set_example({"detail" : "You are not a member of this organisation"}),
+        '403': set_example({"detail": "You are not authorised to view this."}),
+    }
+)    
+@api_view(['get'])
+@permission_classes([IsAuthenticated])
+def GetGroup(request,org_id):
+    try:
+        org = Org.objects.get(pk=org_id)
+        print(org)
+    except Org.DoesNotExist:
+        return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+    
+    try:
+        member = Member.objects.get(
+        user = request.user,
+        org = org
+        )
+    except Member.DoesNotExist:
+        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
+       
+    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
+        group = Group.objects.all() 
+        response_object = []
+        for x in group:
+            memberLen = len(Member.objects.filter(group=x.id))
+            response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
+            
+        return Response(response_object,status.HTTP_200_OK)
+    else :
+        return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+
+
     
