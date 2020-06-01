@@ -1,6 +1,9 @@
 from collections import defaultdict
 from django.db import models
 
+class PERMISSION_INT_INVALID(Exception): 
+    pass
+
 
 class Permissions:
     """Helps in interconversion of permissions into objects(for ease of use) and integers(for storage in db)."""
@@ -33,7 +36,10 @@ class Permissions:
 
         self.permissions = defaultdict(bool)
         for permission in permissions_array:
-            self.permissions[permission]=True
+            if permission in self.get_permission_list(permission):
+                self.permissions[permission]=True
+            else:
+                raise PERMISSION_INT_INVALID("The permission ints in the array are not valid.")
 
 
     def permissions_to_integer(self):

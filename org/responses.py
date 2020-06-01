@@ -25,15 +25,16 @@ user_already_present_409 = {
 
 create_group_400={
   "name": [
+    "This field is required.",
     "Ensure this field has no more than 30 characters."
   ],
   "role": [
+    "This field is required.",
     "Ensure this field has no more than 200 characters."
   ],
   "permissions_array": [
-    "This list may not be empty.",
-    "Ensure this value is less than or equal to 4.",
-    "Ensure this value is greater than or equal to 0."
+    "This field is required.",
+    "The permission ints in the array are not valid."
   ]
 }
 

@@ -95,7 +95,7 @@ class GroupView(APIView):
                 for member in members:
                     if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
                         serializer = CreateGroupSerializer(data=request.data)
-                        if serializer.is_valid():
+                        if serializer.is_valid() and serializer.permissions_valid():
                             """
                             If everything goes right, we create a unique route slug
                             in the overidden save() which takes org_id as a parameter(201).
@@ -138,9 +138,9 @@ class GroupView(APIView):
             return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
         
         if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
-            group = Group.objects.all() 
+            groups = Group.objects.filter(org = org) 
             response_object = []
-            for x in group:
+            for x in groups:
                 memberLen = len(Member.objects.filter(group=x.id))
                 response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
                 

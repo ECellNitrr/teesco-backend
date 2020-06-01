@@ -84,6 +84,18 @@ class CreateGroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['name','role','permissions_array']
 
+    def permissions_valid(self):
+        self.perm = Permissions()
+        try:
+            self.perm.set_permissions(
+                permissions_array=self.initial_data['permissions_array']
+            )
+        except PERMISSION_INT_INVALID as perm_int_invalid:
+            self._errors["permissions_array"]=str(perm_int_invalid)
+        else:
+            self._errors = {}
+        return not bool(self._errors)
+
     def save(self, org_id):
         """
         The overidden save() function is required to allow creation of a unique invite 
@@ -93,8 +105,7 @@ class CreateGroupSerializer(serializers.ModelSerializer):
         valid_data = self.validated_data
         invite_slug = str(org_id)+'-'+str(uuid.uuid4())
         org = Org.objects.get(id=org_id)
-        perm = Permissions()
-        perm.set_permissions(permissions_array=valid_data['permissions_array'])
+        
         
         #Creation of a group using the org and permission obj initialized above.
         group = Group.objects.create(
@@ -102,5 +113,5 @@ class CreateGroupSerializer(serializers.ModelSerializer):
             role = valid_data['role'],
             invite_slug = invite_slug,
             org = org,
-            perm_obj = perm
+            perm_obj = self.perm
         )
