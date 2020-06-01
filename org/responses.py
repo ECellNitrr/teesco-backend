@@ -21,6 +21,7 @@ user_unauthorized_401 = {
 
 user_already_present_409 = {
   "message": "Already a member of organization"
+}
 
 user_unauthorized_401 = {
   "detail": "Authentication credentials were not provided."
