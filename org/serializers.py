@@ -78,7 +78,7 @@ class CreateOrgSerializer(serializers.Serializer):
 
 class CreateGroupSerializer(serializers.ModelSerializer):
     permissions_array = serializers.ListField(
-            child=serializers.IntegerField(min_value=0, max_value=4), allow_empty= False
+            child=serializers.IntegerField()
     )
     class Meta:
         model = Group
