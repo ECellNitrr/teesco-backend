@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework import status 
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -27,7 +27,7 @@ class OrgView(APIView):
             '400': set_example(responses.create_org_400)
         },
     )
-    def post(self,request):
+    def post(self, request):
         """
         1. when a Organisation is created Admin and Volunteer 
             groups are also automatically created for that org.
@@ -37,11 +37,11 @@ class OrgView(APIView):
             put into volunteer group.
         4. The creator of the org will be automatically put into Admin group.
         """
-        serializer = CreateOrgSerializer(data = request.data)
+        serializer = CreateOrgSerializer(data=request.data)
 
         if serializer.is_valid():
             # create org and default groups
-            org,admin_group = serializer.save()
+            org, admin_group = serializer.save()
 
             # add creator to admin group
             member = Member.objects.create(
@@ -68,32 +68,70 @@ class OrgView(APIView):
 )
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
-def AddVolunteer(request,org_id):
+def AddVolunteer(request, org_id):
     org_count = Org.objects.filter(pk=org_id).count()
-    
-    if org_count>0:
+
+    if org_count > 0:
         org = Org.objects.get(pk=org_id)
         member_present = Member.objects.filter(
-            user = request.user,
-            org = org 
+            user=request.user,
+            org=org
         ).count()
-        if member_present>0:
-            return Response({"message":"Already a member of the organization"},status.HTTP_409_CONFLICT)
+        if member_present > 0:
+            return Response({"message": "Already a member of the organization"}, status.HTTP_409_CONFLICT)
         else:
-            
+
             volunteer_group = Group.objects.get(
                 name='Volunteer',
                 org=org,
             )
             member = Member.objects.create(
-                user = request.user,
-                org = org,
-                group = volunteer_group,
+                user=request.user,
+                org=org,
+                group=volunteer_group,
             )
-            return Response({"message":"You are added as a volunteer"},status.HTTP_201_CREATED)
+            return Response({"message": "You are added as a volunteer"}, status.HTTP_201_CREATED)
     else:
-        return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "Organization not present"}, status.HTTP_400_BAD_REQUEST)
 
+
+@swagger_auto_schema(
+    operation_id="edit_org",
+    operation_description="When an authenticated user hits this API it gets added to the volunteer group",
+    method='PUT',
+    request_body=EditOrgSerializer,
+    responses={
+        '200': set_example(responses.update_org_200),
+        '400': set_example(responses.org_not_present_400),
+        '401': set_example(responses.user_unauthorized_401),
+        '403': set_example(responses.admin_access_403),
+    }
+)
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def EditOrg(request, org_id):
+    user = request.user
+    try:
+        org = Org.objects.get(pk=org_id)
+    except Org.DoesNotExist:
+        return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
+
+    try:
+        member = Member.objects.get(user=user, org=org)
+    except Member.DoesNotExist:
+        return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
+
+    isadmin = member.group.perm_obj.permissions_to_integer()
+    # Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
+    if isadmin % 2 == 1:
+        if request.method == "PUT":
+            serializer = EditOrgSerializer(org, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(responses.update_org_200, status.HTTP_200_OK)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
 
 
 @swagger_auto_schema(
@@ -103,37 +141,35 @@ def AddVolunteer(request,org_id):
         '200': set_example(responses.get_group),
         '401': set_example(responses.user_unauthorized_401),
         '404': set_example({"detail": "This organisation doesn't exist."}),
-        '400': set_example({"detail" : "You are not a member of this organisation"}),
+        '400': set_example({"detail": "You are not a member of this organisation"}),
         '403': set_example({"detail": "You are not authorised to view this."}),
     }
-)    
+)
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
-def GetGroup(request,org_id):
+def GetGroup(request, org_id):
     try:
         org = Org.objects.get(pk=org_id)
         print(org)
     except Org.DoesNotExist:
-        return Response({"detail":"This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
-    
+        return Response({"detail": "This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
+
     try:
         member = Member.objects.get(
-        user = request.user,
-        org = org
+            user=request.user,
+            org=org
         )
     except Member.DoesNotExist:
-        return Response({"detail" : "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
-       
-    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:    
-        group = Group.objects.all() 
+        return Response({"detail": "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
+
+    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:
+        group = Group.objects.all()
         response_object = []
         for x in group:
             memberLen = len(Member.objects.filter(group=x.id))
-            response_object.append({"id":x.id, "name": x.name, "memberCount":memberLen})
-            
-        return Response(response_object,status.HTTP_200_OK)
-    else :
+            response_object.append(
+                {"id": x.id, "name": x.name, "memberCount": memberLen})
+
+        return Response(response_object, status.HTTP_200_OK)
+    else:
         return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
-
-
-    
