@@ -21,7 +21,6 @@ user_unauthorized_401 = {
 
 user_already_present_409 = {
   "message": "Already a member of organization"
-}
 
 user_unauthorized_401 = {
   "detail": "Authentication credentials were not provided."
@@ -42,6 +41,7 @@ admin_access_403 = {
 empty_fields_500 = {
   "message": "Can't update! one or more fields are empty!"
 }
+
 get_group = [
   {
     "id": 1,
