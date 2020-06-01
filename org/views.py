@@ -128,8 +128,7 @@ def EditOrg(request,org_id):
             if serializer.is_valid():
                 serializer.save()
                 return Response(responses.update_org_200,status.HTTP_200_OK)
-            else:
-                return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
     else:
         return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
     
