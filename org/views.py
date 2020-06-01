@@ -94,6 +94,7 @@ def AddVolunteer(request,org_id):
     else:
         return Response({"detail":"Organization not present"},status.HTTP_400_BAD_REQUEST)
 
+
 @swagger_auto_schema(
     operation_id="edit_org",
     operation_description="When an authenticated user hits this API it gets added to the volunteer group",
@@ -132,6 +133,7 @@ def EditOrg(request,org_id):
                 return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
     else:
         return Response(responses.admin_access_403,status.HTTP_403_FORBIDDEN)
+
 
 
 @swagger_auto_schema(
