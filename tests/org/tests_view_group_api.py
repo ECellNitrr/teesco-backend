@@ -35,13 +35,13 @@ class ViewGroupAPITestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_fail_invalid_org(self):
-        group_detail_api = "/api/org/2/group/1/"
+        group_detail_api = "/api/org/12345/group/1/"
         auth_client = self.create_auth_client()
         response = auth_client.get(group_detail_api)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_fail_invalid_group(self):
-        group_detail_api = "/api/org/1/group/5/"
+        group_detail_api = "/api/org/1/group/12345/"
         auth_client = self.create_auth_client()
         response = auth_client.get(group_detail_api)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
