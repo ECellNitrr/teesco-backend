@@ -32,6 +32,9 @@ DEBUG='True'
 EMAIL_HOST_USER='naveen@gmail.com'
 EMAIL_HOST_PASSWORD='wnejszjzrvacvkpn'
 MOCK_EMAIL ='True'
+EMAIL_BACKEND = 'your-backend-config'
+AWS_ACCESS_KEY_ID = 'AWS_ACCESS_KEY_ID'
+AWS_SECRET_ACCESS_KEY = 'AWS_SECRET_ACCESS_KEY'
 ```
 
 note:
@@ -41,6 +44,7 @@ note:
 
 **For gmail:**
 
+1. Set the `EMAIL_BACKEND` to 'django.core.mail.backends.smtp.EmailBackend'
 1. If your are using gmail then normal password is not enough to send email through django email package. You have to enable two step verification in https://myaccount.google.com/security.
 1. Then generate a new app password for teesco.
 1. The app password will look like this.
@@ -48,6 +52,10 @@ note:
 1. We have added below images for help.
 
 <img src='https://user-images.githubusercontent.com/33046846/81901877-d6f5d400-95dc-11ea-85de-d7809d85ccdb.png' width='200px' height='200px' /> <img src='https://user-images.githubusercontent.com/33046846/81902570-f3ded700-95dd-11ea-8a42-0eb44f1e195f.png' height='200px' width='200px'/> <img src='https://user-images.githubusercontent.com/33046846/81902642-183ab380-95de-11ea-9c95-86940d2f0b42.png' height='200px' width='200px'/>
+
+**For Amazon SES**
+1. Set the `EMAIL_BACKEND` to 'django_amazon_ses.EmailBackend' in `.env`
+2. Also set the `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` in `.env`.
 
 **Other than gmail:**
 Other email providers like outlook, hotmail, rediffmail, yahoo mail etc., should work with normal email password. Else they will have a similar approach.
