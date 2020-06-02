@@ -7,7 +7,7 @@ from org.models import *
 from org.serializers import CreateOrgSerializer
 from org.custom_model_field import Permissions
 
-class GroupDetailsAPITestCase(AuthAPITestCase):
+class ViewGroupAPITestCase(AuthAPITestCase):
     """
     This class is to test the API [get] /api/org/[org-id]/volunteer
     present in the view Org.views.AddVolunteer.get
@@ -18,7 +18,7 @@ class GroupDetailsAPITestCase(AuthAPITestCase):
             Create an organization in the test database
         """
         #Inheriting the base class functionality
-        super(GroupDetailsAPITestCase, self).setUp()
+        super(ViewGroupAPITestCase, self).setUp()
         # Create the org using serializer
         data_org = {
             "name":'test',
