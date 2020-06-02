@@ -9,8 +9,8 @@ import uuid
 
 class GetGroupAPITestCase(AuthAPITestCase):
     """
-    This class is to test the API [get] /api/org/[org-id]/volunteer
-    present in the view Org.views.AddVolunteer.get
+    This class is to test the API [get] /api/org/(org-id)/group/(group-id)/
+    present in the class based view Org.views.GroupDetailsView
     """
 
     def setUp(self):
