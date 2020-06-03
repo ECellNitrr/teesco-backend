@@ -1,7 +1,6 @@
 from celery import shared_task
 from decouple import config
 from django.core.mail import EmailMessage, send_mail
-from decouple import config
 import boto3
 
 
@@ -9,7 +8,6 @@ import boto3
 def send_email(recipient, subject, body):
     if config('MOCK_EMAIL', cast=bool):
         print('Mock email service:')
-        print('Subject:', subject)
         print('Recipients:', ', '.join(recipient))
         print('Subject:', subject)
     else:
@@ -18,11 +16,10 @@ def send_email(recipient, subject, body):
                 'ses',
                 aws_access_key_id=config('AWS_ACCESS_KEY_ID'),
                 aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY'),
-                region_name='eu-west-1'
+                region_name=config('AWS_REGION_NAME')
             )
             try:
                 sender_email = config('EMAIL_HOST_USER')
-                print(sender_email)
                 response = client.send_email(
                     Source=sender_email,
                     Destination={
