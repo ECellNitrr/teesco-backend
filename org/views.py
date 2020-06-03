@@ -1,18 +1,17 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
-from .serializers import *
-from .models import *
-from . import responses
 from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from utils.swagger import set_example
 from org.custom_model_field import Permissions
+from .serializers import *
+from .models import *
+from . import responses
 
 
 class OrgView(APIView):
@@ -29,11 +28,11 @@ class OrgView(APIView):
     )
     def post(self, request):
         """
-        1. when a Organisation is created Admin and Volunteer 
+        1. when a Organisation is created Admin and Volunteer
             groups are also automatically created for that org.
         2. Admin group has all the permissions available.
-        3. Volunteer group has no permissions but when a user  
-            joins that org without invite link he/she will be 
+        3. Volunteer group has no permissions but when a user
+            joins that org without invite link he/she will be
             put into volunteer group.
         4. The creator of the org will be automatically put into Admin group.
         """
@@ -269,3 +268,95 @@ def GetGroup(request, org_id):
         return Response(response_object, status.HTTP_200_OK)
     else:
         return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
+
+
+class GroupDetailsView(APIView):
+    '''
+    This is to provide details of a particular
+    group of an organisation to authorised
+    members.
+    '''
+
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='group_details',
+        operation_description="Authenticated and permitted users receive\
+         desired group details here",
+        responses={
+            '200': set_example(responses.group_details_200),
+            '404': set_example(responses.org_not_present_404),
+            '401': set_example(responses.user_not_present_401),
+            '403': set_example(responses.user_unauthorized_403),
+            '400': set_example(responses.group_not_present_400),
+        },
+    )
+
+    def get(self, request, org_id, group_id):
+
+        try:
+            org = Org.objects.get(id=org_id)
+        except Org.DoesNotExist:
+            return Response(
+                {"message":"This organisation does not exist"},
+                status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            group = Group.objects.get(
+                id=group_id,
+                org=org
+            )
+        except Group.DoesNotExist:
+            return Response(
+                {"message":"This group does not exist"},
+                status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            member = Member.objects.get(
+                user=request.user,
+                org=org
+            )
+        except Member.DoesNotExist:
+            return Response(
+                {"detail":"You are not a member of this organisation"},
+                status.HTTP_401_UNAUTHORIZED
+            )
+        
+        if member.group.perm_obj.permissions[Permissions.IS_STAFF]:
+            return Response(
+                {
+                    "id" : group_id,
+                    "name" : group.name,
+                    "role" : group.role,
+                    "permissions" : {
+
+                        "Is Admin":{
+                            'value':  group.perm_obj.permissions[Permissions.IS_ADMIN],
+                            'perm_int': Permissions.IS_ADMIN,
+                        },
+                        "Is Staff":{
+                            'value': group.perm_obj.permissions[Permissions.IS_STAFF],
+                            'perm_int': Permissions.IS_STAFF,
+                        },
+                        "Can create tasks":{
+                            'value': group.perm_obj.permissions[Permissions.CAN_CREATE_TASKS],
+                            'perm_int': Permissions.CAN_CREATE_TASKS,
+                        },
+                        "Can reply to queries":{
+                            'value': group.perm_obj.permissions[Permissions.CAN_REPLY_TO_QUERIES],
+                            'perm_int': Permissions.CAN_REPLY_TO_QUERIES,
+                        },
+                        "Can review proofs":{
+                            'value':  group.perm_obj.permissions[Permissions.CAN_CREATE_TASKS],
+                            'perm_int': Permissions.CAN_REVIEW_PROOFS,
+                        }
+                    }
+                },
+                status.HTTP_200_OK
+            )
+        return Response(
+                    {"message":"You do not have the required permissions."},
+                    status.HTTP_403_FORBIDDEN
+                )

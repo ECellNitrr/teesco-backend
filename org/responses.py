@@ -23,12 +23,12 @@ user_already_present_409 = {
     "message": "Already a member of organization"
 }
 
-user_unauthorized_401 = {
-    "detail": "Authentication credentials were not provided."
-}
-
 user_already_present_409 = {
     "message": "Already a member of organization"
+}
+
+user_not_present_401 = {
+    "detail":"You are not a member of this organisation"
 }
 
 update_org_200 = {
@@ -90,3 +90,43 @@ get_group = [
         "memberCount": 1
     }
 ]
+
+org_not_present_404 = {
+    "message":"This organisation does not exist"
+}
+
+group_not_present_400 = {
+    "message":"This group does not exist"
+}
+
+user_unauthorized_403 = {
+    "message":"You do not have the required permissions."
+}
+
+group_details_200 = {
+    "id": 1,
+    "name": "head coordinator",
+    "role": "Managing the sub-ordinates. Supervising and inteeractiong the respective domains.",
+    "permissions": {
+        "Is Admin":{
+            'value':  False,
+            'perm_int': 1,
+        },
+        "Is Staff":{
+            'value': True,
+            'perm_int': 4,
+        },
+        "Can create tasks":{
+            'value': True,
+            'perm_int': 3,
+        },
+        "Can create groups":{
+            'value': True,
+            'perm_int': 6,
+        },
+        "Can reply to queries":{
+            'value':  False,
+            'perm_int': 5,
+        }
+    }
+}
