@@ -70,8 +70,47 @@ class CreateOrgSerializer(serializers.Serializer):
             org=org,
             perm_obj=volunteer_permissions,
         )
-        return [org, admin_group]
+        return [org,admin_group]
 
+class CreateGroupSerializer(serializers.ModelSerializer):
+    permissions_array = serializers.ListField(
+            child=serializers.IntegerField()
+    )
+    class Meta:
+        model = Group
+        fields = ['name','role','permissions_array']
+
+    def permissions_valid(self):
+        self.perm = Permissions()
+        try:
+            self.perm.set_permissions(
+                permissions_array=self.initial_data['permissions_array']
+            )
+        except PERMISSION_INT_INVALID as perm_int_invalid:
+            self._errors["permissions_array"]=str(perm_int_invalid)
+        else:
+            self._errors = {}
+        return not bool(self._errors)
+
+    def save(self, org_id):
+        """
+        The overidden save() function is required to allow creation of a unique invite 
+        slug and for creating a new Permissions object using the permission array.
+        """
+
+        valid_data = self.validated_data
+        invite_slug = str(org_id)+'-'+str(uuid.uuid4())
+        org = Org.objects.get(id=org_id)
+        
+        
+        #Creation of a group using the org and permission obj initialized above.
+        group = Group.objects.create(
+            name = valid_data['name'],
+            role = valid_data['role'],
+            invite_slug = invite_slug,
+            org = org,
+            perm_obj = self.perm
+        )
 
 class EditOrgSerializer(serializers.ModelSerializer):
     class Meta:

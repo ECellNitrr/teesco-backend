@@ -43,6 +43,36 @@ empty_fields_500 = {
     "message": "Can't update! one or more fields are empty!"
 }
 
+create_group_400={
+  "name": [
+    "This field is required.",
+    "Ensure this field has no more than 30 characters."
+  ],
+  "role": [
+    "This field is required.",
+    "Ensure this field has no more than 200 characters."
+  ],
+  "permissions_array": [
+    "This field is required.",
+    "The permission ints in the array are not valid."
+  ]
+}
+
+create_group_401={
+  "detail": [
+    "Authentication credentials were not provided.",
+    "You are not a member of this organisation",
+  ]
+}
+
+create_group_403={
+  "message":"You do not have the required permissions."
+}
+
+create_group_404={
+  "message":"The organisation was not found"
+}
+
 get_group = [
     {
         "id": 1,
