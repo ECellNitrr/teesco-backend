@@ -8,11 +8,6 @@ env:
   SECRET_KEY: sameple_secret_key
   ALLOWED_HOSTS: "*"
   DEBUG: 'True'
-  EMAIL_BACKEND: 'your-backend-config'
-  AWS_ACCESS_KEY_ID: 'AWS_ACCESS_KEY_ID'
-  AWS_SECRET_ACCESS_KEY: 'AWS_SECRET_ACCESS_KEY'
-  EMAIL_HOST_USER: naveennvrgup@gmail.com
-  EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
   MOCK_EMAIL: 'True'
 script:
 - python manage.py test
