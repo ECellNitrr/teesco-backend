@@ -45,6 +45,21 @@ class GetGroupAPITestCase(AuthAPITestCase):
         auth_client = self.create_auth_client()
         response = auth_client.get(get_group_api)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+       
+    def test_fail_unauthorised_member(self): 
+        get_group_api = "/api/org/1/group/"
+        auth_client = self.create_auth_client()
+        volunteer_group = Group.objects.get(
+                name='Volunteer',
+                org=self.org,
+        )
+        member = Member.objects.create(
+                user = self.auth_user,
+                org = self.org,
+                group = volunteer_group
+        )
+        response = auth_client.get(get_group_api)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_success_authorized_user(self): 
         get_group_api = "/api/org/1/group/"
