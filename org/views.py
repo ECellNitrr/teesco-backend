@@ -360,3 +360,76 @@ class GroupDetailsView(APIView):
                     {"message":"You do not have the required permissions."},
                     status.HTTP_403_FORBIDDEN
                 )
+
+class MembersListView(APIView):
+    '''
+    This is to provide the list of members
+    present in a particular group of the 
+    organisation to STAFF members.
+    '''
+
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='group_details',
+        operation_description="Authenticated and permitted users receive\
+         desired group details here",
+        responses={
+            '200': set_example(responses.members_list_200),
+            '404': set_example(responses.org_not_present_404),
+            '401': set_example(responses.user_not_present_401),
+            '403': set_example(responses.user_unauthorized_403),
+            '400': set_example(responses.group_not_present_400),
+        },
+    )
+
+    def get(self, request, org_id, group_id):
+
+        try:
+            org = Org.objects.get(id=org_id)
+        except Org.DoesNotExist:
+            return Response(
+                responses.org_not_present_404,
+                status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            group = Group.objects.get(
+                id=group_id,
+                org=org
+            )
+        except Group.DoesNotExist:
+            return Response(
+                responses.group_not_present_400,
+                status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            member = Member.objects.get(
+                user=request.user,
+                org=org
+            )
+        except Member.DoesNotExist:
+            return Response(
+                responses.user_not_present_401,
+                status.HTTP_401_UNAUTHORIZED
+            )
+        
+        if member.group.perm_obj.permissions[Permissions.IS_STAFF]:
+            response_object = []
+            members = Member.objects.filter(
+                org = org,
+                group = group
+            )
+            for mem in members:
+                mem_present = {
+                    'id': mem.id,
+                    'name': mem.user.name,
+                    'profile_pic': mem.user.profile_pic if mem.user.profile_pic else "null",
+                }
+                response_object.append(mem_present)
+            return Response(response_object, status.HTTP_200_OK)
+        return Response(
+                    responses.user_unauthorized_403,
+                    status.HTTP_403_FORBIDDEN
+                )
