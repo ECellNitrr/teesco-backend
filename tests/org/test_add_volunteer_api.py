@@ -6,16 +6,18 @@ from users.models import User
 from org.serializers import CreateOrgSerializer
 from org.custom_model_field import Permissions
 import uuid
+
 class AddVolunteerAPITestCase(AuthAPITestCase):
     """
     This class is to test the API [get] /api/org/[org-id]/volunteer
     present in the view Org.views.AddVolunteer.get
     """
+
     def setUp(self):
         """
             Create an organization in the test database
         """
-        #Inheriting the base class funtionality
+        #Inheriting the base class functionality
         super(AddVolunteerAPITestCase,self).setUp()
         # Create the org using serializer
         data_org = {
