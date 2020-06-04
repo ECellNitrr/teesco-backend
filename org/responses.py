@@ -60,18 +60,6 @@ update_org_200 ={
   "message":"Organization details updated successfully"
 }
 
-user_unauthorized_401 = {
-    "detail": "Authentication credentials were not provided."
-}
-
-user_already_present_409 = {
-    "message": "Already a member of organization"
-}
-
-update_org_200 = {
-    "message": "Organization details updated successfully"
-}
-
 admin_access_403 = {
     "message": "You are not an admin of this organization"
 }
