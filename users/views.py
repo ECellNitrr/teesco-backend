@@ -13,7 +13,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from users.models import User
 from org.models import *
-
+from django.utils.crypto import get_random_string
+from utils.email_service import send_email
+import datetime
 
 
 class RegistrationView(APIView):
@@ -75,7 +77,50 @@ class LoginView(APIView):
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
+
+
+class ForgetPasswordView(APIView):
+    @swagger_auto_schema(
+        operation_id='forget_password',
+        request_body=ForgetPasswordSerializer,
+        responses={
+            '200': set_example(responses.forget_password_200),
+            '400': set_example(responses.forget_password_400),
+            '404': set_example(responses.login_404),
+        },
+    )
+    def post(self, request):
+        serializer = ForgetPasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            valid_data = serializer.validated_data
+            try:
+                user = User.objects.get(email=valid_data['email'])
+            except User.DoesNotExist:
+                return Response(responses.login_404, status.HTTP_404_NOT_FOUND)
+            else:
+                time_now = datetime.datetime.now()
+                otp_created_at = user.otp_created_at
+                one_hour = datetime.timedelta(hours = 1)
+                
+                if user.otp == None:
+                    self.generate_otp(user)
+                    send_email(user.otp)
+                elif time_now-otp_created_at>one_hour:
+                    self.generate_otp(user)
+                    send_email(user.otp)
+                else:
+                    send_email(user.otp)
                     
+                return Response(responses.forget_password_200, status.HTTP_200_OK)
+        else:
+            data = serializer.errors
+            return Response(data, status.HTTP_400_BAD_REQUEST)
+        
+    def generate_otp(self, user):
+        user.otp = get_random_string(5, allowed_chars='0123456789')
+        user.otp_created_at = datetime.datetime.now()
+        user.save()
                
         
 

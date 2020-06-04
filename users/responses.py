@@ -73,3 +73,18 @@ list_orgs_200 = [
         "tagline": "Work is worship"
     }
 ]
+
+forget_password_200 = {
+    'detail': 'An OTP has been sent to your email.'
+}
+
+forget_password_400 = {
+  "email": [
+    "Enter a valid email address.",
+    "This field is required."
+  ]
+}
+
+forget_password_404 = {
+    'detail': 'User does not exist.'
+}

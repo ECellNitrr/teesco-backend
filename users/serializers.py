@@ -59,3 +59,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(allow_blank=False)
     password = serializers.CharField(allow_blank=False)
+
+class ForgetPasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email']
