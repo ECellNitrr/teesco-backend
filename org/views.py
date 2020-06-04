@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
@@ -135,5 +135,40 @@ def GetGroup(request,org_id):
     else :
         return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
 
+@swagger_auto_schema(
+    operation_id="update_orglogo",
+    method='PUT',
+    request_body=picserializer,
+    responses={
+        '200': set_example(responses.update_org_200),
+        '400': set_example(responses.org_not_present_400),
+        '401': set_example(responses.user_unauthorized_401),
+        '403': set_example(responses.admin_access_403),
+    }
+)
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def put_pic(request, org_id):
+    user = request.user
+    try:
+        org = Org.objects.get(pk=org_id)
+    except Org.DoesNotExist:
+        return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
 
-    
+    try:
+        member = Member.objects.get(user=user, org=org)
+    except Member.DoesNotExist:
+        return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
+
+    isadmin = member.group.perm_obj.permissions_to_integer()
+    # Checking if the isadmin is odd or even, if odd then the IS_ADMIN permission is enabled for the user
+    if isadmin % 2 == 1:
+        if request.method == "PUT":
+            org_data = FormParser().parse(request)
+            pic_serializer = picserializer(org, data=org_data)
+            if pic_serializer.is_valid():
+                pic_serializer.save()
+                return Response(responses.update_org_200, status.HTTP_200_OK)
+            return Response(pic_serializer.errors, status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)

@@ -76,3 +76,7 @@ class CreateOrgSerializer(serializers.Serializer):
 
         return [org,admin_group]
 
+class picserializer(serializers.ModelSerializer):
+    class Meta:
+        model = Org
+        fields = ['profile_pic']
