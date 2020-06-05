@@ -13,15 +13,16 @@ def send_email(recipient, subject, body):
         print(f'Subject: {subject}')
         print(f'Body: {body}')
     else:
-        if config('EMAIL_BACKEND', cast=str) == 'django_amazon_ses.EmailBackend':
+        if settings.EMAIL_BACKEND == 'AWS-SES':
             client = boto3.client(
                 'ses',
-                aws_access_key_id=config('AWS_ACCESS_KEY_ID'),
-                aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY'),
-                region_name=config('AWS_REGION_NAME')
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_REGION_NAME
             )
             try:
-                sender_email = config('EMAIL_HOST_USER')
+                sender_email = settings.EMAIL_HOST_USER
+
                 response = client.send_email(
                     Source=sender_email,
                     Destination={
