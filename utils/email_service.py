@@ -45,11 +45,11 @@ def send_email(recipient, subject, body):
             except:
                 raise ValueError("Invalid SES credentials.")
 
-        elif config('EMAIL_BACKEND', cast=str) == 'django.core.mail.backends.smtp.EmailBackend':
+        elif settings.EMAIL_BACKEND == 'DJANGO-SMTP':
             try:
-                msg = EmailMessage(subject, body, config(
-                    'EMAIL_HOST_USER'), recipient)
+                msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, recipient)
                 msg.content_subtype = "html"
+
                 msg.send()
             except:
                 raise ValueError("Invalid Gmail credentials.")
