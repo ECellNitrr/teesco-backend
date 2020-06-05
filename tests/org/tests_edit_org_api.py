@@ -8,7 +8,7 @@ from org.custom_model_field import PermissionField as Permissions
 import uuid
 
 
-class EditOrgTestCase(AuthAPITestCase):
+class EditOrgAPITestCase(AuthAPITestCase):
     data_org_put = {
         "name": 'test1',
                 "tagline": 'test1',
@@ -22,7 +22,7 @@ class EditOrgTestCase(AuthAPITestCase):
 
     def setUp(self):
         # Inheriting the base class funtionality
-        super(EditOrgTestCase, self).setUp()
+        super(EditOrgAPITestCase, self).setUp()
 
         data_org = {
             "name": 'test',
