@@ -42,8 +42,6 @@ def send_email(recipient, subject, body):
                         }
                     },
                 )
-            except:
-                raise ValueError("Invalid SES credentials.")
 
         elif settings.EMAIL_BACKEND == 'DJANGO-SMTP':
             try:
