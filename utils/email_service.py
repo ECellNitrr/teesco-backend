@@ -1,5 +1,5 @@
 from celery import shared_task
-from decouple import config
+from django.conf import settings
 from django.core.mail import EmailMessage, send_mail
 import boto3
 
