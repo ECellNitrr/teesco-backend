@@ -13,6 +13,6 @@ env:
   MOCK_EMAIL: 'True'
 services:
 - redis-server
-- celery -A server worker -l info
 script:
+- celery -A server worker -l info
 - python manage.py test
