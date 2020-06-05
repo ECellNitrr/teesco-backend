@@ -11,7 +11,8 @@ env:
   EMAIL_HOST_USER: naveennvrgup@gmail.com
   EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
   MOCK_EMAIL: 'True'
+services:
+- redis-server
+- celery -A server worker -l info
 script:
-- screen -S redis redis-server
-- screen -S celery celery -A server worker -l info
 - python manage.py test
