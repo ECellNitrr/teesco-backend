@@ -176,12 +176,12 @@ if not MOCK_EMAIL:
     EMAIL_BACKEND = config('EMAIL_BACKEND')
     EMAIL_HOST_USER = config('EMAIL_HOST_USER')
     # The developer needs to supply credentails only for the option he/she have selected
-    if EMAIL_BACKEND="DJANGO-SMTP": 
+    if EMAIL_BACKEND=="DJANGO-SMTP": 
         EMAIL_HOST = config('EMAIL_HOST')
         EMAIL_USE_TLS = True
         EMAIL_PORT = 587
         EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-    elif EMAIL_BACKEND="AWS-SES": 
+    elif EMAIL_BACKEND=="AWS-SES": 
         AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
         AWS_REGION_NAME=config('AWS_REGION_NAME')
