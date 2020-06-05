@@ -42,7 +42,6 @@ class EditOrgAPITestCase(AuthAPITestCase):
             group=self.admin_group
         )
         response = auth_client.get(get_org_api)
-        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
