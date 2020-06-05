@@ -10,7 +10,7 @@ def send_email(recipient,subject,body):
         print('Mock email service:')
         print('Subject:',subject)
         print('Recipients:',', '.join(recipient))
-        print('Subject:',subject)
+        print('Body:',body)
     else:
         msg = EmailMessage(subject, body, config('EMAIL_HOST_USER') , recipient)
         msg.content_subtype = "html"  
