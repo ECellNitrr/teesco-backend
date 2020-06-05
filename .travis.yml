@@ -14,5 +14,6 @@ env:
 services:
 - redis-server
 script:
-- celery -A server worker -l info
+- celery multi start worker1 -A server --pool=solo
 - python manage.py test
+- celery multi stopwait worker1
