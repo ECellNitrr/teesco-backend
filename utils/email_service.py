@@ -49,5 +49,3 @@ def send_email(recipient, subject, body):
                 msg.content_subtype = "html"
 
                 msg.send()
-            except:
-                raise ValueError("Invalid Gmail credentials.")
