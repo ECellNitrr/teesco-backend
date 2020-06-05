@@ -8,8 +8,9 @@ import boto3
 def send_email(recipient, subject, body):
     if config('MOCK_EMAIL', cast=bool):
         print('Mock email service:')
-        print('Recipients:', ', '.join(recipient))
-        print('Subject:', subject)
+        print(f'Recipients: {recipient}')
+        print(f'Subject: {subject}')
+        print(f'Body: {body}')
     else:
         if config('EMAIL_BACKEND', cast=str) == 'django_amazon_ses.EmailBackend':
             client = boto3.client(
