@@ -6,7 +6,8 @@ import boto3
 
 @shared_task
 def send_email(recipient, subject, body):
-    if config('MOCK_EMAIL', cast=bool):
+    if settings.MOCK_EMAIL:
+
         print('Mock email service:')
         print(f'Recipients: {recipient}')
         print(f'Subject: {subject}')
