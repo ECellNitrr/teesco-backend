@@ -371,7 +371,7 @@ class MembersListView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_id='group_details',
+        operation_id='get_members_list',
         operation_description="Authenticated and permitted users receive\
          desired group details here",
         responses={
