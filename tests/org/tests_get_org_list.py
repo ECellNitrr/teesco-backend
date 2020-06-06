@@ -40,4 +40,4 @@ class GetOrgAPITestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
-        super(GetOrgAPITestCase,self).tearDown() 
+        super(GetOrgAPITestCase, self).tearDown()

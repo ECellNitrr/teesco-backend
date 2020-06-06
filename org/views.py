@@ -53,7 +53,6 @@ class OrgView(APIView):
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
 
-
     @swagger_auto_schema(
         operation_id="edit_org",
         request_body=EditOrgSerializer,
@@ -170,6 +169,7 @@ class GroupView(APIView):
                     {"message": "You do not have the required permissions."},
                     status.HTTP_403_FORBIDDEN
                 )
+
     @swagger_auto_schema(
         operation_id="get_groups_list",
         responses={
@@ -245,11 +245,6 @@ def AddVolunteer(request, org_id):
             return Response({"message": "You are added as a volunteer"}, status.HTTP_201_CREATED)
     else:
         return Response({"detail": "Organization not present"}, status.HTTP_400_BAD_REQUEST)
-
-
-class ListOrgView(APIView):
-    permission_classes = [IsAuthenticated]
-
 
 
 class GroupDetailsView(APIView):
