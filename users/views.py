@@ -119,7 +119,7 @@ class ForgetPasswordView(APIView):
                 Please do not share it with anyone.</br>\
                 </br>\
                 Best Regards,</br>\
-                E-Cell NITRR Open Source"
+                Teesco (Volunteer Management System)"
 
                 # Check if OTP was ever generated for this user.
                 if user.otp == None:
