@@ -53,6 +53,10 @@ class OrgView(APIView):
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
 
+
+class OrgDetailsView(APIView):
+    permission_classes = [IsAuthenticated]
+
     @swagger_auto_schema(
         operation_id="edit_org",
         request_body=EditOrgSerializer,

@@ -4,8 +4,7 @@ from .views import *
 
 urlpatterns = [
     path('', OrgView.as_view()),
-    path('<int:org_id>/', OrgView.as_view(), name='edit_org'),
-    path('<int:org_id>/', OrgView.as_view(), name='get_org'),
+    path('<int:org_id>/', OrgDetailsView.as_view()),
     path('<int:org_id>/volunteer/', AddVolunteer, name='add_volunteer'),
     path('<int:org_id>/group/', GroupView.as_view()),
     path(
