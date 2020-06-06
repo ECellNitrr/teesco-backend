@@ -425,7 +425,7 @@ class MembersListView(APIView):
                 mem_present = {
                     'id': mem.id,
                     'name': mem.user.name,
-                    'profile_pic': mem.user.profile_pic if mem.user.profile_pic else "null",
+                    'profile_pic': mem.user.profile_pic if mem.user.profile_pic else None,
                 }
                 response_object.append(mem_present)
             return Response(response_object, status.HTTP_200_OK)
