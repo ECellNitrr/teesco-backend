@@ -8,10 +8,10 @@ from org.custom_model_field import PermissionField as Permissions
 import uuid
 
 
-class EditOrgAPITestCase(AuthAPITestCase):
+class GetOrgAPITestCase(AuthAPITestCase):
     def setUp(self):
         # Inheriting the base class funtionality
-        super(EditOrgAPITestCase, self).setUp()
+        super(GetOrgAPITestCase, self).setUp()
 
         data_org = {
             "name": 'test',
@@ -28,7 +28,7 @@ class EditOrgAPITestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_fail_with_unknown_org(self):
-        get_org_api = "/api/org/2/"
+        get_org_api = "/api/org/123123/"
         auth_client = self.create_auth_client()
         response = auth_client.get(get_org_api)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -36,13 +36,8 @@ class EditOrgAPITestCase(AuthAPITestCase):
     def test_pass_with_auth_user(self):
         get_org_api = "/api/org/1/"
         auth_client = self.create_auth_client()
-        Member.objects.create(
-            user=self.auth_user,
-            org=self.org,
-            group=self.admin_group
-        )
         response = auth_client.get(get_org_api)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def tearDown(self):
-        self.auth_user.delete()
+        super(GetOrgAPITestCase,self).tearDown() 

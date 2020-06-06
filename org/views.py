@@ -54,6 +54,65 @@ class OrgView(APIView):
             return Response(data, status.HTTP_400_BAD_REQUEST)
 
 
+    @swagger_auto_schema(
+        operation_id="edit_org",
+        request_body=EditOrgSerializer,
+        responses={
+            '200': set_example(responses.update_org_200),
+            '400': set_example(responses.org_not_present_400),
+            '401': set_example(responses.user_unauthorized_401),
+            '403': set_example(responses.admin_access_403),
+        }
+    )
+    def put(self, request, org_id):
+        user = request.user
+        try:
+            org = Org.objects.get(pk=org_id)
+        except Org.DoesNotExist:
+            return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
+
+        try:
+            member = Member.objects.get(user=user, org=org)
+        except Member.DoesNotExist:
+            return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
+
+        if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
+            serializer = EditOrgSerializer(org, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(responses.update_org_200, status.HTTP_200_OK)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
+
+    @swagger_auto_schema(
+        operation_id="get_org",
+        responses={
+            '200': set_example(responses.get_org_200),
+            '400': set_example(responses.org_not_present_400),
+            '403': set_example(responses.user_unauthorized_403),
+        }
+    )
+    def get(self, request, org_id):
+        user = request.user
+        try:
+            org = Org.objects.get(pk=org_id)
+        except Org.DoesNotExist:
+            return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
+
+        response_body = [{
+            "id": org.id,
+            "route_slug": org.route_slug,
+            "can_join_without_invite": org.can_join_without_invite,
+            "name": org.name,
+            "tagline": org.tagline,
+            "about": org.about,
+            "profile_pic": org.profile_pic if org.profile_pic else None,
+            "cover_pic": org.cover_pic if org.cover_pic else None
+        }]
+        return Response(response_body, status.HTTP_200_OK)
+
+
 class GroupView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -188,121 +247,9 @@ def AddVolunteer(request, org_id):
         return Response({"detail": "Organization not present"}, status.HTTP_400_BAD_REQUEST)
 
 
-class EditOrgView(APIView):
+class ListOrgView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(
-        operation_id="edit_org",
-        request_body=EditOrgSerializer,
-        responses={
-            '200': set_example(responses.update_org_200),
-            '400': set_example(responses.org_not_present_400),
-            '401': set_example(responses.user_unauthorized_401),
-            '403': set_example(responses.admin_access_403),
-        }
-    )
-    def put(self, request, org_id):
-        user = request.user
-        try:
-            org = Org.objects.get(pk=org_id)
-        except Org.DoesNotExist:
-            return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
-
-        try:
-            member = Member.objects.get(user=user, org=org)
-        except Member.DoesNotExist:
-            return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
-
-        if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
-            serializer = EditOrgSerializer(org, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(responses.update_org_200, status.HTTP_200_OK)
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(responses.admin_access_403, status.HTTP_403_FORBIDDEN)
-
-    @swagger_auto_schema(
-        operation_id="get_org",
-        responses={
-            '200': set_example([{
-                "id": 1,
-                "route_slug": "slug",
-                "can_join_without_invite": True,
-                "name": "test",
-                "tagline": "test",
-                "about": "test",
-                "profile_pic":  "null",
-                "cover_pic":  "null"
-            }]),
-            '400': set_example(responses.org_not_present_400),
-            '403': set_example(responses.user_unauthorized_403),
-        }
-    )
-    def get(self, request, org_id):
-        user = request.user
-        try:
-            org = Org.objects.get(pk=org_id)
-        except Org.DoesNotExist:
-            return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
-
-        try:
-            member = Member.objects.get(user=user, org=org)
-        except Member.DoesNotExist:
-            return Response(responses.user_unauthorized_403, status.HTTP_403_FORBIDDEN)
-
-        response_body = [{
-            "id": org.id,
-            "route_slug": org.route_slug,
-            "can_join_without_invite": org.can_join_without_invite,
-            "name": org.name,
-            "tagline": org.tagline,
-            "about": org.about,
-            "profile_pic": org.profile_pic if org.profile_pic else "null",
-            "cover_pic": org.cover_pic if org.cover_pic else "null"
-        }]
-        return Response(response_body, status.HTTP_200_OK)
-
-
-@swagger_auto_schema(
-    operation_id="get_groups_list",
-    method='GET',
-    responses={
-        '200': set_example(responses.get_group),
-        '401': set_example(responses.user_unauthorized_401),
-        '404': set_example({"detail": "This organisation doesn't exist."}),
-        '400': set_example({"detail": "You are not a member of this organisation"}),
-        '403': set_example({"detail": "You are not authorised to view this."}),
-    }
-)
-@api_view(['get'])
-@permission_classes([IsAuthenticated])
-def GetGroup(request, org_id):
-    try:
-        org = Org.objects.get(pk=org_id)
-        print(org)
-    except Org.DoesNotExist:
-        return Response({"detail": "This organisation doesn't exist."}, status.HTTP_404_NOT_FOUND)
-
-    try:
-        member = Member.objects.get(
-            user=request.user,
-            org=org
-        )
-    except Member.DoesNotExist:
-        return Response({"detail": "You are not a member of this organisation"}, status.HTTP_400_BAD_REQUEST)
-
-    if member.group.perm_obj.permissions[Permissions.IS_STAFF]:
-        group = Group.objects.all()
-        response_object = []
-        for x in group:
-            memberLen = len(Member.objects.filter(group=x.id))
-            response_object.append(
-                {"id": x.id, "name": x.name, "memberCount": memberLen})
-
-        return Response(response_object, status.HTTP_200_OK)
-    else:
-        return Response({"detail": "You are not authorised to view this."}, status.HTTP_403_FORBIDDEN)
 
 
 class GroupDetailsView(APIView):
