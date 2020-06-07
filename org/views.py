@@ -99,7 +99,7 @@ class OrgDetailsView(APIView):
         responses={
             '200': set_example(responses.get_org_200),
             '400': set_example(responses.org_not_present_400),
-            '403': set_example(responses.user_unauthorized_403),
+            '401': set_example(responses.user_unauthorized_401),
         }
     )
     def get(self, request, org_id):
