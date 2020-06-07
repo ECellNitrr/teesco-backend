@@ -130,32 +130,3 @@ group_details_200 = {
         }
     }
 }
-
-create_group_400={
-  "name": [
-    "Ensure this field has no more than 30 characters."
-  ],
-  "role": [
-    "Ensure this field has no more than 200 characters."
-  ],
-  "permissions_array": [
-    "This list may not be empty.",
-    "Ensure this value is less than or equal to 4.",
-    "Ensure this value is greater than or equal to 0."
-  ]
-}
-
-create_group_401={
-  "detail": [
-    "Authentication credentials were not provided.",
-    "You are not a member of this organisation",
-  ]
-}
-
-create_group_403={
-  "message":"You do not have the required permissions."
-}
-
-create_group_404={
-  "message":"The organisation was not found"
-}
