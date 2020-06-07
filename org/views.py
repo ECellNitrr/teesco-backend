@@ -78,7 +78,7 @@ class GroupView(APIView):
         except Org.DoesNotExist:
             # A check at the URL, that the org_id in the url exists or not(404).
             return Response(
-                {"message":"The organisation was not found"}, 
+                {"detail":"The organisation was not found"}, 
                 status.HTTP_404_NOT_FOUND
             )
         else:
@@ -107,7 +107,7 @@ class GroupView(APIView):
                             return Response(data, status.HTTP_400_BAD_REQUEST)
                 # If no member instance has Admin permission.
                 return Response(
-                    {"message":"You do not have the required permissions."}, 
+                    {"detail":"You do not have the required permissions."}, 
                     status.HTTP_403_FORBIDDEN
                 )
 
@@ -173,7 +173,7 @@ def AddVolunteer(request, org_id):
             org=org
         ).count()
         if member_present > 0:
-            return Response({"message": "Already a member of the organization"}, status.HTTP_409_CONFLICT)
+            return Response({"detail": "Already a member of the organization"}, status.HTTP_409_CONFLICT)
         else:
 
             volunteer_group = Group.objects.get(
@@ -185,7 +185,7 @@ def AddVolunteer(request, org_id):
                 org=org,
                 group=volunteer_group,
             )
-            return Response({"message": "You are added as a volunteer"}, status.HTTP_201_CREATED)
+            return Response({"detail": "You are added as a volunteer"}, status.HTTP_201_CREATED)
     else:
         return Response({"detail": "Organization not present"}, status.HTTP_400_BAD_REQUEST)
 
@@ -298,7 +298,7 @@ class GroupDetailsView(APIView):
             org = Org.objects.get(id=org_id)
         except Org.DoesNotExist:
             return Response(
-                {"message":"This organisation does not exist"},
+                {"detail":"This organisation does not exist"},
                 status.HTTP_404_NOT_FOUND
             )
 
@@ -309,7 +309,7 @@ class GroupDetailsView(APIView):
             )
         except Group.DoesNotExist:
             return Response(
-                {"message":"This group does not exist"},
+                {"detail":"This group does not exist"},
                 status.HTTP_400_BAD_REQUEST
             )
 
@@ -357,7 +357,7 @@ class GroupDetailsView(APIView):
                 status.HTTP_200_OK
             )
         return Response(
-                    {"message":"You do not have the required permissions."},
+                    {"detail":"You do not have the required permissions."},
                     status.HTTP_403_FORBIDDEN
                 )
 
