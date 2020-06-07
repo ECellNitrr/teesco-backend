@@ -12,11 +12,11 @@ from utils.swagger import set_example
     operation_id="test_authentication",
     method='get',
     responses={
-        '200': set_example({"message": "You are authenticated user!"}),
+        '200': set_example({"detail": "You are authenticated user!"}),
         '401': set_example({"detail": "Authentication credentials were not provided."})
     }
 )
 @api_view(['get'])
 @permission_classes([IsAuthenticated])
 def check_token_authentication(req):
-    return Response({"message": "You are authenticated user!"}, status.HTTP_200_OK)
+    return Response({"detail": "You are authenticated user!"}, status.HTTP_200_OK)
