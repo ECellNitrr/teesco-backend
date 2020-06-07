@@ -4,9 +4,6 @@ python:
 install:
 - pip install -r requirements.txt
 - python manage.py migrate
-service:
-- screen -S redis redis-server
-- screen -S celery celery -A server worker -l info
 env:
   SECRET_KEY: sameple_secret_key
   ALLOWED_HOSTS: "*"
@@ -14,5 +11,9 @@ env:
   EMAIL_HOST_USER: naveennvrgup@gmail.com
   EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
   MOCK_EMAIL: 'True'
+services:
+- redis-server
 script:
+- celery multi start worker -A server --pool=solo
 - python manage.py test
+- celery multi stopwait worker

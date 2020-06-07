@@ -25,7 +25,7 @@ user_registration_400 = {
 }
 
 login_401 = {
-    "message": "Credentials did not match"
+    "detail": "Credentials did not match"
 }
 
 login_400 = {
@@ -38,7 +38,7 @@ login_400 = {
 }
 
 login_404 = {
-    "message": "User not found"
+    "detail": "User not found"
 }
 
 login_202 = {

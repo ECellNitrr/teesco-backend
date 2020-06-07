@@ -71,10 +71,10 @@ class LoginView(APIView):
             else:
                 try:
                     if User.objects.get(email=found_email):
-                        return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
+                        return Response({'detail': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
                     
                 except User.DoesNotExist:
-                    return Response({"message": "User not found"}, status.HTTP_404_NOT_FOUND)     
+                    return Response({"detail": "User not found"}, status.HTTP_404_NOT_FOUND)     
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
@@ -119,7 +119,7 @@ class ForgetPasswordView(APIView):
                 Please do not share it with anyone.</br>\
                 </br>\
                 Best Regards,</br>\
-                E-Cell NITRR Open Source"
+                Teesco (Volunteer Management System)"
 
                 # Check if OTP was ever generated for this user.
                 if user.otp == None:
