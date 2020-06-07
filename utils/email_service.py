@@ -13,7 +13,7 @@ def send_email(recipient, subject, body):
         print(f'Subject: {subject}')
         print(f'Body: {body}')
     else:
-        if settings.EMAIL_BACKEND == 'AWS-SES':
+        if settings.EMAIL_SERVICE == 'AWS-SES':
             client = boto3.client(
                 'ses',
                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
@@ -42,10 +42,14 @@ def send_email(recipient, subject, body):
                         }
                     },
                 )
+            except:
+                raise ValueError("Invalid AWS credentials!")
 
-        elif settings.EMAIL_BACKEND == 'DJANGO-SMTP':
+        elif settings.EMAIL_SERVICE == 'DJANGO-SMTP':
             try:
                 msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, recipient)
                 msg.content_subtype = "html"
 
                 msg.send()
+            except:
+                raise ValueError("Invalid Gmail credentials!")
