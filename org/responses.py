@@ -8,7 +8,7 @@ create_org_400 = {
 }
 
 add_volunteer_201 = {
-    "message": "You're added as a volunteer!"
+    "detail": "You're added as a volunteer!"
 }
 
 org_not_present_400 = {
@@ -20,11 +20,11 @@ user_unauthorized_401 = {
 }
 
 user_already_present_409 = {
-    "message": "Already a member of organization"
+    "detail": "Already a member of organization"
 }
 
 user_already_present_409 = {
-    "message": "Already a member of organization"
+    "detail": "Already a member of organization"
 }
 
 user_not_present_401 = {
@@ -32,15 +32,15 @@ user_not_present_401 = {
 }
 
 update_org_200 = {
-    "message": "Organization details updated successfully"
+    "detail": "Organization details updated successfully"
 }
 
 admin_access_403 = {
-    "message": "You are not an admin of this organization"
+    "detail": "You are not an admin of this organization"
 }
 
 empty_fields_500 = {
-    "message": "Can't update! one or more fields are empty!"
+    "detail": "Can't update! one or more fields are empty!"
 }
 
 create_group_400={
@@ -66,11 +66,11 @@ create_group_401={
 }
 
 create_group_403={
-  "message":"You do not have the required permissions."
+  "detail":"You do not have the required permissions."
 }
 
 create_group_404={
-  "message":"The organisation was not found"
+  "detail":"The organisation was not found"
 }
 
 get_group = [
@@ -92,15 +92,15 @@ get_group = [
 ]
 
 org_not_present_404 = {
-    "message":"This organisation does not exist"
+    "detail":"This organisation does not exist"
 }
 
 group_not_present_400 = {
-    "message":"This group does not exist"
+    "detail":"This group does not exist"
 }
 
 user_unauthorized_403 = {
-    "message":"You do not have the required permissions."
+    "detail":"You do not have the required permissions."
 }
 
 group_details_200 = {
