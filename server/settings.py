@@ -183,6 +183,7 @@ if not MOCK_EMAIL:
         EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
         EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
     elif EMAIL_SERVICE=="AWS-SES": 
+        EMAIL_BACKEND = 'django_amazon_ses.EmailBackend'
         AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
         AWS_REGION_NAME=config('AWS_REGION_NAME')

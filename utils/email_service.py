@@ -22,7 +22,6 @@ def send_email(recipient, subject, body):
             )
             try:
                 sender_email = settings.EMAIL_HOST_USER
-
                 response = client.send_email(
                     Source=sender_email,
                     Destination={
@@ -36,9 +35,6 @@ def send_email(recipient, subject, body):
                             'Text': {
                                 'Data': body,
                             },
-                            'Html': {
-                                'Data': '',
-                            }
                         }
                     },
                 )
