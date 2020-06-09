@@ -130,17 +130,3 @@ group_details_200 = {
         }
     }
 }
-
-members_list_200 = [
-    
-    {
-        "id": 1,
-        "name": "Sharanya Mehta",
-        "profile_pic": "null",
-    },
-    {
-        "id": 2,
-        "name": "Nikita Saxena",
-        "profile_pic": "null",
-    }
-]    
