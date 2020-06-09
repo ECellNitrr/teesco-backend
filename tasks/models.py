@@ -5,11 +5,29 @@ from users.models import User
 class Task(models.Model):
     org = models.ForeignKey(Org, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    social_media_platform = models.CharField(max_length=30)
+    social_media_platform_choices = (
+        ('facebook', 'Facebook'),
+        ('whatsapp', 'Whatsapp'),
+        ('linkedin', 'LinkedIn'),
+        ('youtube', 'Youtube'),
+        ('instagram', 'Instagram'),
+        ('twitter', 'Twitter'),
+        ('other', 'Other')
+    )
+    social_media_platform = models.CharField(
+        max_length=30,
+        choices=social_media_platform_choices
+        )
     description = models.CharField(max_length=300)
-    share_link = models.CharField( max_length=30, null=True)
+    type_choices = (
+        ('LINK', 'LINK'),
+        ('TEXT', 'TEXT'),
+        ('IMG', 'IMG'),
+    )
+    share_type = models.CharField(max_length=5, choices=type_choices)
+    share_link = models.CharField(max_length=30, null=True)
     share_text = models.CharField(max_length=65536, null=True)
-    share_img = models.ImageField( upload_to='uploads/tasks/share_img', null=True)
+    share_img = models.ImageField(upload_to='uploads/tasks/share_img', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
