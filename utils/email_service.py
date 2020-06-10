@@ -9,7 +9,6 @@ def send_email(recipient, subject, body):
     if settings.MOCK_EMAIL:
 
         print('Mock email service:')
-
         print(f'Recipients: {recipient}')
         print(f'Subject: {subject}')
         print(f'Body: {body}')
