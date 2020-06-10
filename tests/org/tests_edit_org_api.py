@@ -73,4 +73,4 @@ class EditOrgTestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def tearDown(self):
-        self.auth_user.delete()
+        super(EditOrgTestCase,self).tearDown()
