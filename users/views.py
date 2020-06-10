@@ -131,7 +131,7 @@ def list_orgs_view(request):
             'id': member.org.id,
             'org_name': member.org.name,
             'user_role': member.group.name,
-            'profile_pic': member.org.profile_pic if member.org.profile_pic else "null",
+            'profile_pic': request.build_absolute_uri(member.org.profile_pic.url) if member.org.profile_pic else None,
             'route_slug': member.org.route_slug,
             'tagline': member.org.tagline
         }

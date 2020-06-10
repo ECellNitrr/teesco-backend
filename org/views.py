@@ -425,7 +425,7 @@ class MembersListView(APIView):
                 mem_present = {
                     'id': mem.id,
                     'name': mem.user.name,
-                    'profile_pic': mem.user.profile_pic if mem.user.profile_pic else None,
+                    'profile_pic': request.build_absolute_uri(mem.user.profile_pic.url) if mem.user.profile_pic else None,
                 }
                 response_object.append(mem_present)
             return Response(response_object, status.HTTP_200_OK)
