@@ -1,8 +1,10 @@
+import uuid
 from rest_framework import status
 from tests.AuthAPITestCase import AuthAPITestCase
-from org.serializers import CreateOrgSerializer
+from org.serializers import CreateOrgSerializer, CreateGroupSerializer
 from org.models import Group, Member
 from tasks.models import Task
+from org.custom_model_field import Permissions
 
 class CreateTaskAPITestCase(AuthAPITestCase):
     """
@@ -60,6 +62,38 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         response = auth_client.post(self.create_task_api, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_fail_without_can_create_task_permission(self):
+        auth_client = self.create_auth_client()
+
+        #Creating group without CAN_CREATE_TASK permission
+        no_task_creation_permission = Permissions()
+        no_task_creation_permission.set_permissions([
+            Permissions.IS_ADMIN,
+            Permissions.IS_STAFF,
+            Permissions.CAN_REPLY_TO_QUERIES,
+            Permissions.CAN_REVIEW_PROOFS,
+        ])
+        no_task_creation_invite_slug = str(1)+'-'+str(uuid.uuid4())
+        no_task_creation_group = Group.objects.create(
+            name='No Task creation',
+            role='''This group is supposed to not possess permissions
+                    necessary for creating tasks''',
+            invite_slug=no_task_creation_invite_slug,
+            org=self.org,
+            perm_obj=no_task_creation_permission
+        )
+
+        #Making member of the group just created
+        member = Member.objects.create(
+            user=self.auth_user,
+            group=no_task_creation_group,
+            org=self.org
+        )
+
+        response = auth_client.post(self.create_task_api, self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        
+
     def test_fail_empty_input(self):
         auth_client = self.create_auth_client()
 
@@ -88,7 +122,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
             org=self.org
         )
 
-        # Payload with INVALID share_typr
+        # Payload with INVALID share_type
         invalid_payload = {
             "social_media_platform": "facebook", 
             "share_type": "INVALID",
