@@ -167,11 +167,29 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
-
-# Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# The default behavior is to mock the emails
+# Mocking means to print the emails in the console
+# instead of sending the actual mail.
+MOCK_EMAIL = config('MOCK_EMAIL', cast=bool, default=True)
+if not MOCK_EMAIL:
+    # Email Settings
+    EMAIL_SERVICE = config('EMAIL_SERVICE')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+    # The developer needs to supply credentails only for the option he/she have selected
+    if EMAIL_SERVICE=="DJANGO-SMTP": 
+        EMAIL_HOST = config('EMAIL_HOST')
+        EMAIL_USE_TLS = True
+        EMAIL_PORT = 587
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+        EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+    elif EMAIL_SERVICE=="AWS-SES": 
+        EMAIL_BACKEND = 'django_amazon_ses.EmailBackend'
+        AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+        AWS_REGION_NAME=config('AWS_REGION_NAME')
+    else:
+        # In a production environment improper email setup should
+        # be found as soon as possible and the server should not
+        # be running without proper setup, as the user may not get 
+        # important emails. 
+        raise SystemExit('Invalid Email setup. Please look into README.md for proper setup')
