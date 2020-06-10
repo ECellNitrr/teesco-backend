@@ -94,6 +94,36 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         
 
+    def test_fail_without_staff_permission(self):
+        auth_client = self.create_auth_client()
+
+        #Creating group without STAFF permission
+        not_staff_permission = Permissions()
+        not_staff_permission.set_permissions([
+            Permissions.IS_ADMIN,
+            Permissions.CAN_CREATE_TASKS,
+            Permissions.CAN_REPLY_TO_QUERIES,
+            Permissions.CAN_REVIEW_PROOFS,
+        ])
+        not_staff_invite_slug = str(1)+'-'+str(uuid.uuid4())
+        not_staff_group = Group.objects.create(
+            name='Not Staff',
+            role='This group is supposed to not possess staff permissions',
+            invite_slug=not_staff_invite_slug,
+            org=self.org,
+            perm_obj=not_staff_permission
+        )
+
+        #Making member of the group just created
+        member = Member.objects.create(
+            user=self.auth_user,
+            group=not_staff_group,
+            org=self.org
+        )
+
+        response = auth_client.post(self.create_task_api, self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+ 
     def test_fail_empty_input(self):
         auth_client = self.create_auth_client()
 
