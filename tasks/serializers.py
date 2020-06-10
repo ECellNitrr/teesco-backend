@@ -2,13 +2,15 @@ from rest_framework import serializers
 from .models import Task
 
 
-class CreateTaskSerializer(serializers.Serializer):
+class CreateTaskSerializer(serializers.ModelSerializer):
 
-    social_media_platform = serializers.CharField(allow_blank=False)
-    share_type = serializers.CharField(allow_blank=False)
     share_link = serializers.CharField(default=None)
     share_text = serializers.CharField(default=None)
     share_img = serializers.ImageField(default=None)
+
+    class Meta:
+        model = Task
+        fields=['social_media_platform', 'share_type', 'share_link', 'share_text', 'share_img']
 
     def save(self, user, org):
 

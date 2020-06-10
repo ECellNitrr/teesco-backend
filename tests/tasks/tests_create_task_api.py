@@ -60,6 +60,63 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         response = auth_client.post(self.create_task_api, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_fail_empty_input(self):
+        auth_client = self.create_auth_client()
+
+        # Creating Admin Member
+        group = Group.objects.get(org=self.org, name='Admin')
+        member = Member.objects.create(
+            user=self.auth_user,
+            group=group,
+            org=self.org
+        )
+
+        empty_payload = {
+     
+        }
+        response = auth_client.post(self.create_task_api, empty_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_fail_with_invalid_share_type(self):
+        auth_client = self.create_auth_client()
+
+        # Creating Admin Member
+        group = Group.objects.get(org=self.org, name='Admin')
+        member = Member.objects.create(
+            user=self.auth_user,
+            group=group,
+            org=self.org
+        )
+
+        # Payload with INVALID share_typr
+        invalid_payload = {
+            "social_media_platform": "facebook", 
+            "share_type": "INVALID",
+            "share_link": "..."      
+        }
+        response = auth_client.post(self.create_task_api, invalid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_fail_with_invalid_platform(self):
+        auth_client = self.create_auth_client()
+
+        # Creating Admin Member
+        group = Group.objects.get(org=self.org, name='Admin')
+        member = Member.objects.create(
+            user=self.auth_user,
+            group=group,
+            org=self.org
+        )
+
+        # Payload with INVALID social_media_platform
+        invalid_payload = {
+            "social_media_platform": "INVALID", 
+            "share_type": "LINK",
+            "share_link": "..."      
+        }
+        response = auth_client.post(self.create_task_api, invalid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_fail_with_missing_share_link(self):
         auth_client = self.create_auth_client()
 
