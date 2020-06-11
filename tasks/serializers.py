@@ -32,7 +32,7 @@ class CreateTaskSerializer(serializers.ModelSerializer):
         #Check for presence of Text if share type is text and then create respective task.
         elif valid_data['share_type'] == 'TEXT':
             if valid_data['share_text'] is None:
-                raise serializers.ValidationError({'Share_text':'Share text is required'})
+                raise serializers.ValidationError({'share_text':'Share text is required'})
             task = Task.objects.create(
                 org=org,
                 author=user,
