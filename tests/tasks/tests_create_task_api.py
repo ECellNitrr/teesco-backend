@@ -9,13 +9,14 @@ from org.custom_model_field import Permissions
 class CreateTaskAPITestCase(AuthAPITestCase):
     """
     This class is to test the API [post] /api/tasks/org/<org_id>/
-    present in the view Tasks.views.TaskView.post 
+    present in the view Tasks.views.TaskView.post
     """
     create_task_api = "/api/tasks/org/1"
     valid_payload = {
         "social_media_platform": "facebook",
+        "description": "Test",
         "share_type": "LINK",
-        "share_link": "https://www.facebook.com/priyanshi417/posts/3092506014129036"
+        "share_link": "https://www.facebook.com/ecellnitrr/photos/a.122992964426516/3044548662270917/?type=3&eid=ARATrXaYbYxtCq2dvU3p9k5tKogqQFcqdegbB6GrcyWGlnRz6MXiaiMm_aflnE9MLuvepFI4kiEy-Yoc&__tn__=EEHH-R"
         }
 
     def setUp(self):
@@ -92,7 +93,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
 
         response = auth_client.post(self.create_task_api, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        
+
 
     def test_fail_without_staff_permission(self):
         auth_client = self.create_auth_client()
@@ -123,7 +124,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
 
         response = auth_client.post(self.create_task_api, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
- 
+
     def test_fail_empty_input(self):
         auth_client = self.create_auth_client()
 
@@ -135,9 +136,8 @@ class CreateTaskAPITestCase(AuthAPITestCase):
             org=self.org
         )
 
-        empty_payload = {
-     
-        }
+        empty_payload = {}
+
         response = auth_client.post(self.create_task_api, empty_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -154,9 +154,10 @@ class CreateTaskAPITestCase(AuthAPITestCase):
 
         # Payload with INVALID share_type
         invalid_payload = {
-            "social_media_platform": "facebook", 
+            "social_media_platform": "facebook",
+            "description": "Test",
             "share_type": "INVALID",
-            "share_link": "..."      
+            "share_link": "..."
         }
         response = auth_client.post(self.create_task_api, invalid_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -174,9 +175,10 @@ class CreateTaskAPITestCase(AuthAPITestCase):
 
         # Payload with INVALID social_media_platform
         invalid_payload = {
-            "social_media_platform": "INVALID", 
+            "social_media_platform": "INVALID",
+            "description": "Test",
             "share_type": "LINK",
-            "share_link": "..."      
+            "share_link": "..."
         }
         response = auth_client.post(self.create_task_api, invalid_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -194,9 +196,10 @@ class CreateTaskAPITestCase(AuthAPITestCase):
 
         # Payload with empty link
         invalid_payload = {
-            "social_media_platform": "facebook", 
+            "social_media_platform": "facebook",
+            "description": "Test",
             "share_type": "LINK",
-            "share_link": ""      
+            "share_link": ""
         }
         response = auth_client.post(self.create_task_api, invalid_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -216,7 +219,8 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         # Payload with empty IMAGE
         invalid_payload = {
             "social_media_platform": "whatsapp",
-            "share_type": "IMG", 
+            "description": "Test",
+            "share_type": "IMG",
             "share_img": ""
         }
         response = auth_client.post(self.create_task_api, invalid_payload)
@@ -237,6 +241,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         # Payload with empty TEXT
         invalid_payload = {
             "social_media_platform": "whatsapp",
+            "description": "Test",
             "share_type": "TEXT",
             "share_img": ""
         }
@@ -259,7 +264,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # check db models
-        created_task =  Task.objects.get(
+        created_task = Task.objects.get(
             org=self.org,
             social_media_platform=self.valid_payload['social_media_platform']
         )

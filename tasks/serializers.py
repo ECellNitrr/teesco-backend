@@ -10,7 +10,8 @@ class CreateTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields=['social_media_platform', 'share_type', 'share_link', 'share_text', 'share_img']
+        fields = [
+            'social_media_platform', 'description', 'share_type', 'share_link', 'share_text', 'share_img']
 
     def save(self, user, org):
 
@@ -51,5 +52,5 @@ class CreateTaskSerializer(serializers.ModelSerializer):
                 share_type=valid_data['share_type'],
                 share_img=valid_data['share_img']
             )
-        
+
         return task

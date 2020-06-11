@@ -25,7 +25,7 @@ class Task(models.Model):
         ('IMG', 'IMG'),
     )
     share_type = models.CharField(max_length=5, choices=type_choices)
-    share_link = models.CharField(max_length=30, null=True)
+    share_link = models.CharField(max_length=100, null=True)
     share_text = models.CharField(max_length=65536, null=True)
     share_img = models.ImageField(upload_to='uploads/tasks/share_img', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
