@@ -44,7 +44,7 @@ class CreateTaskSerializer(serializers.ModelSerializer):
         #Check for presence of Image if share type is image and then create respective task.
         elif valid_data['share_type'] == 'IMG':
             if valid_data['share_img'] is None:
-                raise serializers.ValidationError({'Share_img':'Share image is required'})
+                raise serializers.ValidationError({'share_img':'Share image is required'})
             task = Task.objects.create(
                 org=org,
                 author=user,
