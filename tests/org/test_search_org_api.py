@@ -52,9 +52,8 @@ class SearchOrgTestCase(AuthAPITestCase):
         """
         search_org_api = '/api/org/?search=test'
         auth_client = self.create_auth_client()
-        filter_result = ListOrgSerializer(Org.objects.filter(name='Test_Org'), many=True)        
+        filter_result = ListOrgSerializer(Org.objects.filter(name__startswith='test'), many=True)      
         response = auth_client.get(search_org_api)
         self.assertEqual(response.data, filter_result.data)
-
 
 
