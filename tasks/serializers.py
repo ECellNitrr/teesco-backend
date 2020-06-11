@@ -4,10 +4,6 @@ from .models import Task
 
 class CreateTaskSerializer(serializers.ModelSerializer):
 
-    share_link = serializers.CharField(default=None)
-    share_text = serializers.CharField(default=None)
-    share_img = serializers.ImageField(default=None)
-
     class Meta:
         model = Task
         fields = [

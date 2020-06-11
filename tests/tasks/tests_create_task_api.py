@@ -243,7 +243,7 @@ class CreateTaskAPITestCase(AuthAPITestCase):
             "social_media_platform": "whatsapp",
             "description": "Test",
             "share_type": "TEXT",
-            "share_img": ""
+            "share_text": ""
         }
 
         response = auth_client.post(self.create_task_api, invalid_payload)
