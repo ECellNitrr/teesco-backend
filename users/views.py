@@ -11,12 +11,15 @@ from utils.swagger import set_example
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.parsers import MultiPartParser
 from users.models import User
 from org.models import *
 
 
 
 class RegistrationView(APIView):
+
+    parser_classes = [MultiPartParser]
 
     @swagger_auto_schema(
         operation_id='create_user',
@@ -128,7 +131,7 @@ def list_orgs_view(request):
             'id': member.org.id,
             'org_name': member.org.name,
             'user_role': member.group.name,
-            'profile_pic': member.org.profile_pic if member.org.profile_pic else "null",
+            'profile_pic': request.build_absolute_uri(member.org.profile_pic.url) if member.org.profile_pic else None,
             'route_slug': member.org.route_slug,
             'tagline': member.org.tagline
         }
