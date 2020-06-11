@@ -11,12 +11,15 @@ from utils.swagger import set_example
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.parsers import MultiPartParser
 from users.models import User
 from org.models import *
 
 
 
 class RegistrationView(APIView):
+
+    parser_classes = [MultiPartParser]
 
     @swagger_auto_schema(
         operation_id='create_user',
@@ -68,10 +71,10 @@ class LoginView(APIView):
             else:
                 try:
                     if User.objects.get(email=found_email):
-                        return Response({'message': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
+                        return Response({'detail': 'Credentials did not match'}, status.HTTP_401_UNAUTHORIZED)
                     
                 except User.DoesNotExist:
-                    return Response({"message": "User not found"}, status.HTTP_404_NOT_FOUND)     
+                    return Response({"detail": "User not found"}, status.HTTP_404_NOT_FOUND)     
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
@@ -128,7 +131,7 @@ def list_orgs_view(request):
             'id': member.org.id,
             'org_name': member.org.name,
             'user_role': member.group.name,
-            'profile_pic': member.org.profile_pic if member.org.profile_pic else "null",
+            'profile_pic': request.build_absolute_uri(member.org.profile_pic.url) if member.org.profile_pic else None,
             'route_slug': member.org.route_slug,
             'tagline': member.org.tagline
         }

@@ -78,7 +78,7 @@ class GroupView(APIView):
         except Org.DoesNotExist:
             # A check at the URL, that the org_id in the url exists or not(404).
             return Response(
-                {"message":"The organisation was not found"}, 
+                {"detail":"The organisation was not found"}, 
                 status.HTTP_404_NOT_FOUND
             )
         else:
@@ -107,7 +107,7 @@ class GroupView(APIView):
                             return Response(data, status.HTTP_400_BAD_REQUEST)
                 # If no member instance has Admin permission.
                 return Response(
-                    {"message":"You do not have the required permissions."}, 
+                    {"detail":"You do not have the required permissions."}, 
                     status.HTTP_403_FORBIDDEN
                 )
 
@@ -173,7 +173,7 @@ def AddVolunteer(request, org_id):
             org=org
         ).count()
         if member_present > 0:
-            return Response({"message": "Already a member of the organization"}, status.HTTP_409_CONFLICT)
+            return Response({"detail": "Already a member of the organization"}, status.HTTP_409_CONFLICT)
         else:
 
             volunteer_group = Group.objects.get(
@@ -185,7 +185,7 @@ def AddVolunteer(request, org_id):
                 org=org,
                 group=volunteer_group,
             )
-            return Response({"message": "You are added as a volunteer"}, status.HTTP_201_CREATED)
+            return Response({"detail": "You are added as a volunteer"}, status.HTTP_201_CREATED)
     else:
         return Response({"detail": "Organization not present"}, status.HTTP_400_BAD_REQUEST)
 
@@ -298,7 +298,7 @@ class GroupDetailsView(APIView):
             org = Org.objects.get(id=org_id)
         except Org.DoesNotExist:
             return Response(
-                {"message":"This organisation does not exist"},
+                {"detail":"This organisation does not exist"},
                 status.HTTP_404_NOT_FOUND
             )
 
@@ -309,7 +309,7 @@ class GroupDetailsView(APIView):
             )
         except Group.DoesNotExist:
             return Response(
-                {"message":"This group does not exist"},
+                {"detail":"This group does not exist"},
                 status.HTTP_400_BAD_REQUEST
             )
 
@@ -357,6 +357,79 @@ class GroupDetailsView(APIView):
                 status.HTTP_200_OK
             )
         return Response(
-                    {"message":"You do not have the required permissions."},
+                    {"detail":"You do not have the required permissions."},
+                    status.HTTP_403_FORBIDDEN
+                )
+
+class MembersListView(APIView):
+    '''
+    This is to provide the list of members
+    present in a particular group of the 
+    organisation to STAFF members.
+    '''
+
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='get_members_list',
+        operation_description="Authenticated and permitted users receive\
+         desired group details here",
+        responses={
+            '200': set_example(responses.members_list_200),
+            '404': set_example(responses.org_not_present_404),
+            '401': set_example(responses.user_not_present_401),
+            '403': set_example(responses.user_unauthorized_403),
+            '400': set_example(responses.group_not_present_400),
+        },
+    )
+
+    def get(self, request, org_id, group_id):
+
+        try:
+            org = Org.objects.get(id=org_id)
+        except Org.DoesNotExist:
+            return Response(
+                responses.org_not_present_404,
+                status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            group = Group.objects.get(
+                id=group_id,
+                org=org
+            )
+        except Group.DoesNotExist:
+            return Response(
+                responses.group_not_present_400,
+                status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            member = Member.objects.get(
+                user=request.user,
+                org=org
+            )
+        except Member.DoesNotExist:
+            return Response(
+                responses.user_not_present_401,
+                status.HTTP_401_UNAUTHORIZED
+            )
+        
+        if member.group.perm_obj.permissions[Permissions.IS_STAFF]:
+            response_object = []
+            members = Member.objects.filter(
+                org = org,
+                group = group
+            )
+            for mem in members:
+                mem_present = {
+                    'id': mem.id,
+                    'name': mem.user.name,
+                    'profile_pic': request.build_absolute_uri(mem.user.profile_pic.url) if mem.user.profile_pic else None,
+                }
+                response_object.append(mem_present)
+            return Response(response_object, status.HTTP_200_OK)
+        return Response(
+                    responses.user_unauthorized_403,
                     status.HTTP_403_FORBIDDEN
                 )
