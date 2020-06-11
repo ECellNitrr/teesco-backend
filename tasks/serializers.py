@@ -11,7 +11,13 @@ class CreateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
-            'social_media_platform', 'description', 'share_type', 'share_link', 'share_text', 'share_img']
+            'social_media_platform',
+            'description',
+            'share_type',
+            'share_link',
+            'share_text',
+            'share_img'
+        ]
 
     def save(self, user, org):
 
