@@ -20,7 +20,7 @@ class CreateTaskSerializer(serializers.ModelSerializer):
         #Check for presence of Link if share type is link and then create respective task.
         if valid_data['share_type'] == 'LINK':
             if valid_data['share_link'] is None:
-                raise serializers.ValidationError({'Share_Link':'Share link is required'})
+                raise serializers.ValidationError({'share_Link':'Share link is required'})
             task = Task.objects.create(
                 org=org,
                 author=user,
