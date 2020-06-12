@@ -1,6 +1,6 @@
-from django.contrib import admin
-from django.urls import path, include 
+from django.urls import path
+from .views import TaskView
 
 urlpatterns = [
-
+    path('org/<int:org_id>', TaskView.as_view(), name='create_task'),
 ]

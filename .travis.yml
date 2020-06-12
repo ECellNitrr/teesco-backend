@@ -8,8 +8,10 @@ env:
   SECRET_KEY: sameple_secret_key
   ALLOWED_HOSTS: "*"
   DEBUG: 'True'
-  EMAIL_HOST_USER: naveennvrgup@gmail.com
-  EMAIL_HOST_PASSWORD: wnejszjzrvacvkpn
   MOCK_EMAIL: 'True'
+services:
+- redis-server
 script:
+- celery multi start worker -A server --pool=solo
 - python manage.py test
+- celery multi stopwait worker

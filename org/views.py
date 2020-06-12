@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
@@ -14,9 +14,16 @@ from .models import *
 from . import responses
 
 
-class OrgView(APIView):
+class OrgView(generics.ListCreateAPIView):
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
+
+    serializer_class = ListOrgSerializer
+    queryset = Org.objects.all()
+    filter_backends = [filters.SearchFilter]
+    # Searching on the basis of two fields name and tagline.
+    search_fields = ['name', 'tagline']
+
 
     @swagger_auto_schema(
         operation_id='create_org',
@@ -371,7 +378,7 @@ class MembersListView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_id='group_details',
+        operation_id='get_members_list',
         operation_description="Authenticated and permitted users receive\
          desired group details here",
         responses={
@@ -425,7 +432,7 @@ class MembersListView(APIView):
                 mem_present = {
                     'id': mem.id,
                     'name': mem.user.name,
-                    'profile_pic': mem.user.profile_pic if mem.user.profile_pic else "null",
+                    'profile_pic': request.build_absolute_uri(mem.user.profile_pic.url) if mem.user.profile_pic else None,
                 }
                 response_object.append(mem_present)
             return Response(response_object, status.HTTP_200_OK)

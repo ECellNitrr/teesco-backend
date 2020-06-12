@@ -13,6 +13,8 @@ class User(AbstractUser):
     institution = models.CharField(max_length=30, blank=True, null=True)
     country_code = models.CharField(max_length=6, blank=True, null=True)
     phone = models.CharField(max_length=10,blank=True, null=True)
+    otp = models.CharField(max_length=5, blank=True, null=True) 
+    otp_created_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
