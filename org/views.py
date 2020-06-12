@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
@@ -14,9 +14,16 @@ from .models import *
 from . import responses
 
 
-class OrgView(APIView):
+class OrgView(generics.ListCreateAPIView):
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
+
+    serializer_class = ListOrgSerializer
+    queryset = Org.objects.all()
+    filter_backends = [filters.SearchFilter]
+    # Searching on the basis of two fields name and tagline.
+    search_fields = ['name', 'tagline']
+
 
     @swagger_auto_schema(
         operation_id='create_org',

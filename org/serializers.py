@@ -116,3 +116,9 @@ class EditOrgSerializer(serializers.ModelSerializer):
     class Meta:
         model = Org
         fields = ('name', 'tagline', 'about')
+
+
+class ListOrgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Org
+        fields = ('id', 'name', 'tagline', 'route_slug', 'profile_pic')
