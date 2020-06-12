@@ -467,18 +467,21 @@ def UpdateProfilePic(request, org_id):
         org = Org.objects.get(pk=org_id)
     except Org.DoesNotExist:
         return Response(responses.org_not_present_404, status.HTTP_404_NOT_FOUND)
+
     else:
         # Whether the authorized user is a member of the organisation(401).
         members = Member.objects.filter(user = request.user, org= org)
         if members.count()==0:
             return Response(
-                {"detail":"You are not a member of this organisation"}, 
+                responses.unauthorised_user_401['detail'][0], 
                 status.HTTP_401_UNAUTHORIZED
             )
+
         else:
             # Whether the member is an Admin of the organisation.
             for member in members:
                 if member.group.perm_obj.permissions[Permissions.IS_ADMIN]:
+
                     # Updating the serializer of the organization.
                     serializer = UpdateProfilePicSerializer(org, data=request.data)
                     if serializer.is_valid():
@@ -486,10 +489,12 @@ def UpdateProfilePic(request, org_id):
                         org.profile_pic.delete()
                         serializer.save()
                         return Response(responses.update_org_200, status.HTTP_200_OK)
+
                     else:
                         # Whether the data posted is valid or not(400).
                         data = serializer.errors
                         return Response(data, status.HTTP_400_BAD_REQUEST)
+
             # If no member instance has Admin permission.
             return Response(
                 {"detail":"You are not an admin of this organization"}, 
