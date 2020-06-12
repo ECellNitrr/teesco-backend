@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class RegistrationTestCase(APITestCase):
 
@@ -11,7 +12,11 @@ class RegistrationTestCase(APITestCase):
             "institution": "testing",
             "password": "testingg",
             "country_code": "+00",
-            "phone": "0000000000"
+            "phone": "0000000000",
+            "profile_pic": SimpleUploadedFile(
+                name='test_img.png',
+                content=open('tests/users/test_img.png', 'rb').read(),
+                content_type='image/png')
         }
 
         response = self.client.post("/api/users/register/", data)
