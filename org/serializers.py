@@ -122,3 +122,8 @@ class ListOrgSerializer(serializers.ModelSerializer):
     class Meta:
         model = Org
         fields = ('id', 'name', 'tagline', 'route_slug', 'profile_pic')
+
+class UpdateProfilePicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Org
+        fields = ('profile_pic',)
