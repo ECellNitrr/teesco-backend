@@ -18,4 +18,9 @@ urlpatterns = [
         name='group_members_list'
 
     ),
+    path(
+        'invite/<invite_slug>',
+        InviteLinkDetailView.as_view(),
+        name='invite_list_detail'
+    )
 ]

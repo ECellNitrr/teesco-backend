@@ -99,6 +99,17 @@ group_not_present_400 = {
     "detail":"This group does not exist"
 }
 
+group_not_present_404 = {
+    "detail":"This group does not exist"
+}
+
+invite_list_detail_200 = {
+        'org_name' : 'Ecell NITRR Opensource',
+        'org_tagline' : 'Leaders beyond borders',
+        'org_profile_image' : None,
+        'group_name' : "head coordinator"
+    }
+
 user_unauthorized_403 = {
     "detail":"You do not have the required permissions."
 }

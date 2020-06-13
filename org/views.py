@@ -440,3 +440,38 @@ class MembersListView(APIView):
                     responses.user_unauthorized_403,
                     status.HTTP_403_FORBIDDEN
                 )
+
+class InviteLinkDetailView(APIView):
+    '''
+    This API is to display the details of an org to which the 
+    candidate might be invited to join, along with the name of 
+    the group that the candidate is invited to.
+    '''
+    
+    @swagger_auto_schema(
+        operation_id='invite link details',
+        operation_description="Displays details of the organisation according to the invite link",
+        responses={
+            '200': set_example(responses.invite_list_detail_200),
+            '404': set_example(responses.group_not_present_404),
+        },
+    )
+
+    def get(self,request,invite_slug):
+
+        try:
+            group = Group.objects.get(invite_slug=invite_slug)
+        except Group.DoesNotExist:
+            return Response(
+                responses.group_not_present_404,
+                status.HTTP_404_NOT_FOUND
+            )
+
+        response_object = {
+            'org_name' : group.org.name,
+            'org_tagline' : group.org.tagline,
+            'org_profile_image' : group.org.profile_pic if group.org.profile_pic else None,
+            'group_name' : group.name
+        }
+
+        return Response(response_object, status.HTTP_200_OK)
