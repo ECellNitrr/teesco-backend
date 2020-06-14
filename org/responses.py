@@ -144,3 +144,13 @@ members_list_200 = [
         "profile_pic": "null",
     }
 ]    
+get_org_200 = {
+        "id": 1,
+        "route_slug": "slug",
+        "can_join_without_invite": True,
+        "name": "test",
+        "tagline": "test",
+        "about": "test",
+        "profile_pic":  "null",
+        "cover_pic":  "null"
+} 
