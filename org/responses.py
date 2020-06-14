@@ -162,3 +162,13 @@ update_profile_pic_400 = {
     'The submitted file is empty.'
   ]
 }
+get_org_200 = {
+        "id": 1,
+        "route_slug": "slug",
+        "can_join_without_invite": True,
+        "name": "test",
+        "tagline": "test",
+        "about": "test",
+        "profile_pic":  "null",
+        "cover_pic":  "null"
+} 
