@@ -20,7 +20,7 @@ urlpatterns = [
 
     ),
     path(
-        'invite/<invite_slug>',
+        'invite/<invite_slug>/',
         InviteLinkDetailView.as_view(),
         name='invite_list_detail'
     )

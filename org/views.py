@@ -470,7 +470,7 @@ class InviteLinkDetailView(APIView):
         response_object = {
             'org_name' : group.org.name,
             'org_tagline' : group.org.tagline,
-            'org_profile_image' : request.build_absolute_uri(group.org.profile_pic) if group.org.profile_pic else None,
+            'org_profile_image' : request.build_absolute_uri(group.org.profile_pic.url) if group.org.profile_pic else None,
             'group_name' : group.name
         }
 
