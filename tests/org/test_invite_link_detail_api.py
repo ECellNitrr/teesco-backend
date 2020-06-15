@@ -27,7 +27,7 @@ class InviteLinkDetailTestCase(AuthAPITestCase):
 
     def test_fail_invalid_invite_slug(self):
         un_auth_client = APIClient()
-        response = un_auth_client.get("/api/org/invite/iamnotvalid")
+        response = un_auth_client.get("/api/org/invite/iamnotvalid/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_pass_with_valid_invite_slug(self):
@@ -36,7 +36,7 @@ class InviteLinkDetailTestCase(AuthAPITestCase):
             name='Volunteer',
             org=self.org,
         )
-        response = un_auth_client.get("/api/org/invite/"+volunteer_group.invite_slug)
+        response = un_auth_client.get("/api/org/invite/"+volunteer_group.invite_slug+'/')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
