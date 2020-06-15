@@ -7,6 +7,7 @@ urlpatterns = [
     path('<int:org_id>/volunteer/', AddVolunteer, name='add_volunteer'),
     path('<int:org_id>/group/', GroupView.as_view()),
     path('<int:org_id>/', EditOrg, name='edit_org'),
+    path('<int:org_id>/profile_pic/', UpdateProfilePic, name='update_profile_pic'),
     path(
         '<int:org_id>/group/<int:group_id>/',
         GroupDetailsView.as_view(),
