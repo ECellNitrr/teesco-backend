@@ -58,7 +58,7 @@ create_group_400={
   ]
 }
 
-create_group_401={
+unauthorised_user_401={
   "detail": [
     "Authentication credentials were not provided.",
     "You are not a member of this organisation",
@@ -155,3 +155,10 @@ members_list_200 = [
         "profile_pic": "null",
     }
 ]    
+
+update_profile_pic_400 = {
+    "profile_pic": [
+    "Upload a valid image. The file you uploaded was either not an image or a corrupted image.",
+    'The submitted file is empty.'
+  ]
+}
