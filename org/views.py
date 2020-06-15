@@ -453,7 +453,6 @@ class InviteLinkDetailView(APIView):
         operation_description="Displays details of the organisation according to the invite link",
         responses={
             '200': set_example(responses.invite_list_detail_200),
-            '401': set_example(responses.user_unauthorized_401),
             '404': set_example(responses.group_not_present_404),
         },
     )
