@@ -40,6 +40,11 @@ urlpatterns = [
 
     ),
     path(
+        'invite/<invite_slug>/',
+        InviteLinkDetailView.as_view(),
+        name='invite_list_detail'
+    ),
+    path(
         'available_permissions/', 
         AvailablePermissionsView.as_view(), 
         name='available_permissions'
