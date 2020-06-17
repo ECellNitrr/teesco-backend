@@ -501,3 +501,22 @@ def UpdateProfilePic(request, org_id):
                 status.HTTP_403_FORBIDDEN
             )
     
+
+class AvailablePermissionsView(APIView):
+    '''
+    This is to provides list of available
+    permissions.
+    '''
+
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_id='available_permissions',
+        responses={
+            '200': set_example(Permissions.get_permission_dict()),
+            '403': set_example(responses.user_unauthorized_403),
+        },
+    )
+
+    def get(self, request):
+        return Response(Permissions.get_permission_dict())

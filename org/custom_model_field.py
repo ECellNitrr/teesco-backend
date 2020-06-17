@@ -36,7 +36,7 @@ class Permissions:
 
         self.permissions = defaultdict(bool)
         for permission in permissions_array:
-            if permission in self.get_permission_list(permission):
+            if permission in self.get_permission_list():
                 self.permissions[permission]=True
             else:
                 raise PERMISSION_INT_INVALID("The permission ints in the array are not valid.")
@@ -53,7 +53,7 @@ class Permissions:
         return permission_integer
 
 
-    def get_permission_list(self, permission_int):
+    def get_permission_list(self):
         """Returns a list of permissions available"""
 
         permissions_list = [
@@ -65,6 +65,21 @@ class Permissions:
         ]
 
         return permissions_list
+
+
+    @staticmethod
+    def get_permission_dict():
+        """Returns a dict of permissions available"""
+
+        permissions_dict = {
+            'Is Admin': Permissions.IS_ADMIN,
+            'Is Staff': Permissions.IS_STAFF,
+            'Can create tasks': Permissions.CAN_CREATE_TASKS,
+            'Can reply to queries': Permissions.CAN_REPLY_TO_QUERIES,
+            'Can review proofs': Permissions.CAN_REVIEW_PROOFS,
+        }
+
+        return permissions_dict
 
 
     def __str__(self):
