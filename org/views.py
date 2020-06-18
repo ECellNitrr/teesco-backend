@@ -109,7 +109,7 @@ class OrgDetailsView(APIView):
         except Org.DoesNotExist:
             return Response(responses.org_not_present_400, status.HTTP_400_BAD_REQUEST)
 
-        response_body = [{
+        response_body = {
             "id": org.id,
             "route_slug": org.route_slug,
             "can_join_without_invite": org.can_join_without_invite,
