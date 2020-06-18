@@ -58,7 +58,7 @@ create_group_400={
   ]
 }
 
-create_group_401={
+unauthorised_user_401={
   "detail": [
     "Authentication credentials were not provided.",
     "You are not a member of this organisation",
@@ -98,6 +98,17 @@ org_not_present_404 = {
 group_not_present_400 = {
     "detail":"This group does not exist"
 }
+
+group_not_present_404 = {
+    "detail":"This group does not exist"
+}
+
+invite_list_detail_200 = {
+        'org_name' : 'Ecell NITRR Opensource',
+        'org_tagline' : 'Leaders beyond borders',
+        'org_profile_image' : None,
+        'group_name' : "head coordinator"
+    }
 
 user_unauthorized_403 = {
     "detail":"You do not have the required permissions."
@@ -144,3 +155,10 @@ members_list_200 = [
         "profile_pic": "null",
     }
 ]    
+
+update_profile_pic_400 = {
+    "profile_pic": [
+    "Upload a valid image. The file you uploaded was either not an image or a corrupted image.",
+    'The submitted file is empty.'
+  ]
+}
