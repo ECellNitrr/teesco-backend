@@ -118,7 +118,7 @@ class OrgDetailsView(APIView):
             "about": org.about,
             "profile_pic": org.profile_pic if org.profile_pic else None,
             "cover_pic": org.cover_pic if org.cover_pic else None
-        }]
+        }
         return Response(response_body, status.HTTP_200_OK)
 
 
