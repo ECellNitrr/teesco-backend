@@ -116,13 +116,8 @@ class OrgDetailsView(APIView):
             "name": org.name,
             "tagline": org.tagline,
             "about": org.about,
-<<<<<<< HEAD
-            "profile_pic": org.profile_pic if org.profile_pic else None,
-            "cover_pic": org.cover_pic if org.cover_pic else None
-=======
             "profile_pic": request.build_absolute_uri(org.profile_pic.url) if org.profile_pic else None,
             "cover_pic": request.build_absolute_uri(org.cover_pic.url) if org.cover_pic else None
->>>>>>> a6ea1dfe2b8466f5dd768d2d841e991621e3c392
         }
         return Response(response_body, status.HTTP_200_OK)
 

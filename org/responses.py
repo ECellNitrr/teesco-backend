@@ -172,3 +172,4 @@ update_profile_pic_400 = {
     "Upload a valid image. The file you uploaded was either not an image or a corrupted image.",
     'The submitted file is empty.'
   ]
+}
