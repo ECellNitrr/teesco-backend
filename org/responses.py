@@ -156,12 +156,6 @@ members_list_200 = [
     }
 ]    
 
-update_profile_pic_400 = {
-    "profile_pic": [
-    "Upload a valid image. The file you uploaded was either not an image or a corrupted image.",
-    'The submitted file is empty.'
-  ]
-}
 get_org_200 = {
         "id": 1,
         "route_slug": "slug",
@@ -172,3 +166,9 @@ get_org_200 = {
         "profile_pic":  "null",
         "cover_pic":  "null"
 } 
+
+update_profile_pic_400 = {
+    "profile_pic": [
+    "Upload a valid image. The file you uploaded was either not an image or a corrupted image.",
+    'The submitted file is empty.'
+  ]
