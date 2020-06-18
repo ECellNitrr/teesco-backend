@@ -11,7 +11,7 @@ urlpatterns = [
     path(
         '<int:org_id>/',
         OrgDetailsView.as_view(),
-    )
+    ),
     path(
         '<int:org_id>/volunteer/', 
         AddVolunteer, 
