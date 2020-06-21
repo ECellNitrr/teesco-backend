@@ -29,7 +29,7 @@ class OrgView(generics.ListCreateAPIView):
         operation_id='create_org',
         request_body=CreateOrgSerializer,
         responses={
-            '201': set_example({}),
+            '201': set_example(responses.org_created_201),
             '400': set_example(responses.create_org_400)
         },
     )
@@ -55,7 +55,7 @@ class OrgView(generics.ListCreateAPIView):
                 org=org,
                 group=admin_group,
             )
-            return Response({}, status.HTTP_201_CREATED)
+            return Response(responses.org_created_201, status.HTTP_201_CREATED)
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)
@@ -67,7 +67,7 @@ class GroupView(APIView):
         operation_id='create_group',
         request_body=CreateGroupSerializer,
         responses={
-            '201': set_example({}),
+            '201': set_example(responses.group_created_201),
             '400': set_example(responses.create_group_400),
             '401': set_example(responses.unauthorised_user_401),
             '403': set_example(responses.create_group_403),
@@ -107,7 +107,7 @@ class GroupView(APIView):
                             in the overidden save() which takes org_id as a parameter(201).
                             """
                             serializer.save(org_id)
-                            return Response({}, status.HTTP_201_CREATED)
+                            return Response(responses.group_created_201, status.HTTP_201_CREATED)
                         else:
                             # Whether the data posted is valid or not(400).
                             data = serializer.errors

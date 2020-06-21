@@ -21,7 +21,7 @@ class TaskView(APIView):
         operation_id='create_task',
         request_body=CreateTaskSerializer,
         responses={
-            '201': set_example({}),
+            '201': set_example(responses.task_created_201),
             '404': set_example(responses.org_not_present_404),
             '401': set_example(responses.user_not_present_401),
             '403': set_example(responses.user_unauthorized_403),
@@ -55,7 +55,7 @@ class TaskView(APIView):
 
             if serializer.is_valid():
                 task = serializer.save(request.user, org)
-                return Response({}, status.HTTP_201_CREATED)
+                return Response(responses.task_created_201, status.HTTP_201_CREATED)
 
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)

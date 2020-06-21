@@ -162,3 +162,11 @@ update_profile_pic_400 = {
     'The submitted file is empty.'
   ]
 }
+
+org_created_201 = {
+   "detail":"Organisation has been registered successfully"
+}
+
+group_created_201 = {
+   "detail":"Group has been registered successfully"
+}

@@ -28,7 +28,7 @@ class RegistrationView(APIView):
         operation_id='create_user',
         request_body=RegistrationSerializer,
         responses={
-            '201': set_example({}),
+            '201': set_example(responses.user_registration_success_201),
             '400': set_example(responses.user_registration_400)
         },
     )
@@ -37,7 +37,7 @@ class RegistrationView(APIView):
 
         if serializer.is_valid():
             user = serializer.save()
-            return Response({}, status.HTTP_201_CREATED)
+            return Response(responses.user_registration_success_201, status.HTTP_201_CREATED)
         else:
             data = serializer.errors
             return Response(data, status.HTTP_400_BAD_REQUEST)

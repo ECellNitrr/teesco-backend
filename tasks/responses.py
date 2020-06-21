@@ -28,3 +28,8 @@ create_task_400 = {
         "Share image is required"
     ]
 }
+
+task_created_201 = {
+
+    "detail" : "Task has been created successfully."
+}

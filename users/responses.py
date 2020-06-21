@@ -132,3 +132,7 @@ forget_password_400 = {
 forget_password_404 = {
     'detail': 'User does not exist.'
 }
+
+user_registration_success_201 = {
+   "detail":"User has been registered successfully"
+}
