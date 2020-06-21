@@ -13,15 +13,6 @@ user_registration_400 = {
         "This field is required.",
         "Password must be atleast 8 characters.",
     ],
-    "institution": [
-        "This field is required."
-    ],
-    "country_code": [
-        "This field is required."
-    ],
-    "phone": [
-        "This field is required."
-    ]
 }
 
 login_401 = {
