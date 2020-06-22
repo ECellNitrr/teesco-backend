@@ -22,8 +22,6 @@ import datetime
 
 class RegistrationView(APIView):
 
-    parser_classes = [MultiPartParser]
-
     @swagger_auto_schema(
         operation_id='create_user',
         request_body=RegistrationSerializer,
