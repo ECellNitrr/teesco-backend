@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from users.models import User
+from slugify import slugify
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
@@ -37,13 +38,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
     institution = serializers.CharField(allow_blank=True, required=False, default=None)
     country_code = serializers.CharField(allow_blank=True, required=False, default=None)
     phone = serializers.CharField(allow_blank=True, required=False, default=None)
-    profile_pic = serializers.ImageField(required=False, default=None)
 
     class Meta:
         model = User
-        fields = ['email', 'name', 'password', 'institution', 'country_code', 'phone', 'profile_pic']
+        fields = ['email', 'name', 'password', 'institution', 'country_code', 'phone']
 
     def save(self):
+        last_user_id = 0
+        if User.objects.count() > 0:
+            last_user_id = User.objects.last().id + 1
+
+        route_slug = str(last_user_id) + ' ' + self.validated_data['name']
+        route_slug = slugify(route_slug, max_length=40)
+
         user = User.objects.create_user(
             email=self.validated_data['email'],
             username=self.validated_data['email'],
@@ -52,7 +59,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             institution=self.validated_data['institution'],
             country_code=self.validated_data['country_code'],
             phone=self.validated_data['phone'],
-            profile_pic=self.validated_data['profile_pic']
+            route_slug=route_slug,
         )
 
         user.save()
