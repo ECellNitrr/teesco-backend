@@ -2,6 +2,19 @@ version: "3.3"
 services:
 
   web:
+    environment:
+      - SECRET_KEY=''3izb^ryglj(bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!''
+      - ALLOWED_HOSTS=['*']
+      - DEBUG=True
+      - EMAIL_HOST_USER='username@gmail.com'
+      - EMAIL_HOST_PASSWORD='password'
+      - MOCK_EMAIL=True
+      - EMAIL_SERVICE=DJANGO-SMTP
+      - AWS_REGION_NAME='AWS_REGION_NAME'
+      - EMAIL_HOST='smtp.gmail.com'
+      - AWS_ACCESS_KEY_ID='AWS_ACCESS_KEY_ID'
+      - AWS_SECRET_ACCESS_KEY='AWS_SECRET_ACCESS_KEY'
+      - PYTHONDONTWRITEBYTECODE=1
     env_file:
       - ../.env
     build: .
@@ -16,6 +29,19 @@ services:
     
   worker:
     build: "."
+    environment:
+      - SECRET_KEY=''3izb^ryglj(bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!''
+      - ALLOWED_HOSTS=['*']
+      - DEBUG=True
+      - EMAIL_HOST_USER='username@gmail.com'
+      - EMAIL_HOST_PASSWORD='password'
+      - MOCK_EMAIL=True
+      - EMAIL_SERVICE=DJANGO-SMTP
+      - AWS_REGION_NAME='AWS_REGION_NAME'
+      - EMAIL_HOST='smtp.gmail.com'
+      - AWS_ACCESS_KEY_ID='AWS_ACCESS_KEY_ID'
+      - AWS_SECRET_ACCESS_KEY='AWS_SECRET_ACCESS_KEY'
+      - PYTHONDONTWRITEBYTECODE=1
     env_file:
       - ../.env
     command: celery -A server worker -l info -b $${BROKER_URL} --result-backend $${BROKER_URL}
