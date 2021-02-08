@@ -8,12 +8,12 @@ services:
       - DEBUG=True
       - EMAIL_HOST_USER='username@gmail.com'
       - EMAIL_HOST_PASSWORD='password'
-      - MOCK_EMAIL =True
-      - EMAIL_SERVICE =DJANGO-SMTP
-      - AWS_REGION_NAME = 'AWS_REGION_NAME'
-      - EMAIL_HOST= 'smtp.gmail.com'
-      - AWS_ACCESS_KEY_ID = 'AWS_ACCESS_KEY_ID'
-      - AWS_SECRET_ACCESS_KEY = 'AWS_SECRET_ACCESS_KEY'
+      - MOCK_EMAIL=True
+      - EMAIL_SERVICE=DJANGO-SMTP
+      - AWS_REGION_NAME='AWS_REGION_NAME'
+      - EMAIL_HOST='smtp.gmail.com'
+      - AWS_ACCESS_KEY_ID='AWS_ACCESS_KEY_ID'
+      - AWS_SECRET_ACCESS_KEY='AWS_SECRET_ACCESS_KEY'
       - PYTHONDONTWRITEBYTECODE=1
     build: .
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python3 manage.py test && python manage.py runserver 0.0.0.0:3001"
@@ -29,18 +29,18 @@ services:
     build: "."
     environment:
       - SECRET_KEY=''3izb^ryglj(bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!''
-      - ALLOWED_HOSTS='*'
+      - ALLOWED_HOSTS=['*']
       - DEBUG=True
       - EMAIL_HOST_USER='username@gmail.com'
       - EMAIL_HOST_PASSWORD='password'
-      - MOCK_EMAIL =True
-      - EMAIL_SERVICE =DJANGO-SMTP
-      - AWS_REGION_NAME = 'AWS_REGION_NAME'
-      - EMAIL_HOST= 'smtp.gmail.com'
-      - AWS_ACCESS_KEY_ID = 'AWS_ACCESS_KEY_ID'
-      - AWS_SECRET_ACCESS_KEY = 'AWS_SECRET_ACCESS_KEY'
+      - MOCK_EMAIL=True
+      - EMAIL_SERVICE=DJANGO-SMTP
+      - AWS_REGION_NAME='AWS_REGION_NAME'
+      - EMAIL_HOST='smtp.gmail.com'
+      - AWS_ACCESS_KEY_ID='AWS_ACCESS_KEY_ID'
+      - AWS_SECRET_ACCESS_KEY='AWS_SECRET_ACCESS_KEY'
       - PYTHONDONTWRITEBYTECODE=1
-    command: celery -A server worker -l info -b ${BROKER_URL} --result-backend ${BROKER_URL}
+    command: celery -A server worker -l info -b ${{ secrets.BROKER_URL}} --result-backend ${{ secrets.BROKER_URL}}
     volumes:
       - ./app:/app
   
