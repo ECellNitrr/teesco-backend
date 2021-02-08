@@ -44,7 +44,7 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
     env_file:
       - ../.env
-    command: celery -A server worker -l info -b $${BROKER_URL} --result-backend $${BROKER_URL}
+    command: celery -A server worker -l info -b BROKER_URL --result-backend BROKER_URL
     volumes:
       - ./app:/app
   
