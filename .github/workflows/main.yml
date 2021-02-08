@@ -8,7 +8,7 @@ jobs:
     env:
       BROKER_URL: ${{ secrets.BROKER_URL }} 
     steps: 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@dev
       - name: Build the docker-compose stack
         run: docker-compose up -d
       - name: Check running containers
