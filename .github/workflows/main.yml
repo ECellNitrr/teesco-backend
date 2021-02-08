@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      BROKER_URL: ${{ secrets.BROKER_URL }} 
     steps: 
       - uses: actions/checkout@v2
       - name: Build the docker-compose stack
