@@ -1,7 +1,7 @@
 name: Docker Compose Actions Workflow
 on: 
   push:
-    branches: [ master ]
+    branches: [ dev ]
 jobs:
   build:
     runs-on: self-hosted
