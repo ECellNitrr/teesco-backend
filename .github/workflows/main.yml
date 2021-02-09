@@ -14,4 +14,4 @@ jobs:
       - name: Check running containers
         run: docker ps -a
       - name: Check logs
-        run: docker logs teescobackend_worker_1 && docker logs teescobackend_web_1
+        run: docker logs teesco-backend_worker_1 && docker logs teesco-backend_web_1
