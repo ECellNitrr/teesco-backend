@@ -13,15 +13,6 @@ user_registration_400 = {
         "This field is required.",
         "Password must be atleast 8 characters.",
     ],
-    "institution": [
-        "This field is required."
-    ],
-    "country_code": [
-        "This field is required."
-    ],
-    "phone": [
-        "This field is required."
-    ]
 }
 
 login_401 = {
@@ -62,7 +53,29 @@ list_orgs_200 = [
         "user_role": "Admin",
         "profile_pic": "null",
         "route_slug": "0-e-cell",
-        "tagline": "Leader Beyond Borders"
+        "tagline": "Leader Beyond Borders",
+        "permissions": {
+            "Is Admin": {
+                "value": True,
+                "perm_int": 1
+            },
+            "Is Staff": {
+                "value": True,
+                "perm_int": 4
+            },
+            "Can create tasks": {
+                "value": True,
+                "perm_int": 3
+            },
+            "Can create groups": {
+                "value": True,
+                "perm_int": 6
+            },
+            "Can reply to queries": {
+                "value": True,
+                "perm_int": 5
+            }
+        }
     },
     {
         "id": 2,
@@ -70,7 +83,29 @@ list_orgs_200 = [
         "user_role": "Admin",
         "profile_pic": "null",
         "route_slug": "2-nitrr",
-        "tagline": "Work is worship"
+        "tagline": "Work is worship",
+        "permissions": {
+            "Is Admin": {
+                "value": True,
+                "perm_int": 1
+            },
+            "Is Staff": {
+                "value": True,
+                "perm_int": 4
+            },
+            "Can create tasks": {
+                "value": True,
+                "perm_int": 3
+            },
+            "Can create groups": {
+                "value": True,
+                "perm_int": 6
+            },
+            "Can reply to queries": {
+                "value": True,
+                "perm_int": 5
+            }
+        }
     }
 ]
 

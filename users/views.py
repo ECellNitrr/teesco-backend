@@ -22,8 +22,6 @@ import datetime
 
 class RegistrationView(APIView):
 
-    parser_classes = [MultiPartParser]
-
     @swagger_auto_schema(
         operation_id='create_user',
         request_body=RegistrationSerializer,
@@ -205,7 +203,29 @@ def list_orgs_view(request):
             'user_role': member.group.name,
             'profile_pic': request.build_absolute_uri(member.org.profile_pic.url) if member.org.profile_pic else None,
             'route_slug': member.org.route_slug,
-            'tagline': member.org.tagline
+            'tagline': member.org.tagline,
+            'permissions' : {
+                "Is Admin" : {
+                    "value" : member.group.perm_obj.permissions[Permissions.IS_ADMIN],
+                    "perm_int" : Permissions.IS_ADMIN
+                },
+                "Is Staff" : {
+                    "value" : member.group.perm_obj.permissions[Permissions.IS_STAFF],
+                    "perm_int" : Permissions.IS_STAFF
+                },
+                "Can Create Tasks" : {
+                    "value" : member.group.perm_obj.permissions[Permissions.CAN_CREATE_TASKS],
+                    "perm_int" : Permissions.CAN_CREATE_TASKS
+                },
+                "Can Reply to Queries" : {
+                    "value" : member.group.perm_obj.permissions[Permissions.CAN_REPLY_TO_QUERIES],
+                    "perm_int" : Permissions.CAN_REPLY_TO_QUERIES
+                },
+                "Can Review Proofs" : {
+                    "value" : member.group.perm_obj.permissions[Permissions.CAN_REVIEW_PROOFS],
+                    "perm_int" : Permissions.CAN_REVIEW_PROOFS
+                },
+            }
         }
         response_object.append(org)
     return Response(response_object, status.HTTP_200_OK)
