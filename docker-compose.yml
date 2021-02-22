@@ -18,12 +18,12 @@ services:
     env_file:
       - ../.env
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3001"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:5555"
 
     volumes:
       - .:/code
     ports:
-      - "3001:3001"
+      - "5555:5555"
     depends_on: 
       - worker
     
