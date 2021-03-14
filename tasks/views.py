@@ -9,6 +9,7 @@ from org.custom_model_field import Permissions
 from org.models import Org, Member
 from .serializers import CreateTaskSerializer
 from . import responses
+from .models import Task
 
 # Create your views here.
 
