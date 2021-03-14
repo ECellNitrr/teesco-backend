@@ -1,0 +1,17 @@
+name: Docker Compose Actions Workflow
+on: 
+  push:
+    branches: [ dev ]
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      BROKER_URL: ${{ secrets.BROKER_URL }} 
+    steps: 
+      - uses: actions/checkout@master
+      - name: Build the docker-compose stack
+        run: docker-compose --env-file ../.env up -d
+      - name: Check running containers
+        run: docker ps -a
+      - name: Check logs
+        run: docker logs teesco-backend_worker_1 && docker logs teesco-backend_web_1
