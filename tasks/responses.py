@@ -29,6 +29,25 @@ create_task_400 = {
     ]
 }
 
+get_task_400 = {
+
+    "social_media_platform": [
+        "This field may not be blank."
+    ],
+    "share_type": [
+        "This field may not be blank.",
+    ],
+    "Share_Link":[
+        "Share link is required."
+    ],
+    "Share_text":[
+        "Share text is required."
+    ],
+    "Share_img":[
+        "Share image is required"
+    ]
+}
+
 get_task_200 = [
     {
         "task_id":1,
